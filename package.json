@@ -1,5 +1,5 @@
 {
-  "name": "zblog-web2",
+  "name": "zblog-web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,7 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.26.0",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.6",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
