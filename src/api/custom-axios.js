@@ -10,72 +10,61 @@ const instance = axios.create();
 const timeout = serverConfig.TIME_OUT;
 
 // set response interceptor
-instance.interceptors.response.use(success => {
-    console.log("success", success);
-    if (success.data && success.data.code === 200) {
-        // 操作成功
-        if (success.data.message) {
-            Message.success({message: success.data.message})
-        }
-        return success.data;
-    } else {
-        // 操作失败
-        if (success.data) {
-            if (success.data.code === 401) {
-                if (success.data.message) {
-                    Message.error({message: success.data.message})
-                } else {
-                    Message.error({message: "尚未登录，请登录"})
-                }
-            } else if (success.data.code === 403) {
-                Message.error({message: "权限不足，请联系管理员"})
-            } else if (success.data.code === 404) {
-                Message.error({message: "访问的资源不存在"})
-            } else {
-                if (success.data.message) {
-                    Message.error({message: success.data.message})
-                } else {
-                    Message.error({message: "操作失败"})
-                }
-            }
+instance.interceptors.response.use(response => {
+    // deal response
+    console.log("response", response);
+    if (response.data) {
+        const { code, message } = response.data
+        const { responseType } = response.config
+        if (responseType === 'blob') {
+            // return response
+            return response;
         }
 
+        if (code === 200) {
+            // success, return data
+            return response.data;
+        } else if (code === 401) {
+            Message.error({message: message || "尚未登录，请登录"})
+            router.replace("/").then(_ => {
+                console.log("身份认证已过期，跳转登录页面")
+            });
+        } else if (code === 403) {
+            Message.error({message: "权限不足，请联系管理员"})
+        } else if (response.data.code === 404) {
+            Message.error({message: "访问的资源不存在"})
+        } else {
+            Message.error({message: message || "系统发生未知错误"})
+        }
+        return Promise.reject(response)
     }
 }, error => {
     console.log("error", error);
+    if (error.response) {
+        console.log("error.response", error.response);
 
-    // 接口响应失败
-    // let responseCode = error.response.code;
-    // if (responseCode === 504) {
-    //     Message.error({message: "服务器出小差了，稍后再试~"})
-    // } else if (responseCode === 404) {
-    //     Message.error({message: "访问资源不存在"})
-    // } else if (responseCode === 403) {
-    //     Message.error({message: "权限不足，请联系管理员"})
-    // } else if (responseCode === 401) {
-    //     Message.error({message: "尚未登录，请登录"})
-    //     router.replace("/");
-    // } else {
-    //     if (error.response.data.message) {
-    //         Message.error({message: error.response.data.message})
-    //     } else {
-    //         Message.error({message: "服务器错误"})
-    //     }
-    // }
+        const { status, data: { message } } = error.response
+        console.log("status", status);
+        console.log("data.message", message);
+    }
+
+    return Promise.reject(error)
 })
 
 // export get api
-export const get = (url, params, config) => {
+export const get = (url, params, headersItem, respType) => {
     if (params && params.resubmit) {
         let headersItem = { resubmit: params.resubmit }
         delete params.resubmit
+        let hc = httpConfig(timeout, headersItem);
         return new Promise((resolve, reject) => {
             instance({
                 method: 'get',
                 url: url,
                 params: params,
-                timeout: httpConfig(timeout, headersItem).timeout,
-                headers: httpConfig(timeout, headersItem).headers
+                timeout: hc.timeout,
+                headers: hc.headers,
+                responseType: hc.responseType
             }).then(response => {
                 resolve(response)
             }).catch(err => {
@@ -84,12 +73,14 @@ export const get = (url, params, config) => {
         })
     } else {
         return new Promise((resolve, reject) => {
+            let hc = httpConfig(timeout, headersItem, respType);
             instance({
                 method: 'get',
                 url: url,
                 params: params,
-                timeout: httpConfig(config).timeout,
-                headers: httpConfig(config).headers
+                timeout: hc.timeout,
+                headers: hc.headers,
+                responseType: hc.responseType
             }).then(response => {
                 resolve(response)
             }).catch(err => {
@@ -100,17 +91,19 @@ export const get = (url, params, config) => {
 }
 
 // export post api
-export const post = (url, params, config) => {
+export const post = (url, params, headersItem, respType) => {
     if (params && params.resubmit) {
         const headersItem = { resubmit: params.resubmit }
         delete params.resubmit
+        let hc = httpConfig(timeout, headersItem);
         return new Promise((resolve, reject) => {
             instance({
                 method: 'post',
                 url: url,
-                timeout: httpConfig(timeout, headersItem).timeout,
-                headers: httpConfig(timeout, headersItem).headers,
-                data: params
+                data: params,
+                timeout: hc.timeout,
+                headers: hc.headers,
+                responseType: hc.responseType
             }).then(response => {
                 resolve(response)
             }).catch(err => {
@@ -119,11 +112,13 @@ export const post = (url, params, config) => {
         })
     } else {
         return new Promise((resolve, reject) => {
+            let hc = httpConfig(timeout, headersItem, respType);
             instance({
                 method: 'post',
                 url: url,
-                timeout: httpConfig(config).timeout,
-                headers: httpConfig(config).headers,
+                timeout: hc.timeout,
+                headers: hc.headers,
+                responseType: hc.responseType,
                 data: params
             }).then(response => {
                 resolve(response)
