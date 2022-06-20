@@ -114,9 +114,6 @@
 </template>
 
 <script>
-import crudRoles from '@/api/system/role'
-import { getDepts, getDeptSuperior } from '@/api/system/dept'
-import { getMenusTree, getChild } from '@/api/system/menu'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'

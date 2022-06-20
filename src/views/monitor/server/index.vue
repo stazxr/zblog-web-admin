@@ -138,7 +138,6 @@
 import ECharts from 'vue-echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/polar'
-import { initData } from '@/api/data'
 export default {
   name: 'ServerMonitor',
   components: {

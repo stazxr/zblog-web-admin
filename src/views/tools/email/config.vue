@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { get, update } from '@/api/tools/email'
 export default {
   name: 'Config',
   data() {

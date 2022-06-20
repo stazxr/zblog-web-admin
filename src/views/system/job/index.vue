@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import crudJob from '@/api/system/job'
 import eHeader from './module/header'
 import eForm from './module/form'
 import CRUD, { presenter } from '@crud/crud'

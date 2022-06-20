@@ -59,8 +59,6 @@
 
 <script>
 
-import crudServer from '@/api/mnt/serverDeploy'
-import { testServerConnect } from '@/api/mnt/connect'
 import { validateIP } from '@/utils/validate'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'

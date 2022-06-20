@@ -1,8 +1,4 @@
 import {
-  initData,
-  download
-} from '@/api/data'
-import {
   parseTime,
   downloadFile
 } from '@/utils/index'

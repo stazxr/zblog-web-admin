@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { get as getDictDetail } from '@/api/system/dictDetail'
 
 export default class Dict {
   constructor(dict) {

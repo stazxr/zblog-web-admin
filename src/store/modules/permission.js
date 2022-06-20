@@ -27,13 +27,15 @@ const permission = {
   }
 }
 
-export const filterAsyncRouter = (routers, lastRouter = false, type = false) => { // 遍历后台传来的路由字符串，转换为组件对象
+// 遍历后台传来的路由字符串，转换为组件对象
+export const filterAsyncRouter = (routers, lastRouter = false, type = false) => {
   return routers.filter(router => {
     if (type && router.children) {
       router.children = filterChildren(router.children)
     }
     if (router.component) {
-      if (router.component === 'Layout') { // Layout组件特殊处理
+      if (router.component === 'Layout') {
+        // Layout组件特殊处理
         router.component = Layout
       } else if (router.component === 'ParentView') {
         router.component = ParentView
@@ -53,7 +55,7 @@ export const filterAsyncRouter = (routers, lastRouter = false, type = false) => 
 }
 
 function filterChildren(childrenMap, lastRouter = false) {
-  var children = []
+  let children = []
   childrenMap.forEach((el, index) => {
     if (el.children && el.children.length) {
       if (el.component === 'ParentView') {

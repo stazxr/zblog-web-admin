@@ -148,7 +148,6 @@
 </template>
 
 <script>
-import crudMenu from '@/api/system/menu'
 import IconSelect from '@/components/IconSelect'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'

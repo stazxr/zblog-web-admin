@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import { getErrDetail, delAllError } from '@/api/monitor/log'
 import Search from './search'
 import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'

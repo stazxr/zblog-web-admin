@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { toAliPay } from '@/api/tools/alipay'
 export default {
   data() {
     return {

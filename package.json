@@ -1,16 +1,15 @@
 {
-  "name": "eladmin-web",
-  "version": "2.6.0",
-  "description": "EL-ADMIN 前端源码",
-  "author": "Zheng Jie",
-  "license": "Apache-2.0",
+  "name": "zblog-web",
+  "version": "1.0.0",
+  "description": "Z-BLOG 前端源码",
+  "author": "Sun Tao",
+  "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
     "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
-    "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "svgo": "svgo -f src/assets/icons/svg --config=src/assets/icons/svgo.yml",
     "new": "plop"
   },
@@ -27,10 +26,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/elunez/eladmin-web.git"
+    "url": "https://github.com/stazxr/zblog-web.git"
   },
   "bugs": {
-    "url": "https://github.com/elunez/eladmin/issues"
+    "url": "https://github.com/stazxr/zblog/issues"
   },
   "dependencies": {
     "@riophae/vue-treeselect": "^0.4.0",
@@ -72,13 +71,11 @@
     "@vue/babel-plugin-transform-vue-jsx": "^1.2.1",
     "@vue/cli-plugin-babel": "3.5.3",
     "@vue/cli-plugin-eslint": "^3.9.1",
-    "@vue/cli-plugin-unit-jest": "3.5.3",
     "@vue/cli-service": "3.5.3",
     "@vue/test-utils": "1.0.0-beta.29",
     "autoprefixer": "^9.5.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "10.0.1",
-    "babel-jest": "23.6.0",
     "babel-plugin-dynamic-import-node": "2.3.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "chalk": "2.4.2",

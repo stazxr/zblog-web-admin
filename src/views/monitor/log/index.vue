@@ -51,7 +51,6 @@
 
 <script>
 import Search from './search'
-import { delAllInfo } from '@/api/monitor/log'
 import CRUD, { presenter } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'

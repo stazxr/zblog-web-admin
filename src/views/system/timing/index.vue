@@ -114,7 +114,6 @@
 </template>
 
 <script>
-import crudJob from '@/api/system/timing'
 import Log from './log'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'

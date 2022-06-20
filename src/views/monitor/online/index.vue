@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import { del } from '@/api/monitor/online'
 import CRUD, { presenter, header, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'

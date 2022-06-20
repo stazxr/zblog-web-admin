@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { send } from '@/api/tools/email'
 import { upload } from '@/utils/upload'
 import { mapGetters } from 'vuex'
 import E from 'wangeditor'

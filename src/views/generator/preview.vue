@@ -8,7 +8,7 @@
 
 <script>
 import Java from '@/components/JavaEdit/index'
-import { generator } from '@/api/generator/generator'
+// import { generator } from '@/api/generator/generator'
 export default {
   name: 'Preview',
   components: { Java },

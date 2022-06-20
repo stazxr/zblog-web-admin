@@ -67,8 +67,6 @@
 </template>
 
 <script>
-import crudDatabase from '@/api/mnt/database'
-import { testDbConnect } from '@/api/mnt/connect'
 import eForm from './execute'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'

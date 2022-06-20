@@ -1,37 +1,47 @@
 import Vue from 'vue'
-
+import App from './App'
+import router from './router/routers'
+import ElementUI from 'element-ui'
+import store from './store'
 import Cookies from 'js-cookie'
-
+import './router/index'
+import './assets/styles/element-variables.scss'
 import 'normalize.css/normalize.css'
 
-import Element from 'element-ui'
-
-// 数据字典
-import dict from './components/Dict'
-
-// 权限指令
-import checkPer from '@/utils/permission'
-import permission from './components/Permission'
-import './assets/styles/element-variables.scss'
+// icon
+import './assets/icons'
+import './assets/iconfont/iconfont.css'
 
 // global css
 import './assets/styles/index.scss'
 
-import App from './App'
-import store from './store'
-import router from './router/routers'
+// import other
+import api from './api/http-index'
 
-import './assets/icons' // icon
-import './router/index' // permission control
+// 关闭提示
+Vue.config.productionTip = false
 
-Vue.use(checkPer)
-Vue.use(permission)
-Vue.use(dict)
-Vue.use(Element, {
+// 声明全局变量
+Vue.prototype['$mapi'] = api
+
+// 加载插件
+Vue.use(ElementUI, {
   size: Cookies.get('size') || 'small' // set element-ui default size
 })
 
-Vue.config.productionTip = false
+// 前端防多次点击，重复提交 use: v-preventReClick || v-preventReClick = '1000'
+Vue.directive('preventReClick', {
+  inserted(el, binding) {
+    el.addEventListener('click', () => {
+      if (!el['disabled']) {
+        el['disabled'] = true
+        setTimeout(() => {
+          el['disabled'] = false
+        }, binding.value || 3000)
+      }
+    })
+  }
+})
 
 new Vue({
   el: '#app',

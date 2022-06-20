@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 2901484 */
+  src: url('iconfont.woff2?t=1635494807119') format('woff2'),
+  url('iconfont.woff?t=1635494807119') format('woff'),
+  url('iconfont.ttf?t=1635494807119') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-fankui-copy:before {
+  content: "\e602";
+  color: #F69738;
+  background: #fff;
+}
+
+.icon-faqi-copy:before {
+  content: "\e603";
+  color: #0064d6;
+  background: #fff;
+}
+

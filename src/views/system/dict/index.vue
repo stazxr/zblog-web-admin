@@ -70,7 +70,6 @@
 
 <script>
 import dictDetail from './dictDetail'
-import crudDict from '@/api/system/dict'
 import CRUD, { presenter, header, form } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'

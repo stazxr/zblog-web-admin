@@ -1,18 +1,35 @@
 import Cookies from 'js-cookie'
 import Config from '@/settings'
 
-const TokenKey = Config.TokenKey
+const tokenKey = Config.tokenKey
+const refTokenKey = Config.refTokenKey
 
+// get token
 export function getToken() {
-  return Cookies.get(TokenKey)
+  return Cookies.get(tokenKey) || ''
 }
 
-export function setToken(token, rememberMe) {
-  if (rememberMe) {
-    return Cookies.set(TokenKey, token, { expires: Config.tokenCookieExpires })
-  } else return Cookies.set(TokenKey, token)
+// set token
+export function setToken(token) {
+  Cookies.set(tokenKey, token)
 }
 
+// remove token
 export function removeToken() {
-  return Cookies.remove(TokenKey)
+  return Cookies.remove(tokenKey)
+}
+
+// get refresh token
+export function getRefToken() {
+  return Cookies.get(refTokenKey) || ''
+}
+
+// set refresh token
+export function setRefToken(refToken) {
+  Cookies.set(refTokenKey, refToken)
+}
+
+// remove refresh token
+export function removeRefToken() {
+  return Cookies.remove(refTokenKey)
 }

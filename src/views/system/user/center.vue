@@ -113,7 +113,6 @@ import { getToken } from '@/utils/auth'
 import store from '@/store'
 import { isvalidPhone } from '@/utils/validate'
 import crud from '@/mixins/crud'
-import { editUser } from '@/api/system/user'
 import Avatar from '@/assets/images/avatar.png'
 export default {
   name: 'Center',

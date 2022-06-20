@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import crudDictDetail from '@/api/system/dictDetail'
 import CRUD, { presenter, header, form } from '@crud/crud'
 import pagination from '@crud/Pagination'
 import rrOperation from '@crud/RR.operation'

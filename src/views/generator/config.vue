@@ -199,9 +199,6 @@
 
 <script>
 import crud from '@/mixins/crud'
-import { update, get } from '@/api/generator/genConfig'
-import { save, sync, generator } from '@/api/generator/generator'
-import { getDicts } from '@/api/system/dict'
 export default {
   name: 'GeneratorConfig',
   components: {},

@@ -8,7 +8,7 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title // 网址标题
-const port = 8013 // 端口配置
+const port = 8888 // 端口配置
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -20,6 +20,7 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   productionSourceMap: false,
   devServer: {
+    host: 'localhost',
     port: port,
     open: true,
     overlay: {
