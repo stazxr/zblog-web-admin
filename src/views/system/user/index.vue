@@ -107,7 +107,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="状态">
-              <el-radio-group v-model="form.enabled" :disabled="form.id === user.id">
+              <el-radio-group v-model="form.enabled" :disabled="form.id === user1.id">
                 <el-radio
                   v-for="item in dict.user_status"
                   :key="item.id"
@@ -156,7 +156,7 @@
             <template slot-scope="scope">
               <el-switch
                 v-model="scope.row.enabled"
-                :disabled="user.id === scope.row.id"
+                :disabled="user1.id === scope.row.id"
                 active-color="#409EFF"
                 inactive-color="#F56C6C"
                 @change="changeEnabled(scope.row, scope.row.enabled)"
@@ -175,7 +175,7 @@
               <udOperation
                 :data="scope.row"
                 :permission="permission"
-                :disabled-dle="scope.row.id === user.id"
+                :disabled-dle="scope.row.id === user1.id"
               />
             </template>
           </el-table-column>
@@ -188,7 +188,11 @@
 </template>
 
 <script>
+// import crudUser from '@/api/system/user1'
 import { isvalidPhone } from '@/utils/validate'
+// import { getDepts, getDeptSuperior } from '@/api/system/dept'
+// import { getAll, getLevel } from '@/api/system/role'
+// import { getAllJob } from '@/api/system/job'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'

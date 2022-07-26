@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router/routers'
-import ElementUI from 'element-ui'
-import store from './store'
-import Cookies from 'js-cookie'
 import './router/index'
+import ElementUI from 'element-ui'
 import './assets/styles/element-variables.scss'
 import 'normalize.css/normalize.css'
+import store from './store'
+import Cookies from 'js-cookie'
 
 // icon
 import './assets/icons'

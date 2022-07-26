@@ -9,7 +9,7 @@
           <div>
             <div style="text-align: center">
               <div class="el-upload">
-                <img :src="user.avatarName ? baseApi + '/avatar/' + user.avatarName : Avatar" title="点击上传头像" class="avatar" @click="toggleShow">
+                <img :src="user1.avatarName ? baseApi + '/avatar/' + user1.avatarName : Avatar" title="点击上传头像" class="avatar" @click="toggleShow">
                 <myUpload
                   v-model="show"
                   :headers="headers"
@@ -99,7 +99,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <updateEmail ref="email" :email="user.email" />
+    <updateEmail ref="email" :email="user1.email" />
     <updatePass ref="pass" />
   </div>
 </template>
@@ -113,11 +113,11 @@ import { getToken } from '@/utils/auth'
 import store from '@/store'
 import { isvalidPhone } from '@/utils/validate'
 import crud from '@/mixins/crud'
+// import { editUser } from '@/api/system/user1'
 import Avatar from '@/assets/images/avatar.png'
 export default {
   name: 'Center',
   components: { updatePass, updateEmail, myUpload },
-  mixins: [crud],
   data() {
     // 自定义验证
     const validPhone = (rule, value, callback) => {

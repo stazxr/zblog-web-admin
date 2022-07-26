@@ -1,6 +1,6 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
+    <div v-if="device === 'mobile' && sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
@@ -24,6 +24,7 @@ import ResizeMixin from './mixin/ResizeHandler'
 import { mapState } from 'vuex'
 import Theme from '@/components/ThemePicker'
 import Cookies from 'js-cookie'
+import { filterAsyncRouter } from '@/utils/router'
 export default {
   name: 'Layout',
   components: {
@@ -56,15 +57,39 @@ export default {
   mounted() {
     if (Cookies.get('theme')) {
       this.$refs.theme.theme = Cookies.get('theme')
-      this.$store.dispatch('settings/changeSetting', {
+      this.$store.dispatch('settings/ChangeSetting', {
         key: 'theme',
         value: Cookies.get('theme')
       })
     }
   },
+  created() {
+    // 生成菜单列表
+    this.loadMenus()
+  },
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+    },
+    loadMenus() {
+      this.$mapi.perm.buildMenus().then(res => {
+        const data = res.data
+        const sdata = JSON.parse(JSON.stringify(data))
+        const rdata = JSON.parse(JSON.stringify(data))
+        const sidebarRoutes = filterAsyncRouter(sdata)
+        const rewriteRoutes = filterAsyncRouter(rdata, false, true)
+        rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
+
+        console.log('sidebarRoutes', sidebarRoutes)
+        console.log('rewriteRoutes', rewriteRoutes)
+
+        this.$store.dispatch('router/GenerateRoutes', rewriteRoutes).then(() => { // 存储路由
+          this.$router.addRoutes(rewriteRoutes) // 动态添加可访问路由表
+        })
+        this.$store.dispatch('router/SetSidebarRouters', sidebarRoutes)
+      }).catch(e => {
+        console.log('e', e)
+      })
     }
   }
 }

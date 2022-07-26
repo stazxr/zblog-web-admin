@@ -1,7 +1,10 @@
 import axios from 'axios'
 import Config from '@/settings'
 import { Message } from 'element-ui'
-import { getToken } from '@/utils/auth'
+import Cookies from 'js-cookie'
+import store from '@/store'
+
+import { getToken, getRefToken, removeTokenPair } from '@/utils/token'
 
 // create instance
 const instance = axios.create()
@@ -34,6 +37,12 @@ instance.defaults.validateStatus = status => {
   return /^([23])\d{2}$/.test(String(status))
 }
 
+// 是否在续签
+let refreshing = false
+
+// 请求等待队列
+let reqWaitQueue = []
+
 // 设置响应拦截器
 instance.interceptors.response.use(response => {
   // response {data: {}, status: 200, statusText: 'OK', headers: {}, config: {}, request: {}}
@@ -50,11 +59,49 @@ instance.interceptors.response.use(response => {
       // identifier: 900999-未登录; 900006-身份认证异常; 900004-RTK 过期，不可续签; 900001-ATK 过期，可续签
       const identifier = result.identifier || 900999
       if (identifier === 900001) {
-        // TODO 续签
+        // renew token
+        const config = response.config
+        if (refreshing === false) {
+          // push this
+          refreshing = true
+          new Promise(resolve => {
+            reqWaitQueue.push(() => {
+              config.headers.Authorization = getToken()
+              resolve(instance(config))
+            })
+          }).then()
+
+          // refresh token
+          const rtk = getRefToken()
+          return store.dispatch('user/RefreshToken', rtk).then(() => {
+            config.headers.Authorization = getToken()
+            reqWaitQueue.forEach(callBack => callBack())
+            reqWaitQueue = []
+          }).catch(() => {
+            // 续签失败，清除token，跳转登录页
+            logout()
+          }).finally(() => {
+            refreshing = false
+          })
+        } else {
+          return new Promise(resolve => {
+            reqWaitQueue.push(() => {
+              config.headers.Authorization = getToken()
+              resolve(instance(config))
+            })
+          })
+        }
+      } else if (identifier === 10008) {
+        // 10008 登录失败
+        Message.error({ message: result.message || '登录失败' })
+        return Promise.reject(new Error(result.message || '登录失败'))
+      } else if (identifier === 10009) {
+        // TODO 10019 密码过期，跳转修改密码页
+        Message.error({ message: result.message || '请修改密码' })
+        return Promise.reject(new Error(result.message || '请修改密码'))
       } else {
-        // 跳转登录页
-        Message.error({ message: result.message || '请登录' })
-        return Promise.reject(new Error(result.message || '请登录'))
+        // 登录过期，跳转登录页
+        logout()
       }
     } else if (code === 403) {
       Message.error({ message: '权限不足，请联系管理员' })
@@ -69,37 +116,55 @@ instance.interceptors.response.use(response => {
   }
 }, error => {
   // 统一异常处理，一般不会出现401|403|404，后端将其作为业务异常处理了
-  console.log('response eor', error)
+  let errorMsg
   const { response, request } = error
   if (response) {
     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
     switch (response.status) {
+      case 400:
+        errorMsg = '请求数据格式不正确'
+        break
       case 401:
-        Message.error({ message: '会话过期，请重新登录' })
+        logout()
         break
       case 403:
-        Message.error({ message: '权限不足，请联系管理员添加权限' })
+        errorMsg = '权限不足，请联系管理员添加权限'
         break
       case 404:
-        Message.error({ message: '访问资源不存在' })
+        errorMsg = '请求资源不存在'
         break
       default:
-        Message.error({ message: '系统发生未知错误' })
+        errorMsg = '系统发生未知错误'
         break
     }
   } else if (request) {
     // 请求已经成功发起，但没有收到响应
     if (!window.navigator.onLine) {
       // 断网处理
-      Message.error({ message: '服务迷失在了大千网络世界中，请等候它回来' })
+      errorMsg = '服务迷失在了大千网络世界中，请等候它回来'
     } else {
-      Message.error({ message: '服务无响应，请稍后再试' })
+      if (error.message && error.message.includes('timeout')) {
+        errorMsg = '请求超时'
+      } else {
+        errorMsg = '服务无响应，请稍后再试'
+      }
     }
   } else {
     // 发送请求失败
-    Message.error({ message: '请求发送失败' })
+    errorMsg = '请求发送失败'
   }
+
+  Message.error({ message: errorMsg })
+  return Promise.reject(new Error(errorMsg))
 })
+
+function logout() {
+  store.dispatch('user/ClearUserInfo').then(() => {
+    window.sessionStorage.removeItem('vuex')
+    Cookies.set('point', 401)
+    location.reload()
+  })
+}
 
 export const get = (url, params, requestItem) => {
   return new Promise((resolve, reject) => {

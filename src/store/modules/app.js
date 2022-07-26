@@ -34,7 +34,7 @@ const mutations = {
 }
 
 const actions = {
-  toggleSideBar({ commit }) {
+  ToggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR')
   },
   closeSideBar({ commit }, { withoutAnimation }) {
@@ -48,9 +48,14 @@ const actions = {
   }
 }
 
+const getters = {
+
+}
+
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
+  actions,
+  getters
 }

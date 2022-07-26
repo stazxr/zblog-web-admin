@@ -19,18 +19,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
+  activated() {
+    console.log('sidebar', this.sidebar)
+    console.log('sidebarRouters', this.sidebarRouters)
+  },
   computed: {
-    ...mapGetters([
-      'sidebarRouters',
-      'sidebar'
-    ]),
+    ...mapState({
+      sidebar: state => state.app.sidebar,
+      sidebarRouters: state => state.router.sidebarRouters
+    }),
     activeMenu() {
       const route = this.$route
       const { meta, path } = route

@@ -41,7 +41,7 @@ export default {
         return this.$store.state.settings.fixedHeader
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        this.$store.dispatch('settings/ChangeSetting', {
           key: 'fixedHeader',
           value: val
         })
@@ -52,7 +52,7 @@ export default {
         return this.$store.state.settings.tagsView
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        this.$store.dispatch('settings/ChangeSetting', {
           key: 'tagsView',
           value: val
         })
@@ -63,7 +63,7 @@ export default {
         return this.$store.state.settings.sidebarLogo
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        this.$store.dispatch('settings/ChangeSetting', {
           key: 'sidebarLogo',
           value: val
         })
@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     themeChange(val) {
-      this.$store.dispatch('settings/changeSetting', {
+      this.$store.dispatch('settings/ChangeSetting', {
         key: 'theme',
         value: val
       })

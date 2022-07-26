@@ -10,18 +10,9 @@ import { debounce } from '@/utils'
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '300px'
-    }
+    className: { type: String, default: 'chart' },
+    width: { type: String, default: '100%' },
+    height: { type: String, default: '300px' }
   },
   data() {
     return {
@@ -60,14 +51,14 @@ export default {
         },
         xAxis: {
           type: 'category',
-          data: ['12a', '1a', '2a', '3a', '4a', '5a', '6a', '7a', '8a', '9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p', '10p', '11p'],
+          data: ['1a', '1b', '1c', '3a', '4a', '5a', '6a', '7a', '8a', '9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p', '9p', '10p', '11p'],
           splitArea: {
             show: true
           }
         },
         yAxis: {
           type: 'category',
-          data: ['Saturday', 'Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday', 'Sunday'],
+          data: ['Sat', 'Fri', 'Thurs', 'Wed', 'Tues', 'Mon', 'Sun'],
           splitArea: {
             show: true
           }

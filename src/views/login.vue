@@ -46,7 +46,9 @@
 import qs from 'qs'
 import Background from '@/assets/images/background.jpeg'
 import { encrypt } from '@/utils/rsaEncrypt'
-import { setToken, setRefToken } from '@/utils/auth'
+import { setToken, setRefToken } from '@/utils/token'
+import { setUserInfo } from '@/store/modules/user'
+import Cookies from 'js-cookie'
 export default {
   name: 'Login',
   data() {
@@ -92,6 +94,8 @@ export default {
   created() {
     // 获取验证码
     this.getCode()
+    // 登录过期提醒
+    this.point()
   },
   // 在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作
   mounted() {
@@ -124,19 +128,38 @@ export default {
         }
         if (valid) {
           this.loading = true
-          this.$store.dispatch('Login', loginParam).then(() => {
-            this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
+          this.$mapi.communal.login(loginParam).then(res => {
+            const { access_token, refresh_token, additional: { user, userPerms, userMenus }} = res.data
+
+            // 存储Token
+            const tokenPire = { atk: access_token, rtk: refresh_token }
+            this.$store.dispatch('user/SetToken', tokenPire)
+
+            // 设置用户信息
+            this.$store.dispatch('user/SetUser', user)
+
+            // 登录成功，默认跳转首页
+            this.$router.push({ path: this.redirect || '/admin' })
           }).catch(e => {
-            console.log('LOGIN EOR', e)
-            this.loading = false
+            console.log('handleLogin catch eor', e)
             this.getCode()
+          }).finally(() => {
+            this.loading = false
           })
-        } else {
-          console.log('error submit!!')
-          return false
         }
       })
+    },
+    point() {
+      const point = Cookies.get('point')
+      if (point != null && point != undefined) {
+        this.$notify({
+          title: '提示',
+          message: '当前登录状态已过期，请重新登录',
+          type: 'warning',
+          duration: 5000
+        })
+        Cookies.remove('point')
+      }
     }
   }
 }

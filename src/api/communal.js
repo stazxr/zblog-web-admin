@@ -1,6 +1,6 @@
 import api from './custom-axios'
 
-const communal = {
+export default {
   // 登录
   login: params => {
     return api.httpRequest().post(`/api/process`, params)
@@ -12,7 +12,9 @@ const communal = {
   // 获取登录验证码
   loginCode: params => {
     return api.httpRequest().get(`/api/auth/loginCode`, params)
+  },
+  // 续签
+  renewToken: params => {
+    return api.httpRequest().post(`/api/auth/renewToken`, params)
   }
 }
-
-export default communal

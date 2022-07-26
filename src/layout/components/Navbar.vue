@@ -1,47 +1,45 @@
 <template>
   <div class="navbar">
+    <!-- 菜单伸缩按钮 -->
     <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
+    <!-- 面包屑 -->
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
+    <!-- 右侧菜单 -->
     <div class="right-menu">
-      <template v-if="device!=='mobile'">
+      <template v-if="device !== 'mobile'">
+        <!-- 菜单搜索 -->
         <search id="header-search" class="right-menu-item" />
-
-        <el-tooltip content="项目文档" effect="dark" placement="bottom">
-          <Doc class="right-menu-item hover-effect" />
+        <!-- 项目文档 -->
+        <el-tooltip content="博客首页" effect="dark" placement="bottom">
+          <Web class="right-menu-item hover-effect" />
         </el-tooltip>
-
+        <!-- 全屏缩放 -->
         <el-tooltip content="全屏缩放" effect="dark" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
         </el-tooltip>
-
+        <!-- 布局设置 -->
         <el-tooltip content="布局设置" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
-
       </template>
 
+      <!-- 个人头像 -->
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="user.avatarName ? baseApi + '/avatar/' + user.avatarName : Avatar" class="user-avatar">
+          <img alt="" :src="user['headImgUrl'] ? user['headImgUrl'] : Avatar" class="user-avatar">
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
           <span style="display:block;" @click="show = true">
-            <el-dropdown-item>
-              布局设置
-            </el-dropdown-item>
+            <el-dropdown-item>布局设置</el-dropdown-item>
           </span>
           <router-link to="/user/center">
-            <el-dropdown-item>
-              个人中心
-            </el-dropdown-item>
+            <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
-          <span style="display:block;" @click="open">
-            <el-dropdown-item divided>
-              退出登录
-            </el-dropdown-item>
+          <span style="display: block;" @click="open">
+            <el-dropdown-item divided>退出登录</el-dropdown-item>
           </span>
         </el-dropdown-menu>
       </el-dropdown>
@@ -50,10 +48,10 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import Doc from '@/components/Doc'
+import Web from '@/components/Web'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
@@ -66,7 +64,7 @@ export default {
     Screenfull,
     SizeSelect,
     Search,
-    Doc
+    Web
   },
   data() {
     return {
@@ -75,18 +73,17 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'device',
-      'user',
-      'baseApi'
-    ]),
+    ...mapState({
+      sidebar: state => state.app.sidebar,
+      device: state => state.app.device,
+      user: state => state.user.user
+    }),
     show: {
       get() {
         return this.$store.state.settings.showSettings
       },
       set(val) {
-        this.$store.dispatch('settings/changeSetting', {
+        this.$store.dispatch('settings/ChangeSetting', {
           key: 'showSettings',
           value: val
         })
@@ -95,7 +92,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
+      this.$store.dispatch('app/ToggleSideBar')
     },
     open() {
       this.$confirm('确定注销并退出系统吗？', '提示', {
@@ -107,7 +104,12 @@ export default {
       })
     },
     logout() {
-      this.$store.dispatch('LogOut').then(() => {
+      this.$mapi.communal.logout().then(res => {
+        this.$message.success(res.message)
+
+        // 清除token
+        this.$store.dispatch('user/ClearUserInfo')
+        window.sessionStorage.removeItem('vuex')
         location.reload()
       })
     }

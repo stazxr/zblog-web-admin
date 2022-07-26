@@ -22,6 +22,7 @@
 
 <script>
 import store from '@/store'
+// import { updatePass } from '@/api/system/user1'
 export default {
   data() {
     const confirmPass = (rule, value, callback) => {

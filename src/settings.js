@@ -2,18 +2,6 @@ module.exports = {
   // 网站标题
   title: 'Z-BLOG',
 
-  // 记住密码状态下的密码在Cookie中存储的天数
-  passCookieExpires: 1,
-
-  // 记住密码状态下的密码在Cookie中存储的username
-  passCookieOfUname: 'ZBW001',
-
-  // 记住密码状态下的密码在Cookie中存储的username
-  passCookieOfPwd: 'ZBW002',
-
-  // 记住密码状态下的密码在Cookie中存储的rememberMe
-  passCookieOfRm: 'ZBW003',
-
   // token key
   tokenKey: 'usrToken',
 
@@ -21,7 +9,7 @@ module.exports = {
   refTokenKey: 'usrRefToken',
 
   // 请求超时时间，毫秒（默认2分钟）
-  timeout: 1200000,
+  timeout: 120000,
 
   // 是否显示 tagsView
   tagsView: true,

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'show':show}" class="header-search">
+  <div :class="{'show': show}" class="header-search">
     <svg-icon class-name="search-icon" icon-class="search" @click.stop="click" />
     <el-select
       ref="headerSearchSelect"
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     routes() {
-      return this.$store.state.permission.routers
+      return this.$store.state.router.routers
     }
   },
   watch: {
@@ -55,6 +55,7 @@ export default {
     }
   },
   mounted() {
+    console.log('this.routes', this.routes)
     this.searchPool = this.generateRoutes(this.routes)
   },
   methods: {

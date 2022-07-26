@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      title: 'ZBLOG-后台管理',
+      title: 'ZBLOG',
       logo: Logo
     }
   }
