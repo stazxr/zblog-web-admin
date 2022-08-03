@@ -46,7 +46,10 @@ export default {
       }
     }
     return {
-      loading: false, dialog: false, title: '修改邮箱', form: { pass: '', email: '', code: '' },
+      title: '修改邮箱',
+      loading: false,
+      dialog: false,
+      form: { pass: '', email: '', code: '' },
       user: { email: '', password: '' }, codeLoading: false,
       buttonName: '获取验证码', isDisabled: false, time: 60,
       rules: {
@@ -71,7 +74,7 @@ export default {
         this.codeLoading = true
         this.buttonName = '验证码发送中'
         const _this = this
-        resetEmail(this.form.email).then(res => {
+        this.$mapi.communal.resetEmail(this.form.email).then(res => {
           this.$message({
             showClose: true,
             message: '发送成功，验证码有效期5分钟',
@@ -90,10 +93,9 @@ export default {
               window.clearInterval(_this.timer)
             }
           }, 1000)
-        }).catch(err => {
+        }).finally(() => {
           this.resetForm()
           this.codeLoading = false
-          console.log(err.response.data.message)
         })
       }
     },

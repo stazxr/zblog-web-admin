@@ -54,7 +54,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'center',
-        component: (resolve) => require(['@/views/system/user/center'], resolve),
+        component: (resolve) => require(['@/views/userCenter'], resolve),
         name: '个人中心',
         meta: { title: '个人中心' }
       }

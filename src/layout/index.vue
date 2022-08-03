@@ -80,9 +80,6 @@ export default {
         const rewriteRoutes = filterAsyncRouter(rdata, false, true)
         rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
 
-        console.log('sidebarRoutes', sidebarRoutes)
-        console.log('rewriteRoutes', rewriteRoutes)
-
         this.$store.dispatch('router/GenerateRoutes', rewriteRoutes).then(() => { // 存储路由
           this.$router.addRoutes(rewriteRoutes) // 动态添加可访问路由表
         })

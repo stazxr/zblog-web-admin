@@ -61,6 +61,18 @@ const actions = {
         reject(e)
       })
     })
+  },
+  GetUserInfo({ commit }) {
+    return new Promise((resolve, reject) => {
+      communal.loginId().then(res => {
+        const { authorities } = res.data
+        commit('SET_USER', res.data)
+        commit('SET_USER_ROLE', authorities || [])
+        resolve(res.data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
   }
 }
 

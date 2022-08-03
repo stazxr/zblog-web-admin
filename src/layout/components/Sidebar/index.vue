@@ -26,10 +26,6 @@ import variables from '@/assets/styles/variables.scss'
 
 export default {
   components: { SidebarItem, Logo },
-  activated() {
-    console.log('sidebar', this.sidebar)
-    console.log('sidebarRouters', this.sidebarRouters)
-  },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,

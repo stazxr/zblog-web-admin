@@ -16,13 +16,15 @@
         <el-button type="text" @click="cancel">取消</el-button>
         <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       </div>
+      <div style="margin-left: 5px;">
+        <el-alert :title="passwordRemark" type="info" effect="dark" :closable="false"></el-alert>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import store from '@/store'
-// import { updatePass } from '@/api/system/user1'
 export default {
   data() {
     const confirmPass = (rule, value, callback) => {
@@ -37,7 +39,11 @@ export default {
       }
     }
     return {
-      loading: false, dialog: false, title: '修改密码', form: { oldPass: '', newPass: '', confirmPass: '' },
+      title: '修改密码',
+      loading: false,
+      dialog: false,
+      passwordRemark: '密码设置要求: 密码不能包含用户名，密码长度必须大于等于6位且小于等于20位，需要包含大写字母，小写字母，数字，特殊字符中的至少三种',
+      form: { oldPass: '', newPass: '', confirmPass: '' },
       rules: {
         oldPass: [
           { required: true, message: '请输入旧密码', trigger: 'blur' }
@@ -60,24 +66,19 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-          updatePass(this.form).then(res => {
+          this.$mapi.user.updateUserPass(this.form).then(() => {
             this.resetForm()
-            this.$notify({
-              title: '密码修改成功，请重新登录',
-              type: 'success',
-              duration: 1500
-            })
+            this.$message.success("密码修改成功，请重新登录")
+
+            // 跳转登录页面
             setTimeout(() => {
-              store.dispatch('LogOut').then(() => {
-                location.reload() // 为了重新实例化vue-router对象 避免bug
+              store.dispatch('user/ClearUserInfo').then(() => {
+                location.reload()
               })
             }, 1500)
-          }).catch(err => {
+          }).finally(() => {
             this.loading = false
-            console.log(err.response.data.message)
           })
-        } else {
-          return false
         }
       })
     },
