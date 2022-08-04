@@ -1,6 +1,6 @@
 <template>
   <div style="display: inline-block;">
-    <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :before-close="cancel" :title="title" append-to-body width="475px" @close="cancel">
+    <el-dialog :visible.sync="dialog" :close-on-click-modal="false" :before-close="cancel" :title="title" append-to-body width="500px" @close="cancel">
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="88px">
         <el-form-item label="新邮箱" prop="email">
           <el-input v-model="form.email" auto-complete="on" style="width: 200px;" />
@@ -22,10 +22,7 @@
 </template>
 
 <script>
-import store from '@/store'
 import { validEmail } from '@/utils/validate'
-// import { updateEmail } from '@/api/system/user1'
-// import { resetEmail } from '@/api/system/code'
 export default {
   props: {
     email: {
@@ -49,9 +46,11 @@ export default {
       title: '修改邮箱',
       loading: false,
       dialog: false,
-      form: { pass: '', email: '', code: '' },
-      user: { email: '', password: '' }, codeLoading: false,
-      buttonName: '获取验证码', isDisabled: false, time: 60,
+      codeLoading: false,
+      buttonName: '获取验证码',
+      isDisabled: false,
+      time: 60,
+      form: { pass: '', email: '', code: '', uuid: '' },
       rules: {
         pass: [
           { required: true, message: '当前密码不能为空', trigger: 'blur' }
@@ -71,15 +70,12 @@ export default {
     },
     sendCode() {
       if (this.form.email && this.form.email !== this.email) {
+        const _this = this
         this.codeLoading = true
         this.buttonName = '验证码发送中'
-        const _this = this
-        this.$mapi.communal.resetEmail(this.form.email).then(res => {
-          this.$message({
-            showClose: true,
-            message: '发送成功，验证码有效期5分钟',
-            type: 'success'
-          })
+        this.$mapi.communal.sendEmailCode({ email: this.form.email }).then(res => {
+          this.form.uuid = res.data
+          this.$message.success('发送成功，验证码有效期5分钟')
           this.codeLoading = false
           this.isDisabled = true
           this.buttonName = this.time-- + '秒后重新发送'
@@ -93,9 +89,10 @@ export default {
               window.clearInterval(_this.timer)
             }
           }, 1000)
-        }).finally(() => {
-          this.resetForm()
+        }).catch(() => {
+          this.isDisabled = false
           this.codeLoading = false
+          this.buttonName = '获取验证码'
         })
       }
     },
@@ -103,32 +100,29 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           this.loading = true
-          updateEmail(this.form).then(res => {
-            this.loading = false
+          this.$mapi.user.updateUserEmail(this.form).then(() => {
+            this.$message.success('邮箱修改成功')
             this.resetForm()
-            this.$notify({
-              title: '邮箱修改成功',
-              type: 'success',
-              duration: 1500
-            })
-            store.dispatch('GetInfo').then(() => {})
-          }).catch(err => {
             this.loading = false
-            console.log(err.response.data.message)
+            this.$store.dispatch('user/GetUserInfo').then(() => {})
+          }).catch(_ => {
+            this.loading = false
           })
-        } else {
-          return false
         }
       })
     },
-    resetForm() {
-      this.dialog = false
-      this.$refs['form'].resetFields()
-      window.clearInterval(this.timer)
-      this.time = 60
+    resetBtn() {
       this.buttonName = '获取验证码'
       this.isDisabled = false
-      this.form = { pass: '', email: '', code: '' }
+      this.codeLoading = false
+    },
+    resetForm() {
+      this.dialog = false
+      this.time = 60
+      this.$refs['form'].resetFields()
+      window.clearInterval(this.timer)
+      this.resetBtn()
+      this.form = { pass: '', email: '', code: '', uuid: '' }
     }
   }
 }

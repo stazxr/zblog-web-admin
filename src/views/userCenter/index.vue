@@ -183,20 +183,20 @@ export default {
       const { code, data, message } = jsonData
       if (code === 200) {
         // success
-        let param = {
+        const param = {
           username: this.user.username,
           headImg: data[0]['downloadUrl']
         }
         this.$mapi.user.updateUserHeadImg(param).then(() => {
-          this.$message.success("头像修改成功")
+          this.$message.success('头像修改成功')
           this.$store.dispatch('user/GetUserInfo')
           this.$refs.imgUploadRef.off()
         })
       } else {
         // error
-        this.$refs.imgUploadRef.loading = 3;
-        this.$refs.imgUploadRef.hasError = true;
-        this.$refs.imgUploadRef.errorMsg = message;
+        this.$refs.imgUploadRef.loading = 3
+        this.$refs.imgUploadRef.hasError = true
+        this.$refs.imgUploadRef.errorMsg = message
       }
     },
     toggleShow() {
@@ -208,7 +208,7 @@ export default {
           if (valid) {
             this.saveLoading = true
             this.$mapi.user.updateUserBaseInfo(this.form).then(() => {
-              this.$message.success("编辑成功")
+              this.$message.success('修改成功')
               this.$store.dispatch('user/GetUserInfo').then(() => {})
             }).finally(() => {
               this.saveLoading = false

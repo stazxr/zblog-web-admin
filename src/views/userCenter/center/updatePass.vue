@@ -17,7 +17,7 @@
         <el-button :loading="loading" type="primary" @click="doSubmit">确认</el-button>
       </div>
       <div style="margin-left: 5px;">
-        <el-alert :title="passwordRemark" type="info" effect="dark" :closable="false"></el-alert>
+        <el-alert :title="passwordRemark" type="info" effect="dark" :closable="false" />
       </div>
     </el-dialog>
   </div>
@@ -68,7 +68,7 @@ export default {
           this.loading = true
           this.$mapi.user.updateUserPass(this.form).then(() => {
             this.resetForm()
-            this.$message.success("密码修改成功，请重新登录")
+            this.$message.success('密码修改成功，请重新登录')
 
             // 跳转登录页面
             setTimeout(() => {
