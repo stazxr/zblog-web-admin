@@ -11,10 +11,13 @@
             <div style="text-align: center">
               <div class="el-upload">
                 <img :src="user && user['headImgUrl'] !== '' ? user['headImgUrl'] : Avatar" title="点击上传头像" class="avatar" alt="" @click="toggleShow">
-                <img-upload ref="imgUploadRef" v-model="showImgUpload" field="file"
+                <img-upload
+                  ref="imgUploadRef"
+                  v-model="showImgUpload"
+                  field="file"
                   :headers="headers"
                   :url="$store.state.api.fileUploadApi"
-                  :langExt="langExt"
+                  :lang-ext="langExt"
                   @crop-upload-success="cropUploadSuccess"
                 />
               </div>
@@ -55,13 +58,13 @@
                 </el-form-item>
                 <el-form-item label="性别">
                   <el-radio-group v-model.number="form.gender" style="width: 35%;">
-                    <el-radio :label=1>帅哥</el-radio>
-                    <el-radio :label=2>美女</el-radio>
-                    <el-radio :label=3>不显示</el-radio>
+                    <el-radio :label="1">帅哥</el-radio>
+                    <el-radio :label="2">美女</el-radio>
+                    <el-radio :label="3">不显示</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <el-form-item label="签名">
-                  <el-input type="textarea" v-model="form.signature" style="width: 35%;" rows="4" maxlength="100" show-word-limit />
+                  <el-input v-model="form.signature" type="textarea" style="width: 35%;" rows="4" maxlength="100" show-word-limit />
                 </el-form-item>
                 <el-form-item>
                   <el-button :loading="saveLoading" size="mini" type="primary" @click="doSubmit">保存配置</el-button>
@@ -69,40 +72,48 @@
               </el-form>
             </el-tab-pane>
             <!-- 操作日志 -->
-<!--            <el-tab-pane label="操作日志" name="second">-->
-<!--              <el-table v-loading="loading" :data="data" style="width: 100%;">-->
-<!--                <el-table-column prop="description" label="行为" />-->
-<!--                <el-table-column prop="requestIp" label="IP" />-->
-<!--                <el-table-column :show-overflow-tooltip="true" prop="address" label="IP来源" />-->
-<!--                <el-table-column prop="browser" label="浏览器" />-->
-<!--                <el-table-column prop="time" label="请求耗时" align="center">-->
-<!--                  <template slot-scope="scope">-->
-<!--                    <el-tag v-if="scope.row.time <= 300">{{ scope.row.time }}ms</el-tag>-->
-<!--                    <el-tag v-else-if="scope.row.time <= 1000" type="warning">{{ scope.row.time }}ms</el-tag>-->
-<!--                    <el-tag v-else type="danger">{{ scope.row.time }}ms</el-tag>-->
-<!--                  </template>-->
-<!--                </el-table-column>-->
-<!--                <el-table-column-->
-<!--                  align="right"-->
-<!--                >-->
-<!--                  <template slot="header">-->
-<!--                    <div style="display:inline-block;float: right;cursor: pointer" @click="init">创建日期<i class="el-icon-refresh" style="margin-left: 40px" /></div>-->
-<!--                  </template>-->
-<!--                  <template slot-scope="scope">-->
-<!--                    <span>{{ scope.row.createTime }}</span>-->
-<!--                  </template>-->
-<!--                </el-table-column>-->
-<!--              </el-table>-->
-<!--              &lt;!&ndash;分页组件&ndash;&gt;-->
-<!--              <el-pagination-->
-<!--                :total="total"-->
-<!--                :current-page="page + 1"-->
-<!--                style="margin-top: 8px;"-->
-<!--                layout="total, prev, pager, next, sizes"-->
-<!--                @size-change="sizeChange"-->
-<!--                @current-change="pageChange"-->
-<!--              />-->
-<!--            </el-tab-pane>-->
+            <el-tab-pane label="操作日志" name="second">
+              <el-table v-loading="tableLoading" :data="tableData" style="width: 100%;">
+                <el-table-column :show-overflow-tooltip="true" prop="description" label="行为" />
+                <el-table-column prop="requestIp" label="IP" />
+                <el-table-column :show-overflow-tooltip="true" prop="address" label="IP来源" />
+                <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" />
+                <el-table-column prop="costTime" label="请求耗时" align="center">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row['costTime'] === null" />
+                    <el-tag v-else-if="scope.row['costTime'] <= 300">{{ scope.row['costTime'] }}ms</el-tag>
+                    <el-tag v-else-if="scope.row['costTime'] <= 1000" type="warning">{{ scope.row['costTime'] }}ms</el-tag>
+                    <el-tag v-else type="danger">{{ scope.row['costTime'] }}ms</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果">
+                  <template slot-scope="scope">
+                    <el-tag v-if="scope.row['execResult']">成功</el-tag>
+                    <el-tag v-else type="danger">失败</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column :show-overflow-tooltip="true" prop="execMessage" label="备注" />
+                <el-table-column :show-overflow-tooltip="true" align="right">
+                  <template slot="header">
+                    <div style="display:inline-block;float: right;cursor: pointer;white-space: nowrap" @click="listTableData">
+                      创建日期<i class="el-icon-refresh" style="margin-left: 40px" />
+                    </div>
+                  </template>
+                  <template slot-scope="scope">
+                    <span>{{ scope.row['eventTime'] }}</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <!-- 分页组件 -->
+              <el-pagination
+                :total="total"
+                :current-page="page"
+                style="margin-top: 8px;"
+                layout="total, prev, pager, next, sizes"
+                @size-change="sizeChange"
+                @current-change="pageChange"
+              />
+            </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
@@ -154,7 +165,12 @@ export default {
           { required: false, trigger: 'blur', validator: validPhone }
         ]
       },
-      saveLoading: false
+      saveLoading: false,
+      tableData: [],
+      tableLoading: false,
+      total: 0,
+      page: 1,
+      pageSize: 10
     }
   },
   computed: {
@@ -176,8 +192,32 @@ export default {
   methods: {
     handleClick(tab, event) {
       if (tab.name === 'second') {
-        this.init()
+        this.listTableData()
       }
+    },
+    listTableData() {
+      const param = {
+        username: this.user.username,
+        page: this.page,
+        pageSize: this.pageSize
+      }
+      this.tableLoading = true
+      this.$mapi.log.queryUserLog(param).then(res => {
+        const { data } = res
+        this.tableData = data.list
+        this.total = data.total
+      }).finally(() => {
+        this.tableLoading = false
+      })
+    },
+    sizeChange(size) {
+      this.page = 1
+      this.pageSize = size
+      this.listTableData()
+    },
+    pageChange(page) {
+      this.page = page
+      this.listTableData()
     },
     cropUploadSuccess(jsonData) {
       const { code, data, message } = jsonData
@@ -216,10 +256,6 @@ export default {
           }
         })
       }
-    },
-    beforeInit() {
-      this.url = 'api/logs/user'
-      return true
     }
   }
 }
