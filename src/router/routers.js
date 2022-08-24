@@ -1,10 +1,11 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
 import Layout from '../layout/index'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export const constantRouterMap = [
+// 默认路由
+export const defaultRouterMap = [
   {
     path: '/login',
     meta: { title: '登录', noCache: true },
@@ -13,13 +14,13 @@ export const constantRouterMap = [
     hidden: true
   },
   {
-    path: '/404',
-    component: (resolve) => require(['@/views/features/404'], resolve),
+    path: '/403',
+    component: (resolve) => require(['@/views/features/403'], resolve),
     hidden: true
   },
   {
-    path: '/401',
-    component: (resolve) => require(['@/views/features/401'], resolve),
+    path: '/404',
+    component: (resolve) => require(['@/views/features/404'], resolve),
     hidden: true
   },
   {
@@ -35,12 +36,19 @@ export const constantRouterMap = [
   },
   {
     path: '/',
+    meta: { title: 'Z-BLOG', noCache: true },
+    name: 'Index',
+    component: (resolve) => require(['@/views/web'], resolve),
+    hidden: true
+  },
+  {
+    path: '/admin',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/admin/dashboard',
     children: [
       {
         path: 'dashboard',
-        component: (resolve) => require(['@/views/home'], resolve),
+        component: (resolve) => require(['@/views/admin/home'], resolve),
         name: 'Dashboard',
         meta: { title: '首页', icon: 'index', affix: true, noCache: true }
       }
@@ -54,16 +62,22 @@ export const constantRouterMap = [
     children: [
       {
         path: 'center',
-        component: (resolve) => require(['@/views/userCenter'], resolve),
-        name: '个人中心',
+        component: (resolve) => require(['@/views/admin/userCenter'], resolve),
+        name: 'UserCenter',
         meta: { title: '个人中心' }
       }
     ]
   }
 ]
 
-export default new Router({
+export default new VueRouter({
   mode: 'hash',
-  routes: constantRouterMap,
-  scrollBehavior: () => ({ y: 0 })
+  routes: defaultRouterMap,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition && to.meta.keepAlive) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })

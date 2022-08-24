@@ -12,7 +12,7 @@
         <!-- 菜单搜索 -->
         <search id="header-search" class="right-menu-item" />
         <!-- 项目文档 -->
-        <el-tooltip content="博客首页" effect="dark" placement="bottom">
+        <el-tooltip content="网站首页" effect="dark" placement="bottom">
           <Web class="right-menu-item hover-effect" />
         </el-tooltip>
         <!-- 全屏缩放 -->
@@ -56,6 +56,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import Avatar from '@/assets/images/avatar.png'
+import { removeToken } from '@/utils/token'
 
 export default {
   components: {
@@ -105,11 +106,9 @@ export default {
     },
     logout() {
       this.$mapi.communal.logout().then(res => {
+        removeToken()
         this.$message.success(res.message)
-
-        // 清除token
-        this.$store.dispatch('user/ClearUserInfo')
-        window.sessionStorage.removeItem('vuex')
+        this.$store.commit('user/ClearUserInfo')
         location.reload()
       })
     }

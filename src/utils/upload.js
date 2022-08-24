@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getToken } from '@/utils/auth'
+import { getToken } from '@/utils/token'
 
 export function upload(api, file) {
   var data = new FormData()

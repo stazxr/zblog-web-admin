@@ -62,10 +62,8 @@ export default {
     }
   },
   mounted() {
-    console.log('this.visitedViews', this.visitedViews)
-    console.log('this.routers', this.routes)
-    // this.initTags()
-    // this.addTags()
+    this.initTags()
+    this.addTags()
   },
   methods: {
     isActive(route) {
@@ -104,6 +102,7 @@ export default {
     addTags() {
       const { name } = this.$route
       if (name) {
+        // 添加标签
         this.$store.dispatch('tagsView/AddView', this.$route)
       }
       return false
@@ -165,7 +164,7 @@ export default {
           // to reload home page
           this.$router.replace({ path: '/redirect' + view.fullPath })
         } else {
-          this.$router.push('/')
+          this.$router.push('/admin')
         }
       }
     },

@@ -19,12 +19,12 @@
 
 <script>
 import RightPanel from '@/components/RightPanel'
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
-import { mapState } from 'vuex'
 import Theme from '@/components/ThemePicker'
+import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+import { mapState } from 'vuex'
 import Cookies from 'js-cookie'
-import { filterAsyncRouter } from '@/utils/router'
+
 export default {
   name: 'Layout',
   components: {
@@ -63,30 +63,9 @@ export default {
       })
     }
   },
-  created() {
-    // 生成菜单列表
-    this.loadMenus()
-  },
   methods: {
     handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    },
-    loadMenus() {
-      this.$mapi.perm.buildMenus().then(res => {
-        const data = res.data
-        const sdata = JSON.parse(JSON.stringify(data))
-        const rdata = JSON.parse(JSON.stringify(data))
-        const sidebarRoutes = filterAsyncRouter(sdata)
-        const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-        rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
-
-        this.$store.dispatch('router/GenerateRoutes', rewriteRoutes).then(() => { // 存储路由
-          this.$router.addRoutes(rewriteRoutes) // 动态添加可访问路由表
-        })
-        this.$store.dispatch('router/SetSidebarRouters', sidebarRoutes)
-      }).catch(e => {
-        console.log('e', e)
-      })
+      this.$store.dispatch('app/CloseSideBar', { withoutAnimation: false })
     }
   }
 }

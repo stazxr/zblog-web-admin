@@ -70,8 +70,7 @@ export default {
       this.show = false
     },
     change(val) {
-      if (this.ishttp(val.path)) {
-        // http(s):// 路径新窗口打开
+      if (this.isHttp(val.path)) {
         window.open(val.path, '_blank')
       } else {
         this.$router.push(val.path)
@@ -109,14 +108,14 @@ export default {
         if (router.hidden) { continue }
 
         const data = {
-          path: !this.ishttp(router.path) ? path.resolve(basePath, router.path) : router.path,
+          path: !this.isHttp(router.path) ? path.resolve(basePath, router.path) : router.path,
           title: [...prefixTitle]
         }
 
         if (router.meta && router.meta.title) {
           data.title = [...data.title, router.meta.title]
 
-          if (router.redirect !== 'noRedirect') {
+          if (router.redirect !== 'noredirect') {
             // only push the routes with title
             // special case: need to exclude parent router without redirect
             res.push(data)
@@ -140,7 +139,7 @@ export default {
         this.options = []
       }
     },
-    ishttp(url) {
+    isHttp(url) {
       return url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1
     }
   }

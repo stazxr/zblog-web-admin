@@ -1,38 +1,28 @@
-import { constantRouterMap } from '@/router/routers'
+import { defaultRouterMap } from '@/router/routers'
 
-const state = {
-  routers: constantRouterMap,
-  addRouters: [],
-  sidebarRouters: []
-}
-
-const mutations = {
-  SET_ROUTERS: (state, routers) => {
-    state.addRouters = routers
-    state.routers = constantRouterMap.concat(routers)
+const permission = {
+  state: {
+    routers: defaultRouterMap,
+    addRouters: [],
+    sidebarRouters: []
   },
-  SET_SIDEBAR_ROUTERS: (state, routers) => {
-    state.sidebarRouters = constantRouterMap.concat(routers)
+  mutations: {
+    SET_ROUTERS: (state, routers) => {
+      state.addRouters = routers
+      state.routers = defaultRouterMap.concat(routers)
+    },
+    SET_SIDEBAR_ROUTERS: (state, routers) => {
+      state.sidebarRouters = defaultRouterMap.concat(routers)
+    }
+  },
+  actions: {
+    GenerateRoutes({ commit }, asyncRouter) {
+      commit('SET_ROUTERS', asyncRouter)
+    },
+    SetSidebarRouters({ commit }, sidebarRouter) {
+      commit('SET_SIDEBAR_ROUTERS', sidebarRouter)
+    }
   }
 }
 
-const actions = {
-  GenerateRoutes({ commit }, asyncRouter) {
-    commit('SET_ROUTERS', asyncRouter)
-  },
-  SetSidebarRouters({ commit }, sidebarRouter) {
-    commit('SET_SIDEBAR_ROUTERS', sidebarRouter)
-  }
-}
-
-const getters = {
-
-}
-
-export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters
-}
+export default permission

@@ -73,26 +73,43 @@
             </el-tab-pane>
             <!-- 操作日志 -->
             <el-tab-pane label="操作日志" name="second">
-              <el-table v-loading="tableLoading" :data="tableData" style="width: 100%;">
-                <el-table-column :show-overflow-tooltip="true" prop="description" label="行为" />
-                <el-table-column prop="requestIp" label="IP" />
-                <el-table-column :show-overflow-tooltip="true" prop="address" label="IP来源" />
+              <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%;">
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <el-form label-position="left" inline class="demo-table-expand">
+                      <el-form-item label="编号:">
+                        <span>{{ props.row['id'] }}</span>
+                      </el-form-item>
+                      <el-form-item label="请求IP:">
+                        <span>{{ props.row['requestIp'] }}</span>
+                      </el-form-item>
+                      <el-form-item label="日志类型:">
+                        <span v-if="props.row['logType'] === 1">操作日志</span>
+                        <span v-else>异常日志</span>
+                      </el-form-item>
+                      <el-form-item label="备注:">
+                        <span>{{ props.row['execMessage'] }}</span>
+                      </el-form-item>
+                    </el-form>
+                  </template>
+                </el-table-column>
+                <el-table-column :show-overflow-tooltip="true" prop="description" label="请求内容" />
+                <el-table-column :show-overflow-tooltip="true" prop="address" label="请求来源" />
                 <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" />
-                <el-table-column prop="costTime" label="请求耗时" align="center">
+                <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果">
                   <template slot-scope="scope">
-                    <span v-if="scope.row['costTime'] === null" />
+                    <el-tag v-if="scope.row['logType'] === 2 || !scope.row['execResult']" type="danger">失败</el-tag>
+                    <el-tag v-else>成功</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column :show-overflow-tooltip="true" prop="costTime" label="请求耗时" align="center">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row['costTime'] === null"> - </span>
                     <el-tag v-else-if="scope.row['costTime'] <= 300">{{ scope.row['costTime'] }}ms</el-tag>
                     <el-tag v-else-if="scope.row['costTime'] <= 1000" type="warning">{{ scope.row['costTime'] }}ms</el-tag>
                     <el-tag v-else type="danger">{{ scope.row['costTime'] }}ms</el-tag>
                   </template>
                 </el-table-column>
-                <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果">
-                  <template slot-scope="scope">
-                    <el-tag v-if="scope.row['execResult']">成功</el-tag>
-                    <el-tag v-else type="danger">失败</el-tag>
-                  </template>
-                </el-table-column>
-                <el-table-column :show-overflow-tooltip="true" prop="execMessage" label="备注" />
                 <el-table-column :show-overflow-tooltip="true" align="right">
                   <template slot="header">
                     <div style="display:inline-block;float: right;cursor: pointer;white-space: nowrap" @click="listTableData">
@@ -100,6 +117,7 @@
                     </div>
                   </template>
                   <template slot-scope="scope">
+                    <i class="el-icon-time" />
                     <span>{{ scope.row['eventTime'] }}</span>
                   </template>
                 </el-table-column>
@@ -118,7 +136,6 @@
         </el-card>
       </el-col>
     </el-row>
-
     <updateEmail ref="email" :email="user.email" />
     <updatePass ref="pass" />
   </div>
@@ -130,7 +147,8 @@ import updatePass from './center/updatePass'
 import updateEmail from './center/updateEmail'
 import ImgUpload from 'vue-image-crop-upload'
 import { isValidPhone } from '@/utils/validate'
-import { mapState } from 'vuex'
+import { getToken } from '@/utils/token'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'UserCenter',
@@ -153,7 +171,7 @@ export default {
         fail: '图片上传失败!'
       },
       headers: {
-        'Authorization': this.$store.state.user.token
+        Authorization: ''
       },
       form: {},
       rules: {
@@ -174,12 +192,12 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      user: state => state.user.user
-    })
+    ...mapGetters([
+      'user'
+    ])
   },
   created() {
-    this.$store.dispatch('user/GetUserInfo').then(() => {
+    this.$store.dispatch('GetUserInfo').then(() => {
       this.form = {
         id: this.user.id,
         nickname: this.user.nickname,
@@ -190,7 +208,7 @@ export default {
     })
   },
   methods: {
-    handleClick(tab, event) {
+    handleClick(tab) {
       if (tab.name === 'second') {
         this.listTableData()
       }
@@ -229,7 +247,7 @@ export default {
         }
         this.$mapi.user.updateUserHeadImg(param).then(() => {
           this.$message.success('头像修改成功')
-          this.$store.dispatch('user/GetUserInfo')
+          this.$store.dispatch('GetUserInfo')
           this.$refs.imgUploadRef.off()
         })
       } else {
@@ -240,6 +258,7 @@ export default {
       }
     },
     toggleShow() {
+      this.headers.Authorization = getToken()
       this.showImgUpload = !this.showImgUpload
     },
     doSubmit() {
@@ -249,7 +268,7 @@ export default {
             this.saveLoading = true
             this.$mapi.user.updateUserBaseInfo(this.form).then(() => {
               this.$message.success('修改成功')
-              this.$store.dispatch('user/GetUserInfo').then(() => {})
+              this.$store.dispatch('GetUserInfo').then(() => {})
             }).finally(() => {
               this.saveLoading = false
             })
@@ -281,5 +300,18 @@ export default {
         color: #317EF3;
       }
     }
+  }
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    padding-left: 10px;
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
   }
 </style>

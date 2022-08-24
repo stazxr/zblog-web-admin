@@ -37,25 +37,20 @@ const actions = {
   ToggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR')
   },
-  closeSideBar({ commit }, { withoutAnimation }) {
+  CloseSideBar({ commit }, { withoutAnimation }) {
     commit('CLOSE_SIDEBAR', withoutAnimation)
   },
-  toggleDevice({ commit }, device) {
+  ToggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device)
   },
-  setSize({ commit }, size) {
+  SetSize({ commit }, size) {
     commit('SET_SIZE', size)
   }
-}
-
-const getters = {
-
 }
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions,
-  getters
+  actions
 }

@@ -1,11 +1,15 @@
 <template>
-  <div id="app">
-    <router-view />
+  <div>
+    <h2>权限</h2>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'Perm'
 }
 </script>
+
+<style scoped>
+
+</style>

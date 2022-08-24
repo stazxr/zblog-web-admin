@@ -16,7 +16,7 @@
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
-        <el-input v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
+        <el-input ref="code" v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </el-input>
         <div class="login-code">
@@ -27,7 +27,7 @@
         记住我
       </el-checkbox>
       <el-form-item style="width:100%;">
-        <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button ref="loginBtn" :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           <span v-if="!loading">登 录</span>
           <span v-else>登 录 中...</span>
         </el-button>
@@ -46,9 +46,6 @@
 import qs from 'qs'
 import Background from '@/assets/images/background.jpeg'
 import { encrypt } from '@/utils/rsaEncrypt'
-import { setToken, setRefToken } from '@/utils/token'
-import { setUserInfo } from '@/store/modules/user'
-import Cookies from 'js-cookie'
 export default {
   name: 'Login',
   data() {
@@ -104,6 +101,10 @@ export default {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
+    } else if (this.loginForm.code === '') {
+      this.$refs.code.focus()
+    } else {
+      this.$refs.loginBtn.focus()
     }
   },
   methods: {
@@ -114,51 +115,39 @@ export default {
     getCode() {
       this.$mapi.communal.loginCode({ _t: new Date().getTime() }).then(res => {
         this.codeUrl = res.data.img
+        this.loginForm.code = ''
         this.loginForm.uuid = res.data.uuid
       })
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
-        const loginParam = {
-          username: this.loginForm.username,
-          password: encrypt(this.loginForm.password),
-          rememberMe: this.loginForm.rememberMe,
-          code: this.loginForm.code,
-          uuid: this.loginForm.uuid
-        }
         if (valid) {
+          const loginParam = {
+            username: this.loginForm.username,
+            password: encrypt(this.loginForm.password),
+            rememberMe: this.loginForm.rememberMe,
+            code: this.loginForm.code,
+            uuid: this.loginForm.uuid
+          }
+
           this.loading = true
-          this.$mapi.communal.login(loginParam).then(res => {
-            const { access_token, refresh_token, additional: { user, userPerms, userMenus }} = res.data
-
-            // 存储Token
-            const tokenPire = { atk: access_token, rtk: refresh_token }
-            this.$store.dispatch('user/SetToken', tokenPire)
-
-            // 设置用户信息
-            this.$store.dispatch('user/SetUser', user)
-
-            // 登录成功，默认跳转首页
+          this.$store.dispatch('Login', loginParam).then(() => {
+            this.$message.success('登录成功')
             this.$router.push({ path: this.redirect || '/admin' })
-          }).catch(e => {
-            console.log('handleLogin catch eor', e)
+          }).catch(() => {
             this.getCode()
-          }).finally(() => {
+            this.$refs.code.focus()
+          }).finally(_ => {
             this.loading = false
           })
         }
       })
     },
     point() {
-      const point = Cookies.get('point')
-      if (point != null && point != undefined) {
-        this.$notify({
-          title: '提示',
-          message: '当前登录状态已过期，请重新登录',
-          type: 'warning',
-          duration: 5000
-        })
-        Cookies.remove('point')
+      const point = window.sessionStorage.getItem('point')
+      if (point !== null && point !== undefined) {
+        this.$message.warning('当前登录状态已过期，请重新登录')
+        window.sessionStorage.removeItem('point')
       }
     }
   }

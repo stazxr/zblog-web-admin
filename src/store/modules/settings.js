@@ -1,19 +1,16 @@
 import variables from '@/assets/styles/element-variables.scss'
 import defaultSettings from '@/settings'
+const { tagsView, fixedHeader, sidebarLogo, showFooter, footerTxt, caseNumber } = defaultSettings
 
 const state = {
-  theme: variables.theme,
+  theme: variables['theme'],
   showSettings: false,
-  title: defaultSettings.title,
-  tokenKey: defaultSettings.tokenKey,
-  refTokenKey: defaultSettings.refTokenKey,
-  timeout: defaultSettings.timeout,
-  tagsView: defaultSettings.tagsView,
-  fixedHeader: defaultSettings.fixedHeader,
-  sidebarLogo: defaultSettings.sidebarLogo,
-  showFooter: defaultSettings.showFooter,
-  footerTxt: defaultSettings.footerTxt,
-  caseNumber: defaultSettings.caseNumber
+  tagsView: tagsView,
+  fixedHeader: fixedHeader,
+  sidebarLogo: sidebarLogo,
+  showFooter: showFooter,
+  footerTxt: footerTxt,
+  caseNumber: caseNumber
 }
 
 const forbiddenKey = ['tokenKey', 'refTokenKey']
@@ -21,7 +18,7 @@ const forbiddenKey = ['tokenKey', 'refTokenKey']
 const mutations = {
   CHANGE_SETTING: (state, { key, value }) => {
     if (state.hasOwnProperty(key)) {
-      if (forbiddenKey.indexOf() === -1) {
+      if (forbiddenKey.indexOf(key) === -1) {
         state[key] = value
       }
     }
@@ -34,14 +31,9 @@ const actions = {
   }
 }
 
-const getters = {
-
-}
-
 export default {
   namespaced: true,
   state,
   mutations,
-  actions,
-  getters
+  actions
 }

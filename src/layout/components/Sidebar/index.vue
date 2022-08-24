@@ -1,13 +1,13 @@
 <template>
-  <div :class="{'has-logo':showLogo}">
+  <div :class="{'has-logo' : showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :active-text-color="variables.menuActiveText"
+        :background-color="backgroundColor"
+        :text-color="textColor"
+        :active-text-color="activeTextColor"
         :collapse-transition="false"
         unique-opened
         mode="vertical"
@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
@@ -27,10 +26,9 @@ import variables from '@/assets/styles/variables.scss'
 export default {
   components: { SidebarItem, Logo },
   computed: {
-    ...mapState({
-      sidebar: state => state.app.sidebar,
-      sidebarRouters: state => state.router.sidebarRouters
-    }),
+    sidebarRouters() {
+      return this.$store.state.router.sidebarRouters
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -40,14 +38,26 @@ export default {
       }
       return path
     },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
-    },
     variables() {
       return variables
     },
+    sidebar() {
+      return this.$store.state.app.sidebar
+    },
+    showLogo() {
+      return this.$store.state.settings.sidebarLogo
+    },
     isCollapse() {
       return !this.sidebar.opened
+    },
+    backgroundColor() {
+      return variables['menuBg']
+    },
+    textColor() {
+      return variables['menuText']
+    },
+    activeTextColor() {
+      return variables['menuActiveText']
     }
   }
 }

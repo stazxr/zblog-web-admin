@@ -79,8 +79,8 @@ const actions = {
   },
   DelView({ dispatch, state }, view) {
     return new Promise(resolve => {
-      dispatch('delVisitedView', view)
-      dispatch('delCachedView', view)
+      dispatch('DelVisitedView', view)
+      dispatch('DelCachedView', view)
       resolve({
         visitedViews: [...state.visitedViews],
         cachedViews: [...state.cachedViews]
@@ -101,8 +101,8 @@ const actions = {
   },
   DelOthersViews({ dispatch, state }, view) {
     return new Promise(resolve => {
-      dispatch('delOthersVisitedViews', view)
-      dispatch('delOthersCachedViews', view)
+      dispatch('DelOthersVisitedViews', view)
+      dispatch('DelOthersCachedViews', view)
       resolve({
         visitedViews: [...state.visitedViews],
         cachedViews: [...state.cachedViews]
@@ -123,8 +123,8 @@ const actions = {
   },
   DelAllViews({ dispatch, state }, view) {
     return new Promise(resolve => {
-      dispatch('delAllVisitedViews', view)
-      dispatch('delAllCachedViews', view)
+      dispatch('DelAllVisitedViews', view)
+      dispatch('DelAllCachedViews', view)
       resolve({
         visitedViews: [...state.visitedViews],
         cachedViews: [...state.cachedViews]

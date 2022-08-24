@@ -1,10 +1,8 @@
 import axios from 'axios'
-import Config from '@/settings'
 import { Message } from 'element-ui'
-import Cookies from 'js-cookie'
-import store from '@/store'
+import { setToken, getToken, removeToken } from '@/utils/token'
 
-import { getToken, getRefToken, removeTokenPair } from '@/utils/token'
+const defaultTimeout = 120000
 
 // create instance
 const instance = axios.create()
@@ -13,7 +11,7 @@ const instance = axios.create()
 instance.defaults.baseURL = process.env.VUE_APP_BASE_API
 
 // 超时时间
-instance.defaults.timeout = Config.timeout
+instance.defaults.timeout = defaultTimeout
 
 // 是否允许携带凭证
 instance.defaults.withCredentials = true
@@ -37,12 +35,6 @@ instance.defaults.validateStatus = status => {
   return /^([23])\d{2}$/.test(String(status))
 }
 
-// 是否在续签
-let refreshing = false
-
-// 请求等待队列
-let reqWaitQueue = []
-
 // 设置响应拦截器
 instance.interceptors.response.use(response => {
   // response {data: {}, status: 200, statusText: 'OK', headers: {}, config: {}, request: {}}
@@ -50,67 +42,42 @@ instance.interceptors.response.use(response => {
   // data maybe really data, eg: data => 后端直接返回了数据，没有封装为上述格式
   // return Promise.reject(new Error(res.msg || 'Error'))
   if (response.status === 200 && response.data) {
+    // refresh Token
+    if (response.headers['new-token'] !== undefined) {
+      setToken(response.headers['new-token'])
+      console.log('refresh token success')
+    }
+
     const result = response.data
     const code = result.code || 200
     if (code === 200) {
       // success, return data
       return response.data
     } else if (code === 401) {
-      // identifier: 900999-未登录; 900006-身份认证异常; 900004-RTK 过期，不可续签; 900001-ATK 过期，可续签
-      const identifier = result.identifier || 900999
-      if (identifier === 900001) {
-        // renew token
-        const config = response.config
-        if (refreshing === false) {
-          // push this
-          refreshing = true
-          new Promise(resolve => {
-            reqWaitQueue.push(() => {
-              config.headers.Authorization = getToken()
-              resolve(instance(config))
-            })
-          }).then()
-
-          // refresh token
-          const rtk = getRefToken()
-          return store.dispatch('user/RefreshToken', rtk).then(() => {
-            config.headers.Authorization = getToken()
-            reqWaitQueue.forEach(callBack => callBack())
-            reqWaitQueue = []
-          }).catch(() => {
-            // 续签失败，清除token，跳转登录页
-            logout()
-          }).finally(() => {
-            refreshing = false
-          })
-        } else {
-          return new Promise(resolve => {
-            reqWaitQueue.push(() => {
-              config.headers.Authorization = getToken()
-              resolve(instance(config))
-            })
-          })
-        }
-      } else if (identifier === 10008) {
-        // 10008 登录失败
-        Message.error({ message: result.message || '登录失败' })
+      const identifier = result.identifier || 900001
+      if (identifier === 10008) {
+        Message.error(result.message || '登录失败')
         return Promise.reject(new Error(result.message || '登录失败'))
       } else if (identifier === 10009) {
-        // TODO 10019 密码过期，跳转修改密码页
-        Message.error({ message: result.message || '请修改密码' })
+        Message.error(result.message || '请修改密码')
         return Promise.reject(new Error(result.message || '请修改密码'))
+      } else if (identifier === 900002) {
+        logout(true)
+      } else if (identifier === 900003 || identifier === 900004) {
+        Message.error(result.message || '系统异常')
+        return Promise.reject(new Error(result.message || '系统异常'))
       } else {
-        // 登录过期，跳转登录页
-        logout()
+        Message.error(result.message || '请登录')
+        logout(false)
       }
     } else if (code === 403) {
-      Message.error({ message: '权限不足，请联系管理员' })
+      Message.error('权限不足，请联系管理员')
       return Promise.reject(new Error('403'))
     } else if (response.data.code === 404) {
-      Message.error({ message: result.message || '请求资源不存在' })
+      Message.error(result.message || '请求资源不存在')
       return Promise.reject(new Error(result.message || '404'))
     } else {
-      Message.error({ message: result.message || '系统发生未知错误' })
+      Message.error(result.message || '系统发生未知错误')
       return Promise.reject(new Error(result.message || '系统发生未知错误'))
     }
   }
@@ -125,13 +92,16 @@ instance.interceptors.response.use(response => {
         errorMsg = '请求数据格式不正确'
         break
       case 401:
-        logout()
+        logout(false)
         break
       case 403:
         errorMsg = '权限不足，请联系管理员添加权限'
         break
       case 404:
         errorMsg = '请求资源不存在'
+        break
+      case 503:
+        errorMsg = '系统繁忙，请稍后再试'
         break
       default:
         errorMsg = '系统发生未知错误'
@@ -154,16 +124,17 @@ instance.interceptors.response.use(response => {
     errorMsg = '请求发送失败'
   }
 
-  Message.error({ message: errorMsg })
+  Message.error(errorMsg || '系统发生未知错误')
   return Promise.reject(new Error(errorMsg))
 })
 
-function logout() {
-  store.dispatch('user/ClearUserInfo').then(() => {
-    window.sessionStorage.removeItem('vuex')
-    Cookies.set('point', 401)
-    location.reload()
-  })
+function logout(expired) {
+  if (expired) {
+    window.sessionStorage.setItem('point', 401)
+  }
+
+  removeToken()
+  location.reload()
 }
 
 export const get = (url, params, requestItem) => {

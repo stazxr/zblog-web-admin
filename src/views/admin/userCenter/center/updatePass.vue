@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import store from '@/store'
 export default {
   data() {
     const confirmPass = (rule, value, callback) => {
@@ -72,7 +71,7 @@ export default {
 
             // 跳转登录页面
             setTimeout(() => {
-              store.dispatch('user/ClearUserInfo').then(() => {
+              this.$store.dispatch('Logout').then(() => {
                 location.reload()
               })
             }, 1500)

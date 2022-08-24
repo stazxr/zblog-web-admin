@@ -101,10 +101,11 @@ export default {
         if (valid) {
           this.loading = true
           this.$mapi.user.updateUserEmail(this.form).then(() => {
-            this.$message.success('邮箱修改成功')
-            this.resetForm()
-            this.loading = false
-            this.$store.dispatch('user/GetUserInfo').then(() => {})
+            this.$store.dispatch('GetUserInfo').then(() => {
+              this.$message.success('邮箱修改成功')
+              this.resetForm()
+              this.loading = false
+            })
           }).catch(_ => {
             this.loading = false
           })

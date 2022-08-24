@@ -33,19 +33,14 @@ export default {
   methods: {
     handleSetSize(size) {
       this.$ELEMENT.size = size
-      this.$store.dispatch('app/setSize', size)
+      this.$store.dispatch('app/SetSize', size)
       this.refreshView()
-      this.$message({
-        message: '布局设置成功',
-        type: 'success'
-      })
+      this.$message.success('布局设置成功')
     },
     refreshView() {
       // In order to make the cached page re-rendered
-      this.$store.dispatch('tagsView/delAllCachedViews', this.$route)
-
+      this.$store.dispatch('tagsView/DelAllCachedViews', this.$route)
       const { fullPath } = this.$route
-
       this.$nextTick(() => {
         this.$router.replace({
           path: '/redirect' + fullPath

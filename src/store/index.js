@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
+import getters from './getters'
 
 Vue.use(Vuex)
 
@@ -17,9 +17,9 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
   return modules
 }, {})
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules,
-  plugins: [createPersistedState({
-    storage: window.sessionStorage
-  })]
+  getters
 })
+
+export default store

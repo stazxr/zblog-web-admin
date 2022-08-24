@@ -1,89 +1,72 @@
-import { getRefToken, getToken, setTokenPair, removeTokenPair } from '@/utils/token'
 import communal from '@/api/communal'
+import { setToken, removeToken } from '@/utils/token'
 
-const state = {
-  token: getToken(),
-  refToken: getRefToken(),
-  user: {},
-  userRole: {},
-  loadMenus: false
-}
-
-const mutations = {
-  SET_TOKEN: (state) => {
-    state.token = getToken()
-    state.refToken = getRefToken()
+const user = {
+  state: {
+    user: null,
+    loadMenus: false
   },
-  SET_USER: (state, user) => {
-    state.user = user
+  mutations: {
+    SET_USER: (state, user) => {
+      state.user = user
+    },
+    SET_LOAD_MENUS: (state, loadMenus) => {
+      state.loadMenus = loadMenus
+    }
   },
-  SET_USER_ROLE: (state, userRole) => {
-    state.userRole = userRole
-  },
-  SET_LOAD_MENUS: (state, flag) => {
-    state.loadMenus = flag
+  actions: {
+    // 登录
+    Login({ commit }, loginParam) {
+      return new Promise((resolve, reject) => {
+        communal.login(loginParam).then(res => {
+          const { access_token } = res.data
+          setToken(access_token)
+          setUserInfo(commit)
+          commit('SET_LOAD_MENUS', true)
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    GetUserInfo({ commit }) {
+      return new Promise((resolve, reject) => {
+        communal.loginId().then(res => {
+          commit('SET_USER', res.data)
+          resolve(res)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    Logout({ commit }) {
+      return new Promise((resolve, reject) => {
+        communal.logout().then(_ => {
+          logout(commit)
+          resolve()
+        }).catch(error => {
+          logout(commit)
+          reject(error)
+        })
+      })
+    },
+    UpdateLoadMenus({ commit }) {
+      return new Promise(() => {
+        commit('SET_LOAD_MENUS', false)
+      })
+    }
   }
 }
 
-const actions = {
-  SetToken({ commit }, tokenPair) {
-    setTokenPair(tokenPair)
-    commit('SET_TOKEN')
-  },
-  SetUser({ commit }, user) {
-    const { authorities } = user
-    commit('SET_USER', user)
-    commit('SET_USER_ROLE', authorities || [])
-  },
-  SetLoadMenus({ commit }, flag) {
-    commit('SET_LOAD_MENUS', flag)
-  },
-  ClearUserInfo({ commit }) {
-    removeTokenPair()
-
-    commit('SET_TOKEN')
-    commit('SET_USER', {})
-    commit('SET_USER_ROLE', [])
-  },
-  RefreshToken({ commit }, rtk) {
-    return new Promise((resolve, reject) => {
-      communal.renewToken({ rtk: rtk }).then(res => {
-        // clear token
-        removeTokenPair()
-        commit('SET_TOKEN')
-
-        // set new token
-        const { atk, rtk } = res.data
-        setTokenPair({ atk: atk, rtk: rtk })
-        commit('SET_TOKEN')
-        resolve(atk)
-      }).catch(e => {
-        reject(e)
-      })
-    })
-  },
-  GetUserInfo({ commit }) {
-    return new Promise((resolve, reject) => {
-      communal.loginId().then(res => {
-        const { authorities } = res.data
-        commit('SET_USER', res.data)
-        commit('SET_USER_ROLE', authorities || [])
-        resolve(res.data)
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  }
+export const logout = (commit) => {
+  commit('SET_USER', null)
+  removeToken()
 }
 
-const getters = {
-
+export const setUserInfo = (commit) => {
+  communal.loginId().then(res => {
+    commit('SET_USER', res.data)
+  })
 }
 
-export default {
-  namespaced: true,
-  state,
-  mutations,
-  actions,
-  getters
-}
+export default user

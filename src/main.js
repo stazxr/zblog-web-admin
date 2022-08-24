@@ -1,47 +1,36 @@
 import Vue from 'vue'
-import App from './App'
-import router from './router/routers'
-import './router/index'
-import ElementUI from 'element-ui'
-import './assets/styles/element-variables.scss'
-import 'normalize.css/normalize.css'
-import store from './store'
 import Cookies from 'js-cookie'
-
-// icon
+import 'normalize.css/normalize.css'
+import ElementUI from 'element-ui'
+import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
+import preventReClick from '@/directive/preventReClick'
+import './assets/styles/element-variables.scss'
+import './assets/styles/index.scss'
+import VueHighlightJS from 'vue-highlightjs'
+import 'highlight.js/styles/atom-one-dark.css'
+import App from './App'
+import store from '@/store'
+import router from '@/router/routers'
 import './assets/icons'
 import './assets/iconfont/iconfont.css'
-
-// global css
-import './assets/styles/index.scss'
-
-// import other
+import './router/index'
+import 'echarts-gl'
 import api from './api/http-index'
 
-// 关闭提示
-Vue.config.productionTip = false
-
-// 声明全局变量
-Vue.prototype['$mapi'] = api
-
 // 加载插件
+Vue.use(preventReClick)
+Vue.use(VueHighlightJS)
+Vue.use(mavonEditor)
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'small' // set element-ui default size
 })
 
-// 前端防多次点击，重复提交 use: v-preventReClick || v-preventReClick = '1000'
-Vue.directive('preventReClick', {
-  inserted(el, binding) {
-    el.addEventListener('click', () => {
-      if (!el['disabled']) {
-        el['disabled'] = true
-        setTimeout(() => {
-          el['disabled'] = false
-        }, binding.value || 3000)
-      }
-    })
-  }
-})
+// 声明全局变量
+Vue.prototype['$mapi'] = api
+
+// 关闭提示
+Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
