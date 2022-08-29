@@ -67,7 +67,7 @@
                   <el-input v-model="form.signature" type="textarea" style="width: 35%;" rows="4" maxlength="100" show-word-limit />
                 </el-form-item>
                 <el-form-item>
-                  <el-button :loading="saveLoading" size="mini" type="primary" @click="doSubmit">保存配置</el-button>
+                  <el-button :loading="saveLoading" size="small" type="primary" @click="doSubmit">保存配置</el-button>
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -77,29 +77,31 @@
                 <el-table-column type="expand">
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                      <el-form-item label="编号:">
+                      <el-form-item label="日志序号:">
                         <span>{{ props.row['id'] }}</span>
-                      </el-form-item>
-                      <el-form-item label="请求IP:">
-                        <span>{{ props.row['requestIp'] }}</span>
                       </el-form-item>
                       <el-form-item label="日志类型:">
                         <span v-if="props.row['logType'] === 1">操作日志</span>
                         <span v-else>异常日志</span>
                       </el-form-item>
-                      <el-form-item label="备注:">
+                      <el-form-item label="请求地址:">
+                        <span>{{ props.row['requestIp'] }}</span>
+                      </el-form-item>
+                      <el-form-item label="请求来源:">
+                        <span>{{ props.row['address'] }}</span>
+                      </el-form-item>
+                      <el-form-item label="描述信息:" style="width: 100%">
                         <span>{{ props.row['execMessage'] }}</span>
                       </el-form-item>
                     </el-form>
                   </template>
                 </el-table-column>
                 <el-table-column :show-overflow-tooltip="true" prop="description" label="请求内容" />
-                <el-table-column :show-overflow-tooltip="true" prop="address" label="请求来源" />
                 <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" />
-                <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果">
+                <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果" align="center">
                   <template slot-scope="scope">
-                    <el-tag v-if="scope.row['logType'] === 2 || !scope.row['execResult']" type="danger">失败</el-tag>
-                    <el-tag v-else>成功</el-tag>
+                    <el-tag v-if="scope.row['logType'] === 2 || !scope.row['execResult']" size="small" type="danger">失败</el-tag>
+                    <el-tag v-else size="small">成功</el-tag>
                   </template>
                 </el-table-column>
                 <el-table-column :show-overflow-tooltip="true" prop="costTime" label="请求耗时" align="center">

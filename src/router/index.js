@@ -65,5 +65,7 @@ export const loadMenus = (next, to) => {
     })
 
     store.dispatch('SetSidebarRouters', sidebarRoutes)
+  }).finally(_ => {
+    NProgress.done()
   })
 }

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import JSONBIG from 'json-bigint'
 import { setToken, getToken, removeToken } from '@/utils/token'
 
 const defaultTimeout = 120000
@@ -12,6 +13,16 @@ instance.defaults.baseURL = process.env.VUE_APP_BASE_API
 
 // 超时时间
 instance.defaults.timeout = defaultTimeout
+
+// 处理超过16位数字精度丢失问题
+instance.defaults.transformResponse = [
+  function(data) {
+    const json = JSONBIG({
+      storeAsString: true
+    })
+    return json.parse(data)
+  }
+]
 
 // 是否允许携带凭证
 instance.defaults.withCredentials = true

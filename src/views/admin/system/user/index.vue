@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <h2>用户</h2>
-  </div>
+  <el-container>
+    <el-header>Header</el-header>
+    <el-container>
+      <el-main>Main</el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
