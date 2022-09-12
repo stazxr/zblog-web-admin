@@ -10,17 +10,6 @@
           <span v-else> - </span>
         </template>
       </el-table-column>
-      <el-table-column :show-overflow-tooltip="true" align="right">
-        <template slot="header">
-          <div style="display:inline-block;float: right;cursor: pointer;white-space: nowrap" @click="listTableData">
-            刷新时间<i class="el-icon-refresh" style="margin-left: 40px" />
-          </div>
-        </template>
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row['createTime'] }}</span>
-        </template>
-      </el-table-column>
     </el-table>
     <!-- 分页组件 -->
     <el-pagination
@@ -61,7 +50,7 @@ export default {
         pageSize: this.pageSize
       }
       this.tableLoading = true
-      this.$mapi.interfaces.queryPermInterface(param).then(res => {
+      this.$mapi.perm.queryPermInterfaces(param).then(res => {
         const { data } = res
         this.tableData = data.list
         this.total = data.total

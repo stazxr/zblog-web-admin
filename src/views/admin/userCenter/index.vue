@@ -226,6 +226,9 @@ export default {
         const { data } = res
         this.tableData = data.list
         this.total = data.total
+      }).catch(_ => {
+        this.tableData = []
+        this.total = 0
       }).finally(() => {
         this.tableLoading = false
       })

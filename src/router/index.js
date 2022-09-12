@@ -51,7 +51,7 @@ router.afterEach((to, from) => {
 })
 
 export const loadMenus = (next, to) => {
-  perm.buildMenus().then(res => {
+  perm.buildUserMenus().then(res => {
     const data = res.data
     const sdata = JSON.parse(JSON.stringify(data))
     const rdata = JSON.parse(JSON.stringify(data))

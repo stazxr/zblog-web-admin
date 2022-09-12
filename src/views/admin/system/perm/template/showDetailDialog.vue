@@ -20,12 +20,11 @@
 </template>
 
 <script>
-import PermDetail from '@/views/admin/system/perm/detail/PermDetail'
-import InterfaceList from '@/views/admin/system/perm/detail/InterfaceList'
-import RoleList from '@/views/admin/system/perm/detail/RoleList'
-import LogList from '@/views/admin/system/perm/detail/LogList'
+import PermDetail from '@/views/admin/system/perm/template/detail/PermDetail'
+import InterfaceList from '@/views/admin/system/perm/template/detail/InterfaceList'
+import RoleList from '@/views/admin/system/perm/template/detail/RoleList'
+import LogList from '@/views/admin/system/perm/template/detail/LogList'
 export default {
-  name: 'ShowDetailDialog',
   components: {
     PermDetail,
     InterfaceList,

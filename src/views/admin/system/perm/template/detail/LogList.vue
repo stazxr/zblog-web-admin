@@ -18,10 +18,10 @@
               <span>{{ props.row['address'] }}</span>
             </el-form-item>
             <el-form-item label="请求接口:">
-              <span>{{ props.row['requestUri'] }}</span>
+              <span>[{{ props.row['requestMethod'] }}] {{ props.row['requestUri'] }}</span>
             </el-form-item>
-            <el-form-item label="请求方式:">
-              <span>{{ props.row['requestMethod'] }}</span>
+            <el-form-item label="操作环境:">
+              <span>{{ props.row['browser'] }}</span>
             </el-form-item>
             <el-form-item label="描述信息:" style="width: 100%">
               <span>{{ props.row['execMessage'] }}</span>
@@ -30,7 +30,6 @@
         </template>
       </el-table-column>
       <el-table-column :show-overflow-tooltip="true" prop="operateUser" label="操作人" />
-      <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" />
       <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row['logType'] === 2 || !scope.row['execResult']" size="small" type="danger">失败</el-tag>
@@ -96,7 +95,7 @@ export default {
         pageSize: this.pageSize
       }
       this.tableLoading = true
-      this.$mapi.log.queryPermLog(param).then(res => {
+      this.$mapi.perm.queryPermLogs(param).then(res => {
         const { data } = res
         this.tableData = data.list
         this.total = data.total

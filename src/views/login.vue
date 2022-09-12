@@ -44,7 +44,7 @@
 
 <script>
 import qs from 'qs'
-import Background from '@/assets/images/background.jpeg'
+import Background from '@/assets/images/wh.jpg'
 import { encrypt } from '@/utils/rsaEncrypt'
 export default {
   name: 'Login',

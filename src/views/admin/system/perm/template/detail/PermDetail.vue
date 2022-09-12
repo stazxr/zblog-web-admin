@@ -1,10 +1,15 @@
 <template>
   <el-descriptions direction="vertical" :column="4" border>
     <!-- 1 -->
-    <el-descriptions-item label="权限编码"> {{ permInfo.id }} </el-descriptions-item>
-    <el-descriptions-item label="权限名称">
+    <el-descriptions-item label="权限序列"> {{ permInfo.id }} </el-descriptions-item>
+    <el-descriptions-item v-if="permInfo.permType === '1' || permInfo.permType === '2'" label="权限名称">
       <span>
         <svg-icon :icon-class="permInfo.icon" />
+        {{ permInfo.permName }}
+      </span>
+    </el-descriptions-item>
+    <el-descriptions-item v-else label="权限名称">
+      <span>
         {{ permInfo.permName }}
       </span>
     </el-descriptions-item>
@@ -99,6 +104,10 @@ export default {
           this.permInfo[key] = '-'
         })
       })
+    },
+    isShowIcon() {
+      console.log('1111')
+      return false
     }
   }
 }

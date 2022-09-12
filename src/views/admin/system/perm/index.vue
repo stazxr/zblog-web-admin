@@ -21,7 +21,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="crud-opts">
+      <div>
         <el-button size="small" type="primary" @click="addPerm()">
           新增
         </el-button>
@@ -29,7 +29,7 @@
     </div>
 
     <el-table v-loading="tableLoading" :data="tableData" row-key="id" :tree-props="tableProps" border>
-      <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="150px" prop="permName">
+      <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="220px" prop="permName">
         <template slot-scope="scope">
           <span>
             <svg-icon :icon-class="scope.row.icon ? scope.row.icon : ''" />
@@ -56,7 +56,7 @@
           <span v-else> - </span>
         </template>
       </el-table-column>
-      <el-table-column prop="enabled" label="状态" align="center" width="75px">
+      <el-table-column prop="enabled" label="状态" width="75px">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
           <el-tag v-else size="small" type="warning">禁用</el-tag>
@@ -70,10 +70,10 @@
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
           <el-button-group>
-            <el-button type="primary" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
+            <el-button type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
             <el-button type="success" size="mini" @click="editPerm(scope.row)">编辑</el-button>
             <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deletePerm(scope.row)">
-              <el-button v-show="allowDelete(scope.row)" slot="reference" type="warning" size="mini">删除</el-button>
+              <el-button v-show="allowDelete(scope.row)" slot="reference" type="danger" size="mini">删除</el-button>
             </el-popconfirm>
           </el-button-group>
         </template>
@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import addOrEditDialog from './addOrEditDialog'
-import showDetailDialog from './showDetailDialog'
+import addOrEditDialog from '@/views/admin/system/perm/template/addOrEditDialog'
+import showDetailDialog from '@/views/admin/system/perm/template/showDetailDialog'
 export default {
   name: 'Perm',
   components: {
@@ -143,7 +143,7 @@ export default {
     listTableData() {
       const param = { ... this.filters }
       this.tableLoading = true
-      this.$mapi.perm.list(param).then(res => {
+      this.$mapi.perm.queryPermTreeList(param).then(res => {
         this.tableData = res.data
       }).catch(_ => {
         this.tableData = []
@@ -174,7 +174,7 @@ export default {
     deletePerm(row) {
       this.$mapi.perm.deletePerm({ permId: row.id }).then(res => {
         this.$message.success(res.message)
-        this.search()
+        this.listTableData()
       })
     },
     addOrEditDone(result = false) {
@@ -194,10 +194,5 @@ export default {
 </script>
 
 <style scoped>
-.crud-opts {
-  padding: 4px 0;
-  display: -webkit-flex;
-  display: flex;
-  align-items: center;
-}
+
 </style>

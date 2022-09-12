@@ -70,10 +70,10 @@
         <el-form-item label="权限排序" prop="sort">
           <el-input-number v-model.number="addForm.sort" :min="0" :max="99999" step-strictly controls-position="right" style="width: 178px" />
         </el-form-item>
-        <el-form-item v-if="addForm.iFrame != null && addForm.iFrame.toString() === 'true' && addForm.permType.toString() === '2'" label="组件名称" prop="componentName">
+        <el-form-item v-if="(addForm.iFrame == null || addForm.iFrame.toString() === 'false') && addForm.permType.toString() === '2'" label="组件名称" prop="componentName">
           <el-input v-model="addForm.componentName" placeholder="匹配组件内Name字段" style="width: 178px" />
         </el-form-item>
-        <el-form-item v-if="addForm.iFrame != null && addForm.iFrame.toString() === 'true' && addForm.permType.toString() === '2'" label="组件路径" prop="componentPath">
+        <el-form-item v-if="(addForm.iFrame == null || addForm.iFrame.toString() === 'false') && addForm.permType.toString() === '2'" label="组件路径" prop="componentPath">
           <el-input v-model="addForm.componentPath" placeholder="组件路径" style="width: 178px" />
         </el-form-item>
         <el-form-item label="访问级别" prop="permLevel">
@@ -103,7 +103,6 @@ import IconSelect from '@/components/IconSelect'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
-  name: 'AddOrEditDialog',
   components: {
     IconSelect,
     Treeselect
@@ -195,18 +194,20 @@ export default {
       this.getMenus()
       this.getPermCodes()
       this.$nextTick(() => {
-        this.getPermDetail()
+        this.getPermInfo()
       })
     },
     getMenus() {
       const param = {
         iFrame: false,
+        needTop: true,
         onlyShowMenu: true
       }
-      this.$mapi.perm.list(param).then(res => {
-        this.menus = [{ id: 0, permName: '顶级类目', children: res.data }]
+      this.$mapi.perm.queryPermTree(param).then(res => {
+        this.menus = res.data
       }).catch(_ => {
-        this.menus = [{ id: 0, permName: '顶级类目' }]
+        this.addForm.pid = ''
+        this.menus = []
       })
     },
     getPermCodes() {
@@ -216,9 +217,9 @@ export default {
         this.permCodes = []
       })
     },
-    getPermDetail() {
+    getPermInfo() {
       if (this.addForm.id != null && this.addForm.id !== '') {
-        this.$mapi.perm.queryPermDetail({ permId: this.addForm.id }).then(res => {
+        this.$mapi.perm.queryPermInfo({ permId: this.addForm.id }).then(res => {
           const { data } = res
           Object.keys(this.addForm).forEach(key => {
             this.addForm[key] = data[key]
@@ -228,6 +229,7 @@ export default {
           }
 
           this.oldPermCode = this.addForm.permCode
+          console.log('permCode', this.oldPermCode)
         }).catch(_ => {
           this.doClose()
         })
@@ -276,9 +278,11 @@ export default {
       this.$emit('addOrEditDone', result)
     },
     handleClose() {
-      this.$confirm('确认关闭？').then(_ => {
-        this.doClose()
-      }).catch(_ => {})
+      if (!this.submitLoading) {
+        this.$confirm('确认关闭？').then(_ => {
+          this.doClose()
+        }).catch(_ => {})
+      }
     },
     cancel() {
       this.handleClose()
@@ -298,7 +302,7 @@ export default {
     },
     iFrameChange(isIFrame) {
       isIFrame = isIFrame == null || isIFrame === '' ? this.addForm.iFrame : isIFrame
-      if (isIFrame) {
+      if (isIFrame != null && isIFrame.toString() === 'true') {
         this.addForm.permCode = ''
         this.addRules.permCode[0].required = false
       } else {
