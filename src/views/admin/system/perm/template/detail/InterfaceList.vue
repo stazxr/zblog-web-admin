@@ -15,6 +15,8 @@
     <el-pagination
       :total="total"
       :current-page="page"
+      :page-size="pageSize"
+      :page-sizes="[5, 10, 20, 50]"
       style="margin-top: 8px;"
       layout="total, prev, pager, next, sizes"
       @size-change="sizeChange"
@@ -33,7 +35,7 @@ export default {
       tableLoading: false,
       total: 0,
       page: 1,
-      pageSize: 10
+      pageSize: 5
     }
   },
   methods: {

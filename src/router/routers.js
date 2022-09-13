@@ -62,9 +62,15 @@ export const defaultRouterMap = [
     children: [
       {
         path: 'center',
-        component: (resolve) => require(['@/views/admin/userCenter'], resolve),
+        component: (resolve) => require(['@/views/admin/components/userCenter'], resolve),
         name: 'UserCenter',
         meta: { title: '个人中心' }
+      },
+      {
+        path: 'search',
+        component: (resolve) => require(['@/views/admin/components/userSearch'], resolve),
+        name: 'UserSearch',
+        meta: { title: '用户查询' }
       }
     ]
   }

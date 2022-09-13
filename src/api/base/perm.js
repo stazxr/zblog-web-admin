@@ -47,6 +47,10 @@ export default {
   deletePerm: params => {
     return api.httpRequest().post(`${permApi}/deletePerm`, params)
   },
+  // 删除权限 - 角色关系数据
+  batchDeleteRolePerm: params => {
+    return api.httpRequest().post(`${permApi}/batchDeleteRolePerm`, params)
+  },
   // 查询用户菜单列表
   buildUserMenus: params => {
     return api.httpRequest().get(`${permApi}/queryUserMenus`, params)

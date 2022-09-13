@@ -229,7 +229,6 @@ export default {
           }
 
           this.oldPermCode = this.addForm.permCode
-          console.log('permCode', this.oldPermCode)
         }).catch(_ => {
           this.doClose()
         })

@@ -50,8 +50,7 @@ export default {
   },
   watch: {
     $route() {
-      this.addTags()
-      this.moveToCurrentTag()
+      this.addTags(true)
     },
     visible(value) {
       if (value) {
@@ -99,11 +98,14 @@ export default {
         }
       }
     },
-    addTags() {
+    addTags(moveFlag = false) {
+      console.log('this.$route', this.$route)
       const { name } = this.$route
-      if (name) {
+      if (name && name !== 'UserSearch') {
         // 添加标签
-        this.$store.dispatch('tagsView/AddView', this.$route)
+        this.$store.dispatch('tagsView/AddView', this.$route).then(_ => {
+          moveFlag && this.moveToCurrentTag()
+        })
       }
       return false
     },

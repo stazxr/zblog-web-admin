@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-form ref="searchForm" :inline="true" size="mini">
+        <el-form ref="searchForm" :inline="true" size="small">
           <el-form-item label="模糊搜索">
             <el-input v-model="filters.blurry" clearable placeholder="模糊搜索" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
           </el-form-item>
@@ -28,57 +28,59 @@
       </div>
     </div>
 
-    <el-table v-loading="tableLoading" :data="tableData" row-key="id" :tree-props="tableProps" border>
-      <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="220px" prop="permName">
-        <template slot-scope="scope">
-          <span>
-            <svg-icon :icon-class="scope.row.icon ? scope.row.icon : ''" />
-            {{ scope.row['permName'] }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column :show-overflow-tooltip="true" prop="permCode" label="权限编码" />
-      <el-table-column :show-overflow-tooltip="true" prop="componentName" label="组件名称" />
-      <el-table-column :show-overflow-tooltip="true" prop="componentPath" label="组件路径" />
-      <el-table-column prop="permType" label="类型" align="center" width="75px">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row['permType'] === 1" size="small">目录</el-tag>
-          <el-tag v-else-if="scope.row['permType'] === 2" size="small" type="success">菜单</el-tag>
-          <el-tag v-else-if="scope.row['permType'] === 3" size="small" type="info">按钮</el-tag>
-          <span v-else> - </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="permLevel" label="级别" align="center" width="75px">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row['permLevel'] === 1" size="small" type="warning">公开</el-tag>
-          <el-tag v-else-if="scope.row['permLevel'] === 2" size="small" type="info">认证</el-tag>
-          <el-tag v-else-if="scope.row['permLevel'] === 3" size="small" type="success">授权</el-tag>
-          <span v-else> - </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="enabled" label="状态" width="75px">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
-          <el-tag v-else size="small" type="warning">禁用</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="menuSort" label="排序" align="center" width="75px">
-        <template slot-scope="scope">
-          {{ scope.row.sort }}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="200">
-        <template slot-scope="scope">
-          <el-button-group>
-            <el-button type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
-            <el-button type="success" size="mini" @click="editPerm(scope.row)">编辑</el-button>
-            <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deletePerm(scope.row)">
-              <el-button v-show="allowDelete(scope.row)" slot="reference" type="danger" size="mini">删除</el-button>
-            </el-popconfirm>
-          </el-button-group>
-        </template>
-      </el-table-column>
-    </el-table>
+    <div class="components-container">
+      <el-table v-loading="tableLoading" :data="tableData" row-key="id" :tree-props="tableProps" border>
+        <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="220px" prop="permName">
+          <template slot-scope="scope">
+            <span>
+              <svg-icon :icon-class="scope.row.icon ? scope.row.icon : ''" />
+              {{ scope.row['permName'] }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="permCode" label="权限编码" />
+        <el-table-column :show-overflow-tooltip="true" prop="componentName" label="组件名称" />
+        <el-table-column :show-overflow-tooltip="true" prop="componentPath" label="组件路径" />
+        <el-table-column prop="permType" label="类型" align="center" width="75px">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row['permType'] === 1" size="small">目录</el-tag>
+            <el-tag v-else-if="scope.row['permType'] === 2" size="small" type="success">菜单</el-tag>
+            <el-tag v-else-if="scope.row['permType'] === 3" size="small" type="info">按钮</el-tag>
+            <span v-else> - </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="permLevel" label="级别" align="center" width="75px">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row['permLevel'] === 1" size="small" type="warning">公开</el-tag>
+            <el-tag v-else-if="scope.row['permLevel'] === 2" size="small" type="info">认证</el-tag>
+            <el-tag v-else-if="scope.row['permLevel'] === 3" size="small" type="success">授权</el-tag>
+            <span v-else> - </span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="enabled" label="状态" width="75px">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
+            <el-tag v-else size="small" type="warning">禁用</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="menuSort" label="排序" align="center" width="75px">
+          <template slot-scope="scope">
+            {{ scope.row.sort }}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="200">
+          <template slot-scope="scope">
+            <el-button-group>
+              <el-button type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
+              <el-button type="success" size="mini" @click="editPerm(scope.row)">编辑</el-button>
+              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deletePerm(scope.row)">
+                <el-button v-show="allowDelete(scope.row)" slot="reference" type="danger" size="mini">删除</el-button>
+              </el-popconfirm>
+            </el-button-group>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
 
     <!-- 新增 / 编辑 -->
     <addOrEditDialog

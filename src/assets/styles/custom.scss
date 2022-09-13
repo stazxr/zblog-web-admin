@@ -9,6 +9,9 @@
       line-height: 30.5px;
     }
   }
+  .el-form--inline {
+    height: 40px;
+  }
   .el-form-item-label {
     margin: 0 3px 9px 0;
     display: inline-block;
@@ -26,6 +29,13 @@
     line-height: 30.5px;
   }
   .date-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+    height: 30.5px !important;
+    width: 230px !important;
+  }
+  .el-date-editor {
     display: inline-block;
     vertical-align: middle;
     margin-bottom: 10px;
