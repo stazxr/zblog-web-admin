@@ -8,7 +8,6 @@
           show-checkbox
           node-key="id"
           default-expand-all
-          :default-checked-keys="checkedKeys"
           :props="defaultProps"
         />
         <div class="demo-drawer__footer">
@@ -40,7 +39,6 @@ export default {
     return {
       submitLoading: false,
       permissions: [],
-      checkedKeys: [],
       defaultProps: {
         children: 'children',
         label: 'permName'
@@ -50,22 +48,29 @@ export default {
   methods: {
     initData() {
       this.getPermission()
-      this.$nextTick(() => {
-        this.queryRolePerm()
-      })
     },
     getPermission() {
       this.$mapi.perm.queryPermTree().then(res => {
         this.permissions = res.data
+        this.$nextTick(() => {
+          this.queryRolePerm()
+        })
       }).catch(_ => {
         this.permissions = []
       })
     },
     queryRolePerm() {
       this.$mapi.role.queryPermIdsByRoleId({ roleId: this.dataId }).then(res => {
-        const { data } = res
-        this.checkedKeys = data
-      }).catch(_ => {
+        const nodes = []
+        res.data.forEach(item => {
+          const node = this.$refs.permTree.getNode(item)
+          if (node != null && node.isLeaf) {
+            nodes.push(item)
+          }
+        })
+        this.$refs.permTree.setCheckedKeys(nodes, true)
+      }).catch(e => {
+        console.log('set checked keys catch eor', e)
         this.doClose()
       })
     },
@@ -90,7 +95,7 @@ export default {
       this.$confirm('确定要提交表单吗？').then(_ => {
         const param = {
           roleId: this.dataId,
-          permIds: this.$refs.permTree.getCheckedKeys()
+          permIds: this.$refs.permTree.getCheckedKeys().concat(this.$refs.permTree.getHalfCheckedKeys())
         }
         this.submitLoading = true
         this.$mapi.role.authRole(param).then(res => {

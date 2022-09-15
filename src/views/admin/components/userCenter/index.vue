@@ -107,8 +107,8 @@
                 <el-table-column :show-overflow-tooltip="true" prop="costTime" label="请求耗时" align="center">
                   <template slot-scope="scope">
                     <span v-if="scope.row['costTime'] === null"> - </span>
-                    <el-tag v-else-if="scope.row['costTime'] <= 300">{{ scope.row['costTime'] }}ms</el-tag>
-                    <el-tag v-else-if="scope.row['costTime'] <= 1000" type="warning">{{ scope.row['costTime'] }}ms</el-tag>
+                    <el-tag v-else-if="scope.row['costTime'] <= 500">{{ scope.row['costTime'] }}ms</el-tag>
+                    <el-tag v-else-if="scope.row['costTime'] <= 3000" type="warning">{{ scope.row['costTime'] }}ms</el-tag>
                     <el-tag v-else type="danger">{{ scope.row['costTime'] }}ms</el-tag>
                   </template>
                 </el-table-column>

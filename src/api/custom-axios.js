@@ -54,7 +54,7 @@ instance.interceptors.response.use(response => {
   // return Promise.reject(new Error(res.msg || 'Error'))
   if (response.status === 200 && response.data) {
     // refresh Token
-    if (response.headers['new-token'] !== undefined) {
+    if (response.headers['new-token'] !== undefined && response.headers['new-token'] !== '') {
       setToken(response.headers['new-token'])
       console.log('refresh token success')
     }

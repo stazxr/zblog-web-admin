@@ -153,7 +153,7 @@ export default {
       })
     },
     addRole() {
-      this.editId = null
+      this.dataId = null
       this.addOrEditDialogVisible = true
       this.addOrEditDialogTitle = '新增角色'
       this.$refs.addOrEditDialogRef.initData()

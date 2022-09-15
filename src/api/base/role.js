@@ -3,6 +3,10 @@ import api from '../custom-axios'
 const roleApi = '/api/roles'
 
 export default {
+  // 查询角色列表
+  roleList: params => {
+    return api.httpRequest().get(`${roleApi}/list`, params)
+  },
   // 分页查询角色列表
   pageRoleList: params => {
     return api.httpRequest().get(`${roleApi}/pageList`, params)

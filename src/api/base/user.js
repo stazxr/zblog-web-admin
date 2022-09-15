@@ -22,5 +22,29 @@ export default {
   // 分页查询用户列表（公共方法）
   pageListOfCommon: params => {
     return api.httpRequest().get(`${userApi}/pageListOfCommon`, params)
+  },
+  // 分页查询用户列表
+  pageList: params => {
+    return api.httpRequest().get(`${userApi}/pageList`, params)
+  },
+  // 查询用户详情
+  queryUserDetail: params => {
+    return api.httpRequest().get(`${userApi}/queryUserDetail`, params)
+  },
+  // 更新用户状态
+  updateUserStatus: params => {
+    return api.httpRequest().post(`${userApi}/updateUserStatus`, params)
+  },
+  // 新增用户
+  addUser: params => {
+    return api.httpRequest().post(`${userApi}/addUser`, params)
+  },
+  // 编辑用户
+  editUser: params => {
+    return api.httpRequest().post(`${userApi}/editUser`, params)
+  },
+  // 删除用户
+  deleteUser: params => {
+    return api.httpRequest().post(`${userApi}/deleteUser`, params)
   }
 }

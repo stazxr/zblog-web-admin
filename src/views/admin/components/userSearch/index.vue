@@ -6,8 +6,8 @@
       <el-form ref="userSearchForm" :inline="true" size="small">
         <el-input v-model="filters.username" clearable placeholder="用户名" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
         <el-input v-model="filters.nickname" clearable placeholder="用户昵称" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
-        <el-date-picker v-model="filters.loginStartTime" placeholder="登录开始时间" />
-        <el-date-picker v-model="filters.loginEndTime" placeholder="登录结束时间" />
+        <el-date-picker v-model="filters.loginStartTime" placeholder="登录开始时间" value-format="yyyy-MM-dd" />
+        <el-date-picker v-model="filters.loginEndTime" placeholder="登录结束时间" value-format="yyyy-MM-dd" />
         <el-form-item>
           <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
           <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
