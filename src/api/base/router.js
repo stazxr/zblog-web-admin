@@ -3,7 +3,7 @@ import api from '../custom-axios'
 const routerApi = '/api/router'
 
 export default {
-  // 分页查询角色列表
+  // 分页查询路由列表
   pageRouterList: params => {
     return api.httpRequest().get(`${routerApi}/pageList`, params)
   },

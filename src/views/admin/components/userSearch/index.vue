@@ -81,15 +81,24 @@
       :data-id="dataId"
       @chooseDown="userChooseDown"
     />
+    <!-- 查看详情 -->
+    <showDetailDialog
+      ref="showDetailDialogRef"
+      :dialog-visible="showDetailDialogVisible"
+      :data-id="dataId"
+      @showDetailDone="showDetailDone"
+    />
   </div>
 </template>
 
 <script>
 import userChooseDialog from './template/userChooseDialog'
+import showDetailDialog from '../../system/user/template/showDetailDialog'
 export default {
   name: 'UserSearch',
   components: {
-    userChooseDialog
+    userChooseDialog,
+    showDetailDialog
   },
   data() {
     return {
@@ -108,6 +117,7 @@ export default {
       pageSize: 10,
       tableTitle: '',
       userChooseDialogVisible: false,
+      showDetailDialogVisible: false,
       type: '',
       dataId: ''
     }
@@ -158,8 +168,14 @@ export default {
     handleSelectionChange(val) {
       this.selectRows = val
     },
-    showUserDetail() {
-
+    showUserDetail(row) {
+      this.dataId = row.id.toString()
+      this.showDetailDialogVisible = true
+      this.$refs.showDetailDialogRef.initData()
+    },
+    showDetailDone() {
+      this.dataId = null
+      this.showDetailDialogVisible = false
     },
     addUserRelation() {
       this.userChooseDialogVisible = true

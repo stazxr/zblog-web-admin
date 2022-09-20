@@ -3,7 +3,7 @@
     <el-dialog append-to-body :close-on-click-modal="false" :before-close="handleClose" :visible.sync="dialogVisible" :title="dialogTitle" width="580px">
       <el-form ref="addForm" :inline="true" :model="addForm" :rules="addRules" size="small" label-width="80px">
         <el-form-item label="权限类型" prop="permType">
-          <el-radio-group v-model="addForm.permType" :disabled="addForm.id != null && addForm.id !== ''" size="mini" style="width: 178px">
+          <el-radio-group v-model="addForm.permType" :disabled="addForm.id != null && addForm.id !== ''" size="mini" style="width: 178px" @change="permTypeChange">
             <el-radio-button label="1">目录</el-radio-button>
             <el-radio-button label="2">菜单</el-radio-button>
             <el-radio-button label="3">按钮</el-radio-button>
@@ -19,7 +19,7 @@
           </el-popover>
         </el-form-item>
         <el-form-item v-show="addForm.permType.toString() !== '3'" label="外链菜单" prop="iFrame">
-          <el-radio-group v-model="addForm.iFrame" size="mini" @change="iFrameChange">
+          <el-radio-group v-model="addForm.iFrame" :disabled="addForm.id != null && addForm.id !== ''" size="mini" @change="iFrameChange">
             <el-radio-button label="true">是</el-radio-button>
             <el-radio-button label="false">否</el-radio-button>
           </el-radio-group>
@@ -295,7 +295,7 @@ export default {
         this.$mapi.router.queryRouterByCode({ code }).then(res => {
           const { data } = res
           this.addForm.permName = data['name']
-          this.addForm.permLevel = data['defaultLevel']
+          this.addForm.permLevel = data['permLevel']
         })
       }
     },
@@ -303,21 +303,26 @@ export default {
       isIFrame = isIFrame == null || isIFrame === '' ? this.addForm.iFrame : isIFrame
       if (isIFrame != null && isIFrame.toString() === 'true') {
         this.addForm.permCode = ''
-        this.addRules.permCode[0].required = false
-      } else {
-        this.addRules.permCode[0].required = true
       }
     },
     permTypeChange(permType) {
-      permType = permType == null || permType === '' ? this.addForm.permType : permType
       switch (permType) {
+        case '1':
+        case '2':
+          this.addRules.permCode[0].required = false
+          break
+        case '3':
+          this.addRules.permCode[0].required = true
+          break
+      }
+    },
+    dealEmptyData() {
+      switch (this.addForm.permType) {
         case '1':
           this.addForm.cache = ''
           this.addForm.permCode = ''
           this.addForm.componentPath = ''
           this.addForm.componentName = ''
-          break
-        case '2':
           break
         case '3':
           this.addForm.icon = ''
@@ -332,7 +337,7 @@ export default {
     },
     submit() {
       // deal empty data
-      this.permTypeChange()
+      this.dealEmptyData()
       this.$refs['addForm'].validate((valid) => {
         if (valid) {
           this.submitLoading = true

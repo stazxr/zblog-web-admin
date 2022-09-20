@@ -100,8 +100,8 @@
                 <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" />
                 <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果" align="center">
                   <template slot-scope="scope">
-                    <el-tag v-if="scope.row['logType'] === 2 || !scope.row['execResult']" size="small" type="danger">失败</el-tag>
-                    <el-tag v-else size="small">成功</el-tag>
+                    <el-tag v-if="scope.row['execResult']" size="small">成功</el-tag>
+                    <el-tag v-else size="small" type="danger">失败</el-tag>
                   </template>
                 </el-table-column>
                 <el-table-column :show-overflow-tooltip="true" prop="costTime" label="请求耗时" align="center">
@@ -217,6 +217,7 @@ export default {
     },
     listTableData() {
       const param = {
+        logType: 1,
         username: this.user.username,
         page: this.page,
         pageSize: this.pageSize
