@@ -79,6 +79,9 @@
             </el-button-group>
           </template>
         </el-table-column>
+        <div slot="empty">
+          <el-empty />
+        </div>
       </el-table>
     </div>
 

@@ -1,6 +1,7 @@
 import router from './routers'
 import store from '@/store'
 import Config from '@/settings'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { getToken } from '@/utils/token'
@@ -48,6 +49,11 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to, from) => {
   to.meta.title && (document.title = to.meta.title + ' - ' + Config.title)
   NProgress.done()
+})
+
+router.onError(error => {
+  NProgress.done()
+  Message.error(error.message || '系统发生未知错误')
 })
 
 export const loadMenus = (next, to) => {
