@@ -25,7 +25,7 @@
   .el-button+.el-button {
     margin-left: 0 !important;
   }
-  .el-select__caret.el-input__icon.el-icon-arrow-up{
+  .el-select__caret.el-input__icon.el-icon-arrow-up {
     line-height: 30.5px;
   }
   .date-item {
@@ -58,14 +58,13 @@
   border-radius: 16px;
 }
 
-.logo-con{
+.logo-con {
   height: 60px;
   padding: 13px 0 0;
-  img{
+  img {
     height: 32px;
     width: 135px;
     display: block;
-    //margin: 0 auto;
   }
 }
 
@@ -104,7 +103,7 @@
   line-height: 45px;
   width: 368px;
 }
-.my-blockquote{
+.my-blockquote {
   margin: 0 0 10px;
   padding: 15px;
   line-height: 22px;
@@ -112,7 +111,7 @@
   border-radius: 0 2px 2px 0;
   background-color: #f2f2f2;
 }
-.my-code{
+.my-code {
   position: relative;
   padding: 15px;
   line-height: 20px;
@@ -122,6 +121,19 @@
   font-size: 12px
 }
 
-.el-tabs{
+.el-tabs {
   margin-bottom: 25px;
+}
+
+.crud-opts {
+  padding: 4px 0;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+}
+.crud-opts .crud-opts-right {
+  margin-left: auto;
+}
+.crud-opts .crud-opts-right span {
+  float: left;
 }

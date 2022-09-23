@@ -4,26 +4,28 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="日志序号:">
+            <el-form-item class="el-form-item" label="日志序号:">
               <span>{{ props.row['id'] }}</span>
             </el-form-item>
-            <el-form-item label="日志类型:">
+            <el-form-item class="el-form-item" label="日志类型:">
               <span v-if="props.row['logType'] === 1">操作日志</span>
-              <span v-else>异常日志</span>
+              <span v-else-if="props.row['logType'] === 2">接口日志</span>
+              <span v-else-if="props.row['logType'] === 3">异常日志</span>
+              <span v-else> - </span>
             </el-form-item>
-            <el-form-item label="请求地址:">
+            <el-form-item class="el-form-item" label="请求地址:">
               <span>{{ props.row['requestIp'] }}</span>
             </el-form-item>
-            <el-form-item label="请求来源:">
+            <el-form-item class="el-form-item" label="请求来源:">
               <span>{{ props.row['address'] }}</span>
             </el-form-item>
-            <el-form-item label="请求接口:">
+            <el-form-item class="el-form-item" label="请求接口:">
               <span>[{{ props.row['requestMethod'] }}] {{ props.row['requestUri'] }}</span>
             </el-form-item>
-            <el-form-item label="操作环境:">
+            <el-form-item class="el-form-item" label="操作环境:">
               <span>{{ props.row['browser'] }}</span>
             </el-form-item>
-            <el-form-item label="描述信息:" style="width: 100%">
+            <el-form-item class="el-form-item" label="描述信息:" style="width: 100%">
               <span>{{ props.row['execMessage'] }}</span>
             </el-form-item>
           </el-form>
@@ -32,7 +34,8 @@
       <el-table-column :show-overflow-tooltip="true" prop="operateUser" label="操作人" />
       <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row['logType'] === 2 || !scope.row['execResult']" size="small" type="danger">失败</el-tag>
+          <el-tag v-if="scope.row['logType'] === 3" size="small" type="danger">系统错误</el-tag>
+          <el-tag v-else-if="!scope.row['execResult']" size="small" type="warning">失败</el-tag>
           <el-tag v-else size="small">成功</el-tag>
         </template>
       </el-table-column>
@@ -92,6 +95,7 @@ export default {
     },
     listTableData() {
       const param = {
+        logType: 1,
         permId: this.permId,
         page: this.page,
         pageSize: this.pageSize

@@ -13,10 +13,6 @@ export default {
   loginCode: params => {
     return api.httpRequest().get(`/api/auth/loginCode`, params)
   },
-  // 续签
-  renewToken: params => {
-    return api.httpRequest().post(`/api/auth/renewToken`, params)
-  },
   // 获取当前登录人信息
   loginId: params => {
     return api.httpRequest().get(`/api/auth/loginId`, params)

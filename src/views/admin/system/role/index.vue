@@ -200,6 +200,7 @@ export default {
     },
     authRoleDone() {
       this.dataId = null
+      this.authRoleDialogTitle = ''
       this.authRoleDialogVisible = false
     },
     sizeChange(size) {

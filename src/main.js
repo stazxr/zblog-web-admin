@@ -5,10 +5,9 @@ import ElementUI from 'element-ui'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import preventReClick from '@/directive/preventReClick'
+import Highlight from '@/utils/highlight'
 import './assets/styles/element-variables.scss'
 import './assets/styles/index.scss'
-import VueHighlightJS from 'vue-highlightjs'
-import 'highlight.js/styles/atom-one-dark.css'
 import App from './App'
 import store from '@/store'
 import router from '@/router/routers'
@@ -20,7 +19,7 @@ import api from './api/http-index'
 
 // 加载插件
 Vue.use(preventReClick)
-Vue.use(VueHighlightJS)
+Vue.use(Highlight)
 Vue.use(mavonEditor)
 Vue.use(ElementUI, {
   size: Cookies.get('size') || 'small' // set element-ui default size

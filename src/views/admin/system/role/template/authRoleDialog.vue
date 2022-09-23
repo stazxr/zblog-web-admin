@@ -79,7 +79,6 @@ export default {
       this.checkedKeys = []
       this.submitLoading = false
       this.$emit('authRoleDone')
-      clearTimeout(this.timer)
     },
     handleClose() {
       if (!this.submitLoading) {

@@ -14,5 +14,21 @@ export default {
   // 查询用户操作日志记录
   queryUserLog: params => {
     return api.httpRequest().get(`${logApi}/queryUserLog`, params)
+  },
+  // 导出操作日志
+  exportOperateLog: params => {
+    return api.httpRequest().get(`${logApi}/exportOperateLog`, params, { responseType: 'blob' })
+  },
+  // 导出接口日志
+  exportAllLog: params => {
+    return api.httpRequest().get(`${logApi}/exportAllLog`, params, { responseType: 'blob' })
+  },
+  // 删除日志列表
+  deleteLog: params => {
+    return api.httpRequest().post(`${logApi}/deleteLog`, params)
+  },
+  // 查询日志堆栈详情
+  queryLogErrorDetail: params => {
+    return api.httpRequest().get(`${logApi}/queryLogErrorDetail`, params)
   }
 }

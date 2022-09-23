@@ -17,6 +17,10 @@ instance.defaults.timeout = defaultTimeout
 // 处理超过16位数字精度丢失问题
 instance.defaults.transformResponse = [
   function(data) {
+    if (data instanceof Blob) {
+      return data
+    }
+
     const json = JSONBIG({
       storeAsString: true
     })
@@ -26,6 +30,13 @@ instance.defaults.transformResponse = [
 
 // 是否允许携带凭证
 instance.defaults.withCredentials = true
+
+// 自定义响应成功的HTTP状态码
+instance.defaults.validateStatus = status => {
+  // default: status >= 200 && status < 300
+  // 3XX: 临时重定向，永久重定向，缓存
+  return /^([23])\d{2}$/.test(String(status))
+}
 
 // 设置请求拦截器
 instance.interceptors.request.use(config => {
@@ -38,13 +49,6 @@ instance.interceptors.request.use(config => {
 }, error => {
   return Promise.reject(error)
 })
-
-// 自定义响应成功的HTTP状态码
-instance.defaults.validateStatus = status => {
-  // default: status >= 200 && status < 300
-  // 3XX: 临时重定向，永久重定向，缓存
-  return /^([23])\d{2}$/.test(String(status))
-}
 
 // 设置响应拦截器
 instance.interceptors.response.use(response => {
@@ -127,7 +131,7 @@ instance.interceptors.response.use(response => {
       if (error.message && error.message.includes('timeout')) {
         errorMsg = '请求超时'
       } else {
-        errorMsg = '服务无响应，请稍后再试'
+        errorMsg = '服务无响应'
       }
     }
   } else {
