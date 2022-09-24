@@ -100,13 +100,15 @@ export default {
   },
   watch: {
     userInfo(user) {
-      this.addForm.id = user['id']
-      this.addForm.username = user['username']
-      this.addForm.email = user['email']
-      this.addForm.enabled = user['enabled']
-      this.addForm.temp = user['temp']
-      this.addForm.expiredTime = user['expiredTime']
-      this.addForm.roleIds = user['roleIds']
+      if (user !== null) {
+        this.addForm.id = user['id']
+        this.addForm.username = user['username']
+        this.addForm.email = user['email']
+        this.addForm.enabled = user['enabled']
+        this.addForm.temp = user['temp']
+        this.addForm.expiredTime = user['expiredTime']
+        this.addForm.roleIds = user['roleIds']
+      }
     }
   },
   methods: {

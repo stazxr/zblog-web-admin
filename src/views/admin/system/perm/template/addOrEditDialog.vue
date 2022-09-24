@@ -228,6 +228,7 @@ export default {
             this.addForm.pid = 0
           }
 
+          this.permTypeChange(this.addForm.permType)
           this.oldPermCode = this.addForm.permCode
         }).catch(_ => {
           this.doClose()
@@ -306,7 +307,7 @@ export default {
       }
     },
     permTypeChange(permType) {
-      switch (permType) {
+      switch (permType.toString()) {
         case '1':
         case '2':
           this.addRules.permCode[0].required = false

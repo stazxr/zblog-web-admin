@@ -6,7 +6,8 @@ import log from '@/api/base/log.js'
 import router from '@/api/base/router.js'
 import role from '@/api/base/role.js'
 import dict from '@/api/base/dict.js'
+import server from '@/api/base/server.js'
 
 export default {
-  communal, home, perm, user, log, router, role, dict
+  communal, home, perm, user, log, router, role, dict, server
 }

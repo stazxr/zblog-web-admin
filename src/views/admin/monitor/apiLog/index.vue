@@ -148,7 +148,7 @@ export default {
       this.filters.eventEndTime = data[1]
     }
   },
-  mounted() {
+  activated() {
     this.listTableData()
   },
   methods: {
