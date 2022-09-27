@@ -4,7 +4,9 @@ const api = {
     // baseUrl
     baseApi: baseUrl,
     // 文件上传
-    fileUploadApi: baseUrl + '/api/file/uploadFile'
+    fileUploadApi: baseUrl + '/api/file/uploadFile',
+    // Druid
+    sqlApi: baseUrl + '/druid/index.html'
   }
 }
 

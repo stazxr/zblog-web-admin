@@ -77,7 +77,7 @@ export default {
       handler: function(route) {
         const data = route.query
         if (data && data.redirect) {
-          this.redirect = data.redirect
+          this.redirect = data.redirect === '/' ? '/admin' : data.redirect
           delete data.redirect
           if (JSON.stringify(data) !== '{}') {
             this.redirect = this.redirect + '&' + qs.stringify(data, { indices: false })
