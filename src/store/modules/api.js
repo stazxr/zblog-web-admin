@@ -6,7 +6,9 @@ const api = {
     // 文件上传
     fileUploadApi: baseUrl + '/api/file/uploadFile',
     // Druid
-    sqlApi: baseUrl + '/druid/index.html'
+    sqlApi: baseUrl + '/druid/index.html',
+    // Swagger
+    swaggerApi: baseUrl + '/swagger-ui.html'
   }
 }
 
