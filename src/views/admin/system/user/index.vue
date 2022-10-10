@@ -2,25 +2,26 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-form ref="searchForm" :inline="true" size="small">
-          <el-input v-model="filters.username" clearable placeholder="用户名" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-input v-model="filters.nickname" clearable placeholder="用户昵称" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-select v-model="filters.enabled" clearable placeholder="角色状态" style="width: 120px" class="filter-item">
-            <el-option label="启用" value="true" />
-            <el-option label="禁用" value="false" />
-          </el-select>
-          <el-form-item>
-            <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
-            <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <el-input v-model="filters.username" clearable placeholder="用户名" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.nickname" clearable placeholder="用户昵称" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-select v-model="filters.enabled" clearable placeholder="角色状态" style="width: 120px" class="filter-item">
+          <el-option label="启用" value="true" />
+          <el-option label="禁用" value="false" />
+        </el-select>
+        <span>
+          <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
+          <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
+        </span>
       </div>
-      <div>
-        <el-button size="small" type="primary" @click="addUser()">
-          新增
-        </el-button>
+      <div class="crud-opts">
+        <span class="crud-opts-left">
+          <el-button size="small" type="primary" @click="addUser()">
+            新增
+          </el-button>
+        </span>
       </div>
     </div>
+
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="username" label="头像" align="center">
@@ -67,6 +68,7 @@
         </div>
       </el-table>
     </div>
+
     <div class="pagination-container">
       <el-pagination
         :total="total"
@@ -140,12 +142,15 @@ export default {
   },
   methods: {
     search() {
+      this.page = 1
       this.listTableData()
     },
     resetSearch() {
       this.filters.username = ''
       this.filters.nickname = ''
       this.filters.enabled = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {

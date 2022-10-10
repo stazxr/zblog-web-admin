@@ -2,18 +2,17 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-form ref="searchForm" :inline="true" size="small">
-          <el-input v-model="filters.uri" clearable placeholder="接口地址" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-form-item>
-            <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
-            <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
-            <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="addBlackOrWhiteUri()">
-              新增
-            </el-button>
-          </el-form-item>
-        </el-form>
+        <el-input v-model="filters.uri" clearable placeholder="接口地址" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <span>
+          <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
+          <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
+          <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="addBlackOrWhiteUri()">
+            新增
+          </el-button>
+        </span>
       </div>
     </div>
+
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="name" label="接口名称" align="left" />
@@ -47,6 +46,7 @@
         </div>
       </el-table>
     </div>
+
     <div class="pagination-container">
       <el-pagination
         :total="total"
@@ -109,10 +109,13 @@ export default {
       })
     },
     search() {
+      this.page = 1
       this.listTableData()
     },
     resetSearch() {
       this.filters.uri = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {

@@ -70,7 +70,7 @@ export const defaultRouterMap = [
         path: 'search',
         component: (resolve) => require(['@/views/admin/components/userSearch'], resolve),
         name: 'UserSearch',
-        meta: { title: '用户查询' }
+        meta: { title: '用户查询', hideTag: true }
       }
     ]
   }

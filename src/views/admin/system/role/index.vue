@@ -2,23 +2,23 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-form ref="searchForm" :inline="true" size="small">
-          <el-input v-model="filters.roleName" clearable placeholder="角色名称" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
-          <el-input v-model="filters.roleCode" clearable placeholder="角色编码" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
-          <el-select v-model="filters.enabled" clearable placeholder="角色状态" style="width: 120px" class="filter-item">
-            <el-option label="启用" value="true" />
-            <el-option label="禁用" value="false" />
-          </el-select>
-          <el-form-item>
-            <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
-            <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <el-input v-model="filters.roleName" clearable placeholder="角色名称" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.roleCode" clearable placeholder="角色编码" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
+        <el-select v-model="filters.enabled" clearable placeholder="角色状态" style="width: 120px" class="filter-item">
+          <el-option label="启用" value="true" />
+          <el-option label="禁用" value="false" />
+        </el-select>
+        <span>
+          <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
+          <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
+        </span>
       </div>
-      <div>
-        <el-button size="small" type="primary" @click="addRole()">
-          新增
-        </el-button>
+      <div class="crud-opts">
+        <span class="crud-opts-left">
+          <el-button size="small" type="primary" @click="addRole()">
+            新增
+          </el-button>
+        </span>
       </div>
     </div>
 
@@ -126,12 +126,15 @@ export default {
   },
   methods: {
     search() {
+      this.page = 1
       this.listTableData()
     },
     resetSearch() {
       this.filters.roleName = ''
       this.filters.roleCode = ''
       this.filters.enabled = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {

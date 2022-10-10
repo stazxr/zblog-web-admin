@@ -2,31 +2,30 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-form ref="searchForm" :inline="true" size="small">
-          <el-input v-model="filters.name" clearable placeholder="接口名称" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-input v-model="filters.code" clearable placeholder="接口编码" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-input v-model="filters.uri" clearable placeholder="接口地址" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-select v-model="filters.level" clearable placeholder="访问级别" style="width: 120px" class="filter-item">
-            <el-option label="公开" value="1" />
-            <el-option label="认证" value="2" />
-            <el-option label="授权" value="3" />
-          </el-select>
-          <el-select v-model="filters.status" clearable placeholder="接口状态" style="width: 120px" class="filter-item">
-            <el-option label="默认" value="1" />
-            <el-option label="启用" value="2" />
-            <el-option label="禁用" value="3" />
-          </el-select>
-          <el-select v-model="filters.logShowed" clearable placeholder="日志展示" style="width: 120px" class="filter-item">
-            <el-option label="开启" value="true" />
-            <el-option label="关闭" value="false" />
-          </el-select>
-          <el-form-item>
-            <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
-            <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <el-input v-model="filters.name" clearable placeholder="接口名称" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.code" clearable placeholder="接口编码" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.uri" clearable placeholder="接口地址" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-select v-model="filters.level" clearable placeholder="访问级别" style="width: 120px" class="filter-item">
+          <el-option label="公开" value="1" />
+          <el-option label="认证" value="2" />
+          <el-option label="授权" value="3" />
+        </el-select>
+        <el-select v-model="filters.status" clearable placeholder="接口状态" style="width: 120px" class="filter-item">
+          <el-option label="默认" value="1" />
+          <el-option label="启用" value="2" />
+          <el-option label="禁用" value="3" />
+        </el-select>
+        <el-select v-model="filters.logShowed" clearable placeholder="日志展示" style="width: 120px" class="filter-item">
+          <el-option label="开启" value="true" />
+          <el-option label="关闭" value="false" />
+        </el-select>
+        <span>
+          <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
+          <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
+        </span>
       </div>
     </div>
+
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="name" label="接口名称" align="left" />
@@ -68,6 +67,7 @@
         </div>
       </el-table>
     </div>
+
     <div class="pagination-container">
       <el-pagination
         :total="total"
@@ -112,6 +112,7 @@ export default {
       })
     },
     search() {
+      this.page = 1
       this.listTableData()
     },
     resetSearch() {
@@ -121,6 +122,8 @@ export default {
       this.filters.level = ''
       this.filters.status = ''
       this.filters.logShowed = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {

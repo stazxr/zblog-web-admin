@@ -99,9 +99,9 @@ export default {
       }
     },
     addTags(moveFlag = false) {
-      console.log('this.$route', this.$route)
-      const { name } = this.$route
-      if (name && name !== 'UserSearch') {
+      const { name, meta } = this.$route
+      const showTag = !(meta && meta.hideTag && meta.hideTag === true)
+      if (name && showTag) {
         // 添加标签
         this.$store.dispatch('tagsView/AddView', this.$route).then(_ => {
           moveFlag && this.moveToCurrentTag()

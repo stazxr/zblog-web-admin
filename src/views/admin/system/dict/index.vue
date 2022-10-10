@@ -16,6 +16,7 @@
         </span>
       </div>
     </div>
+
     <div class="components-container">
       <el-table ref="table" v-loading="tableLoading" :data="tableData" row-key="id" lazy :load="loadSubList" :tree-props="tableProps" border>
         <el-table-column :show-overflow-tooltip="true" prop="name" label="字典名称" align="center" />
@@ -123,6 +124,8 @@ export default {
     },
     resetSearch() {
       this.filters.dictName = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {

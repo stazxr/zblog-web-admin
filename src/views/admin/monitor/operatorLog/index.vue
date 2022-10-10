@@ -2,26 +2,25 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-form ref="searchForm" :inline="true" size="small">
-          <el-input v-model="filters.description" clearable placeholder="操作描述" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-input v-model="filters.username" clearable placeholder="操作用户" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-          <el-input v-model="filters.costTime" type="number" clearable placeholder="请求耗时" style="width: 150px;" class="filter-item type-number" />
-          <el-select v-model="filters.execResult" clearable placeholder="操作结果" style="width: 150px" class="filter-item">
-            <el-option label="成功" value="1" />
-            <el-option label="失败" value="0" />
-            <el-option label="系统错误" value="2" />
-          </el-select>
-          <date-range-picker v-model="eventTimeRange" type="datetimerange" />
-          <el-form-item>
-            <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
-            <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
-          </el-form-item>
-        </el-form>
+        <el-input v-model="filters.description" clearable placeholder="操作描述" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.username" clearable placeholder="操作用户" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.costTime" type="number" clearable placeholder="请求耗时" style="width: 150px;" class="filter-item type-number" />
+        <el-select v-model="filters.execResult" clearable placeholder="操作结果" style="width: 150px" class="filter-item">
+          <el-option label="成功" value="true" />
+          <el-option label="失败" value="false" />
+        </el-select>
+        <date-range-picker v-model="eventTimeRange" type="datetimerange" start-placeholder="开始时间" end-placeholder="结束时间" />
+        <span>
+          <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
+          <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
+        </span>
       </div>
-      <div>
-        <el-button size="small" type="info" :loading="downloadLoading" @click="exportData">
-          导出
-        </el-button>
+      <div class="crud-opts">
+        <span class="crud-opts-left">
+          <el-button size="small" type="info" :loading="downloadLoading" @click="exportData">
+            导出
+          </el-button>
+        </span>
       </div>
     </div>
 
@@ -82,6 +81,7 @@
       <el-pagination
         :total="total"
         :current-page="page"
+        :page-size="pageSize"
         style="margin-top: 8px;"
         layout="total, prev, pager, next, sizes"
         @size-change="sizeChange"
@@ -129,6 +129,7 @@ export default {
   },
   methods: {
     search() {
+      this.page = 1
       this.listTableData()
     },
     resetSearch() {
@@ -139,6 +140,8 @@ export default {
       this.filters.costTime = ''
       this.filters.eventStartTime = ''
       this.filters.eventEndTime = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {

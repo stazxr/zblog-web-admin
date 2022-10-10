@@ -11,11 +11,10 @@
           <el-option label="异常日志" value="3" />
         </el-select>
         <el-select v-model="filters.execResult" clearable placeholder="操作结果" style="width: 120px" class="filter-item">
-          <el-option label="成功" value="1" />
-          <el-option label="失败" value="0" />
-          <el-option label="系统错误" value="2" />
+          <el-option label="成功" value="true" />
+          <el-option label="失败" value="false" />
         </el-select>
-        <date-range-picker v-model="eventTimeRange" type="datetimerange" />
+        <date-range-picker v-model="eventTimeRange" type="datetimerange" start-placeholder="开始时间" end-placeholder="结束时间" />
         <span>
           <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
           <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
@@ -92,6 +91,7 @@
       <el-pagination
         :total="total"
         :current-page="page"
+        :page-size="pageSize"
         style="margin-top: 8px;"
         layout="total, prev, pager, next, sizes"
         @size-change="sizeChange"
@@ -148,11 +148,12 @@ export default {
       this.filters.eventEndTime = data[1]
     }
   },
-  activated() {
+  mounted() {
     this.listTableData()
   },
   methods: {
     search() {
+      this.page = 1
       this.listTableData()
     },
     resetSearch() {
@@ -164,6 +165,8 @@ export default {
       this.filters.costTime = ''
       this.filters.eventStartTime = ''
       this.filters.eventEndTime = ''
+
+      this.page = 1
       this.listTableData()
     },
     listTableData() {
