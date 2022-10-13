@@ -49,7 +49,7 @@
         <el-table-column label="操作" align="center" width="150px">
           <template slot-scope="scope">
             <el-button-group>
-              <el-button type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
+              <el-button v-if="['queryUserDetail']" type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
               <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deleteUserRelation(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
@@ -202,14 +202,16 @@ export default {
     deleteUserRelation(row) {
       const userIds = []
       userIds.push(row.id)
-      const param = {
-        roleId: this.dataId,
-        userIds: userIds
+      if (this.type === 'role') {
+        const param = {
+          roleId: this.dataId,
+          userIds: userIds
+        }
+        this.$mapi.role.batchDeleteUserRole(param).then(res => {
+          this.$message.success(res.message)
+          this.listTableData()
+        })
       }
-      this.$mapi.role.batchDeleteUserRole(param).then(res => {
-        this.$message.success(res.message)
-        this.listTableData()
-      })
     },
     batchDeleteUserRelation() {
       if (this.selectRows.length === 0) {

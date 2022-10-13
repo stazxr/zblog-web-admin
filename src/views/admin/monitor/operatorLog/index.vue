@@ -17,7 +17,7 @@
       </div>
       <div class="crud-opts">
         <span class="crud-opts-left">
-          <el-button size="small" type="info" :loading="downloadLoading" @click="exportData">
+          <el-button v-perm="['exportOperateLog']" size="small" type="info" :loading="downloadLoading" @click="exportData">
             导出
           </el-button>
         </span>

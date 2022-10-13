@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="接口管理" name="apiList">
+      <el-tab-pane v-if="hasPerm(['queryRouterListByPage'])" v-perm="['queryRouterListByPage']" label="接口管理" name="apiList">
         <api-list ref="apiList" />
       </el-tab-pane>
-      <el-tab-pane label="白名单管理" name="routerWhiteList">
+      <el-tab-pane v-if="hasPerm(['pageBlackOrWhiteList'])" label="白名单管理" name="routerWhiteList">
         <black-or-white-list ref="routerWhiteList" dict-key="routerWhiteList" />
       </el-tab-pane>
-      <el-tab-pane label="黑名单管理" name="routerBlackList">
+      <el-tab-pane v-if="hasPerm(['pageBlackOrWhiteList'])" label="黑名单管理" name="routerBlackList">
         <black-or-white-list ref="routerBlackList" dict-key="routerBlackList" />
       </el-tab-pane>
     </el-tabs>
@@ -56,6 +56,9 @@ export default {
         default:
           console.log('error tab name', name)
       }
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

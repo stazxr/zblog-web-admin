@@ -10,7 +10,7 @@
       </div>
       <div class="crud-opts">
         <span class="crud-opts-left">
-          <el-button size="small" type="primary" @click="addDictGroup()">
+          <el-button v-perm="['addDict']" size="small" type="primary" @click="addDictGroup()">
             新增组
           </el-button>
         </span>
@@ -35,13 +35,13 @@
             <el-tag v-else size="small" type="warning">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="250px">
+        <el-table-column v-if="hasPerm(['queryDictDetail', 'addDict', 'editDict', 'deleteDict'])" label="操作" align="center" width="250px">
           <template slot-scope="scope">
             <el-button-group>
-              <el-button type="info" size="mini" @click="showDictDetail(scope.row)">详情</el-button>
-              <el-button v-if="scope.row.type === 1" type="primary" size="mini" @click="addDict(scope.row)">新增子项</el-button>
-              <el-button v-if="!scope.row.locked" type="success" size="mini" @click="editDict(scope.row)">编辑</el-button>
-              <el-popconfirm v-if="!scope.row.locked && !scope.row.hasChildren" title="操作不可撤销，确定删除吗？" @confirm="deleteDict(scope.row)">
+              <el-button v-perm="['queryDictDetail']" type="info" size="mini" @click="showDictDetail(scope.row)">详情</el-button>
+              <el-button v-if="hasPerm(['addDict']) && scope.row.type === 1" type="primary" size="mini" @click="addDict(scope.row)">新增子项</el-button>
+              <el-button v-if="hasPerm(['editDict']) && !scope.row.locked" type="success" size="mini" @click="editDict(scope.row)">编辑</el-button>
+              <el-popconfirm v-if="hasPerm(['deleteDict']) && !scope.row.locked && !scope.row.hasChildren" title="操作不可撤销，确定删除吗？" @confirm="deleteDict(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
             </el-button-group>
@@ -232,6 +232,9 @@ export default {
     showDetailDone() {
       this.rowId = null
       this.showDetailDialogVisible = false
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

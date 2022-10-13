@@ -15,7 +15,7 @@
       </div>
       <div class="crud-opts">
         <span class="crud-opts-left">
-          <el-button size="small" type="primary" @click="addRole()">
+          <el-button v-perm="['addRole']" size="small" type="primary" @click="addRole()">
             新增
           </el-button>
         </span>
@@ -38,10 +38,10 @@
           <template slot-scope="scope">
             <el-button-group>
               <el-button type="info" size="mini" @click="showRoleDetail(scope.row)">详情</el-button>
-              <el-button type="success" size="mini" @click="editRole(scope.row)">编辑</el-button>
-              <el-button type="primary" size="mini" @click="showRoleUser(scope.row)">用户</el-button>
-              <el-button type="warning" size="mini" @click="authRole(scope.row)">授权</el-button>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deleteRole(scope.row)">
+              <el-button v-perm="['editRole']" type="success" size="mini" @click="editRole(scope.row)">编辑</el-button>
+              <el-button v-perm="['pageUsersByRoleId']" type="primary" size="mini" @click="showRoleUser(scope.row)">用户</el-button>
+              <el-button v-perm="['authRole']" type="warning" size="mini" @click="authRole(scope.row)">授权</el-button>
+              <el-popconfirm v-perm="['deleteRole']" title="操作不可撤销，确定删除吗？" @confirm="deleteRole(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
             </el-button-group>

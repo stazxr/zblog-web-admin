@@ -37,6 +37,11 @@ export default {
     Theme
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+      interval: null
+    }
+  },
   computed: {
     ...mapState({
       sidebar: state => state.app.sidebar,
@@ -62,6 +67,15 @@ export default {
         value: Cookies.get('theme')
       })
     }
+  },
+  created() {
+    this.interval = window.setInterval(() => {
+      this.$store.dispatch('GetUserInfo')
+    }, 30000)
+  },
+  destroyed() {
+    console.log('clear interval')
+    clearInterval(this.interval)
   },
   methods: {
     handleClickOutside() {

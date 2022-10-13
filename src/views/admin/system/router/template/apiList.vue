@@ -54,6 +54,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row['logShowed']"
+              :disabled="!hasPerm('updateLogShowStatus')"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="开启"
@@ -172,6 +173,9 @@ export default {
     pageChange(page) {
       this.page = page
       this.listTableData()
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

@@ -2,9 +2,10 @@
   <div>
     <div class="head-container" style="text-align: right;">
       <el-form ref="userSearchForm" :inline="true" size="small" class="clearfix" style="text-align: left">
-        <el-input v-model="filters.blurry" clearable placeholder="角色名称/角色编码" style="width: 200px" class="filter-item" @keyup.enter.native="listTableData" />
+        <el-input v-model="filters.blurry" clearable placeholder="角色名称/角色编码" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
         <el-form-item style="float: right">
           <el-button
+            v-perm="['batchDeleteRolePerm']"
             size="small"
             type="danger"
             :loading="deleteLoading"
@@ -26,10 +27,10 @@
             <el-tag v-else size="small" type="warning">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="150px">
+        <el-table-column v-if="hasPerm(['batchDeleteRolePerm'])" label="操作" align="center" width="150px">
           <template slot-scope="scope">
             <el-button-group>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deleteRolePerm(scope.row)">
+              <el-popconfirm v-perm="['batchDeleteRolePerm']" title="操作不可撤销，确定删除吗？" @confirm="deleteRolePerm(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
             </el-button-group>
@@ -77,6 +78,10 @@ export default {
       this.$nextTick(() => {
         this.listTableData()
       })
+    },
+    search() {
+      this.page = 1
+      this.listTableData()
     },
     listTableData() {
       const param = {
@@ -148,6 +153,9 @@ export default {
     pageChange(page) {
       this.page = page
       this.listTableData()
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

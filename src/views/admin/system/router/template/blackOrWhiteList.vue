@@ -6,7 +6,7 @@
         <span>
           <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
           <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
-          <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="addBlackOrWhiteUri()">
+          <el-button v-perm="['addBlackOrWhiteRouter']" class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="addBlackOrWhiteUri()">
             新增
           </el-button>
         </span>
@@ -23,6 +23,7 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row['enabled']"
+              :disabled="!hasPerm('changeBlackOrWhiteRouterStatus')"
               active-color="#13ce66"
               inactive-color="#ff4949"
               active-text="启用"
@@ -31,11 +32,11 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="150">
+        <el-table-column v-if="hasPerm(['editBlackOrWhiteRouter', 'deleteBlackOrWhiteRouter'])" label="操作" align="center" width="150">
           <template slot-scope="scope">
             <el-button-group>
-              <el-button type="success" size="mini" @click="editBlackOrWhiteUri(scope.row)">编辑</el-button>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deleteBlackOrWhiteUri(scope.row)">
+              <el-button v-perm="['editBlackOrWhiteRouter']" type="success" size="mini" @click="editBlackOrWhiteUri(scope.row)">编辑</el-button>
+              <el-popconfirm v-perm="['deleteBlackOrWhiteRouter']" title="操作不可撤销，确定删除吗？" @confirm="deleteBlackOrWhiteUri(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
             </el-button-group>
@@ -188,6 +189,9 @@ export default {
     pageChange(page) {
       this.page = page
       this.listTableData()
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

@@ -251,7 +251,7 @@ export default {
       if (code === 200) {
         // success
         const param = {
-          username: this.user.username,
+          id: this.user.id,
           headImg: data[0]['downloadUrl']
         }
         this.$mapi.user.updateUserHeadImg(param).then(() => {

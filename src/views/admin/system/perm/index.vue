@@ -22,7 +22,7 @@
         </el-form>
       </div>
       <div>
-        <el-button size="small" type="primary" @click="addPerm()">
+        <el-button v-perm="['addPerm']" size="small" type="primary" @click="addPerm()">
           新增
         </el-button>
       </div>
@@ -68,12 +68,12 @@
             {{ scope.row.sort }}
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="200">
+        <el-table-column v-if="hasPerm(['queryPermDetail', 'editPerm', 'deletePerm'])" label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button-group>
-              <el-button type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
-              <el-button type="success" size="mini" @click="editPerm(scope.row)">编辑</el-button>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deletePerm(scope.row)">
+              <el-button v-perm="['queryPermDetail']" type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
+              <el-button v-perm="['editPerm']" type="success" size="mini" @click="editPerm(scope.row)">编辑</el-button>
+              <el-popconfirm v-perm="['deletePerm']" title="操作不可撤销，确定删除吗？" @confirm="deletePerm(scope.row)">
                 <el-button v-show="allowDelete(scope.row)" slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
             </el-button-group>
@@ -193,6 +193,9 @@ export default {
     showDetailDone() {
       this.detailId = null
       this.showDetailDialogVisible = false
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

@@ -15,7 +15,7 @@
       </div>
       <div class="crud-opts">
         <span class="crud-opts-left">
-          <el-button size="small" type="primary" @click="addUser()">
+          <el-button v-perm="['addUser']" size="small" type="primary" @click="addUser()">
             新增
           </el-button>
         </span>
@@ -45,19 +45,19 @@
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
-              :disabled="user.id === scope.row.id"
+              :disabled="!hasPerm('updateUserStatus') || user.id === scope.row.id"
               active-color="#409EFF"
               inactive-color="#F56C6C"
               @change="changeEnabled(scope.row, scope.row.enabled)"
             />
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" width="200px">
+        <el-table-column v-if="hasPerm(['queryUserDetail', 'editUser', 'deleteUser'])" label="操作" align="center" width="200px">
           <template slot-scope="scope">
             <el-button-group>
-              <el-button type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
-              <el-button type="success" size="mini" @click="editUser(scope.row)">编辑</el-button>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deleteUser(scope.row)">
+              <el-button v-perm="['queryUserDetail']" type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
+              <el-button v-perm="['editUser']" type="success" size="mini" @click="editUser(scope.row)">编辑</el-button>
+              <el-popconfirm v-perm="['deleteUser']" title="操作不可撤销，确定删除吗？" @confirm="deleteUser(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
               </el-popconfirm>
             </el-button-group>
@@ -233,6 +233,9 @@ export default {
     pageChange(page) {
       this.page = page
       this.listTableData()
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }

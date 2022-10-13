@@ -22,10 +22,10 @@
       </div>
       <div class="crud-opts">
         <span class="crud-opts-left">
-          <el-button size="small" type="danger" :loading="deleteLogLoading" @click="deleteLog">
+          <el-button v-perm="['deleteLog']" size="small" type="danger" :loading="deleteLogLoading" @click="deleteLog">
             清空日志
           </el-button>
-          <el-button size="small" type="info" :loading="downloadLoading" @click="exportData">
+          <el-button v-perm="['exportAllLog']" size="small" type="info" :loading="downloadLoading" @click="exportData">
             导出
           </el-button>
         </span>
@@ -65,7 +65,7 @@
         <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果" align="center">
           <template slot-scope="scope">
-            <el-link v-if="scope.row['logType'] === 3" type="danger" @click="openDetailLog(scope.row.id)">
+            <el-link v-if="scope.row['logType'] === 3" type="danger" :disabled="!hasPerm('queryLogErrorDetail')" @click="openDetailLog(scope.row.id)">
               系统错误<i class="el-icon-view el-icon--right" />
             </el-link>
             <el-tag v-else-if="!scope.row['execResult']" size="small" type="warning">失败</el-tag>
@@ -237,6 +237,9 @@ export default {
     pageChange(page) {
       this.page = page
       this.listTableData()
+    },
+    hasPerm(value) {
+      return this.checkPerm(value)
     }
   }
 }
