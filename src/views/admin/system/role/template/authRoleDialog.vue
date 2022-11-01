@@ -5,10 +5,12 @@
         <el-tree
           ref="permTree"
           :data="permissions"
+          :props="defaultProps"
+          :check-strictly="checkStrictly"
           show-checkbox
           node-key="id"
           default-expand-all
-          :props="defaultProps"
+          @check="handleCheck"
         />
         <div class="demo-drawer__footer">
           <el-button @click="cancel">取 消</el-button>
@@ -39,6 +41,7 @@ export default {
     return {
       submitLoading: false,
       permissions: [],
+      checkStrictly: true,
       defaultProps: {
         children: 'children',
         label: 'permName'
@@ -63,16 +66,54 @@ export default {
       this.$mapi.role.queryPermIdsByRoleId({ roleId: this.dataId }).then(res => {
         const nodes = []
         res.data.forEach(item => {
-          const node = this.$refs.permTree.getNode(item)
-          if (node != null && node.isLeaf) {
-            nodes.push(item)
-          }
+          // 注释部分,在 checkStrictly 为 false 时,可以反显选中半选节点
+          // const node = this.$refs.permTree.getNode(item)
+          // if (node != null && node.isLeaf) {
+          nodes.push(item)
+          // }
         })
         this.$refs.permTree.setCheckedKeys(nodes, true)
       }).catch(e => {
         console.log('set checked keys catch eor', e)
         this.doClose()
       })
+    },
+    setChildrenChecked(node, checked) {
+      // node
+      if (node.childNodes && node.childNodes.length) {
+        node.childNodes.forEach(item => {
+          item.checked = checked
+          this.setChildrenChecked(item, checked)
+        })
+      }
+
+      // data
+      // this.$refs.permTree.setChecked(current.id, checked, true)
+      // const children = current.children
+      // if (children && children.length > 0) {
+      //   children.forEach(node => {
+      //     this.setChildrenChecked(node, checked)
+      //   })
+      // }
+    },
+    handleCheck(data) {
+      // 1、父节点选中，递归选中所有的子节点
+      // 2、父节点取消选中，递归取消选中所有的子节点
+      // 3、子节点选中，递归选中父节点
+      const node = this.$refs.permTree.getNode(data.id)
+      const checked = node.checked
+      this.setChildrenChecked(node, checked)
+      checked ? this.setParentChecked(node, checked) : ''
+    },
+    setParentChecked(node, checked) {
+      if (node.parent) {
+        for (const key in node) {
+          if (key === 'parent' && node.hasOwnProperty(key)) {
+            node[key].checked = checked
+            this.setParentChecked(node[key], checked)
+          }
+        }
+      }
     },
     doClose() {
       this.permissions = []
