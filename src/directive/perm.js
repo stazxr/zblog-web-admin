@@ -11,9 +11,21 @@ export default function(Vue) {
       } else if (value && value instanceof Array && value.length > 0) {
         const userPerms = store.getters && store.getters.perms
         const needPerms = value
-        hasPermission = userPerms.some(permCode => {
-          return needPerms.includes(permCode)
-        })
+
+        // 必须有所有的权限才可以
+        hasPermission = true
+        for (let i = 0; i < needPerms.length; i++) {
+          const needPerm = needPerms[i]
+          if (!userPerms.includes(needPerm)) {
+            hasPermission = false
+            break
+          }
+        }
+
+        // 有一个权限就可以
+        // hasPermission = userPerms.some(permCode => {
+        //   return needPerms.includes(permCode)
+        // })
       } else {
         console.error(`error! use Like v-perm="'permCode'" or v-perm="['permCode1','permCode2']"`)
       }

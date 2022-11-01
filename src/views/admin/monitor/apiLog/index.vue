@@ -215,7 +215,7 @@ export default {
       }).then(() => {
         this.downloadLoading = true
         this.$mapi.log.exportAllLog({ ... this.filters }).then(res => {
-          downloadFile(res, '接口日志数据导出列表', 'xlsx')
+          downloadFile(res, '接口日志数据导出列表.xlsx')
         }).finally(_ => {
           this.downloadLoading = false
         })

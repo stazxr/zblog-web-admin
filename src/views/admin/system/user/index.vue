@@ -26,8 +26,11 @@
       <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="username" label="头像" align="center">
           <template slot-scope="scope">
-            <el-avatar v-if="scope.row['headImgUrl'] == null || scope.row['headImgUrl'] === ''" icon="el-icon-user-solid" />
-            <el-avatar v-else :src="scope.row['headImgUrl']" />
+            <el-image :src="scope.row['headImgUrl']" :preview-src-list="[scope.row['headImgUrl']]" fit="contain" lazy class="el-avatar">
+              <div slot="error">
+                <i class="el-icon-user-solid" />
+              </div>
+            </el-image>
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" align="center" />

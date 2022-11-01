@@ -19,17 +19,17 @@
 
     <div class="components-container">
       <el-table ref="table" v-loading="tableLoading" :data="tableData" row-key="id" lazy :load="loadSubList" :tree-props="tableProps" border>
-        <el-table-column :show-overflow-tooltip="true" prop="name" label="字典名称" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="key" label="字典KEY" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="value" label="字典VALUE" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="sort" label="字典排序" align="center" />
-        <el-table-column prop="locked" label="锁定状态" align="center">
+        <el-table-column :show-overflow-tooltip="true" prop="name" label="字典名称" align="left" />
+        <el-table-column :show-overflow-tooltip="true" prop="key" label="字典KEY" align="left" />
+        <el-table-column :show-overflow-tooltip="true" prop="value" label="字典VALUE" align="left" />
+        <el-table-column :show-overflow-tooltip="true" prop="sort" label="字典排序" align="left" width="80" />
+        <el-table-column :show-overflow-tooltip="true" prop="locked" label="锁定状态" align="center" width="120">
           <template slot-scope="scope">
             <span v-if="scope.row.locked">禁止编辑删除</span>
             <span v-else>允许编辑删除</span>
           </template>
         </el-table-column>
-        <el-table-column prop="enabled" label="状态" align="center">
+        <el-table-column :show-overflow-tooltip="true" prop="enabled" label="状态" align="center" width="100">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
             <el-tag v-else size="small" type="warning">禁用</el-tag>

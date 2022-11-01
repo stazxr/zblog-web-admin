@@ -48,13 +48,16 @@ export function removeClass(ele, cls) {
   }
 }
 
-export function downloadFile(obj, name, suffix) {
+export function downloadFile(obj, filename) {
   const url = window.URL.createObjectURL(new Blob([obj]))
+  downloadFileByUrl(url, filename)
+}
+
+export function downloadFileByUrl(url, filename) {
   const link = document.createElement('a')
   link.style.display = 'none'
   link.href = url
-  const fileName = name + '.' + suffix
-  link.setAttribute('download', fileName)
+  link.setAttribute('download', filename)
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

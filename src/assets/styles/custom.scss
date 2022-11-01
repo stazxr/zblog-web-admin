@@ -96,7 +96,7 @@
   z-index: 99;
   width: 100%;
 }
-.eladmin-upload {
+.custom-upload {
   border: 1px dashed #c0ccda;
   border-radius: 5px;
   height: 45px;
@@ -136,4 +136,9 @@
 }
 .crud-opts .crud-opts-right span {
   float: left;
+}
+
+// 修改 show-overflow-tooltip 的宽度
+.el-tooltip__popper {
+  max-width: 600px;
 }

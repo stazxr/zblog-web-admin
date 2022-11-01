@@ -64,37 +64,7 @@ instance.interceptors.response.use(response => {
     }
 
     const result = response.data
-    const code = result.code || 200
-    if (code === 200) {
-      // success, return data
-      return response.data
-    } else if (code === 401) {
-      const identifier = result.identifier || 900001
-      if (identifier === 10008) {
-        Message.error(result.message || '登录失败')
-        return Promise.reject(new Error(result.message || '登录失败'))
-      } else if (identifier === 10009) {
-        Message.error(result.message || '请修改密码')
-        return Promise.reject(new Error(result.message || '请修改密码'))
-      } else if (identifier === 900002) {
-        logout(true)
-      } else if (identifier === 900003 || identifier === 900004) {
-        Message.error(result.message || '系统异常')
-        return Promise.reject(new Error(result.message || '系统异常'))
-      } else {
-        Message.error(result.message || '请登录')
-        logout(false)
-      }
-    } else if (code === 403) {
-      Message.error('权限不足，请联系管理员')
-      return Promise.reject(new Error('403'))
-    } else if (response.data.code === 404) {
-      Message.error(result.message || '请求资源不存在')
-      return Promise.reject(new Error(result.message || '404'))
-    } else {
-      Message.error(result.message || '系统发生未知错误')
-      return Promise.reject(new Error(result.message || '系统发生未知错误'))
-    }
+    return responseHandler(result)
   }
 }, error => {
   // 统一异常处理，一般不会出现401|403|404，后端将其作为业务异常处理了
@@ -150,6 +120,40 @@ function logout(expired) {
 
   removeToken()
   location.reload()
+}
+
+function responseHandler(result) {
+  const code = result.code || 200
+  if (code === 200) {
+    // success, return data
+    return result
+  } else if (code === 401) {
+    const identifier = result.identifier || 900001
+    if (identifier === 10008) {
+      Message.error(result.message || '登录失败')
+      return Promise.reject(new Error(result.message || '登录失败'))
+    } else if (identifier === 10009) {
+      Message.error(result.message || '请修改密码')
+      return Promise.reject(new Error(result.message || '请修改密码'))
+    } else if (identifier === 900002) {
+      logout(true)
+    } else if (identifier === 900003 || identifier === 900004) {
+      Message.error(result.message || '系统异常')
+      return Promise.reject(new Error(result.message || '系统异常'))
+    } else {
+      Message.error(result.message || '请登录')
+      logout(false)
+    }
+  } else if (code === 403) {
+    Message.error('权限不足，请联系管理员')
+    return Promise.reject(new Error('403'))
+  } else if (code === 404) {
+    Message.error(result.message || '请求资源不存在')
+    return Promise.reject(new Error(result.message || '404'))
+  } else {
+    Message.error(result.message || '系统发生未知错误')
+    return Promise.reject(new Error(result.message || '系统发生未知错误'))
+  }
 }
 
 export const get = (url, params, requestItem) => {
