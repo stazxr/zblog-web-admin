@@ -67,7 +67,10 @@
     "vuedraggable": "2.20.0",
     "vuex": "3.1.0",
     "wangeditor": "^4.7.11",
-    "xlsx": "^0.17.4"
+    "xlsx": "^0.17.4",
+    "xterm": "^3.1.0",
+    "xterm-addon-attach": "^0.7.0",
+    "xterm-addon-fit": "^0.6.0"
   },
   "devDependencies": {
     "@babel/parser": "^7.7.4",
@@ -103,7 +106,7 @@
     "vue-template-compiler": "2.6.14"
   },
   "engines": {
-    "node": ">=8.9",
+    "node": ">= 8.9",
     "npm": ">= 3.0.0"
   },
   "browserslist": [

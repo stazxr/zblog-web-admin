@@ -53,7 +53,7 @@
                   总量：{{ data.memory.total }}
                 </div>
                 <div style="padding: 3px">
-                  已使用：{{ data.memory.used }}
+                  已用：{{ data.memory.used }}
                 </div>
                 <div style="padding: 3px">
                   空闲：{{ data.memory.available }}
@@ -73,7 +73,7 @@
                   总量：{{ data.swap.total }}
                 </div>
                 <div style="padding: 3px">
-                  已使用：{{ data.swap.used }}
+                  已用：{{ data.swap.used }}
                 </div>
                 <div style="padding: 3px">
                   空闲：{{ data.swap.available }}
@@ -96,7 +96,7 @@
                   总量：{{ data.jvm.total }}
                 </div>
                 <div style="padding: 3px">
-                  已使用：{{ data.jvm.used }}
+                  已用：{{ data.jvm.used }}
                 </div>
                 <div style="padding: 3px">
                   空闲：{{ data.jvm.available }}

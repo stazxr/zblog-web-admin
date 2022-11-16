@@ -73,6 +73,13 @@ export const defaultRouterMap = [
         meta: { title: '用户查询', hideTag: true }
       }
     ]
+  },
+  {
+    path: '/xterm',
+    meta: { title: 'WEB_SSH', noCache: true },
+    name: 'XtermPage',
+    component: (resolve) => require(['@/views/admin/mnt/node/xterm'], resolve),
+    hidden: true
   }
 ]
 

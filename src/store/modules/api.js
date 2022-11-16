@@ -1,3 +1,4 @@
+const wsUrl = process.env.VUE_APP_WS_API
 const baseUrl = process.env.VUE_APP_BASE_API === '/' ? '' : process.env.VUE_APP_BASE_API
 const api = {
   state: {
@@ -10,7 +11,9 @@ const api = {
     // Druid
     sqlApi: baseUrl + '/druid/index.html',
     // Swagger
-    swaggerApi: baseUrl + '/swagger-ui.html'
+    swaggerApi: baseUrl + '/swagger-ui.html',
+    // webSsh
+    webSshApi: wsUrl + '/webssh'
   }
 }
 
