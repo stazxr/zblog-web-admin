@@ -103,7 +103,7 @@ export default {
             ids.push(data[i].id)
           }
 
-          this.$mapi.file.batchDeleteFile(ids)
+          this.$mapi.file.testDeleteFile(ids)
         }
       }
     },

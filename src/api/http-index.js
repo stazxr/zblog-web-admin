@@ -1,5 +1,8 @@
+// communal
 import communal from '@/api/communal.js'
 import home from '@/api/home.js'
+
+// base
 import perm from '@/api/base/perm.js'
 import user from '@/api/base/user.js'
 import log from '@/api/base/log.js'
@@ -11,6 +14,10 @@ import version from '@/api/base/version.js'
 import file from '@/api/base/file.js'
 import node from '@/api/base/node.js'
 
+// service
+import category from '@/api/service/category.js'
+
 export default {
-  communal, home, perm, user, log, router, role, dict, server, version, file, node
+  communal, home, perm, user, log, router, role, dict, server, version, file, node,
+  category
 }

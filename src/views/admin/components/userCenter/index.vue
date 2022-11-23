@@ -268,6 +268,8 @@ export default {
     },
     toggleShow() {
       this.headers.Authorization = getToken()
+
+      this.$refs.imgUploadRef.step = 1
       this.showImgUpload = !this.showImgUpload
     },
     doSubmit() {
