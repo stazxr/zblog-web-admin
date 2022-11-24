@@ -3,7 +3,7 @@ import api from '../custom-axios'
 const categoryApi = '/api/categories'
 
 export default {
-  // 分页查询类别列表
+  // 查询类别树列表
   queryCategoryTreeList: params => {
     return api.httpRequest().get(`${categoryApi}/treeList`, params)
   },

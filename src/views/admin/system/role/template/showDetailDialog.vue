@@ -6,7 +6,7 @@
         <el-descriptions-item label="角色序列"> {{ roleInfo.id }} </el-descriptions-item>
         <el-descriptions-item label="角色名称"> {{ roleInfo.roleName }} </el-descriptions-item>
         <el-descriptions-item label="角色编码"> {{ roleInfo.roleCode }} </el-descriptions-item>
-        <el-descriptions-item label="权限状态">
+        <el-descriptions-item label="角色状态">
           <el-tag v-if="roleInfo.enabled === 'true'" size="small">启用</el-tag>
           <el-tag v-else-if="roleInfo.enabled === 'false'" size="small" type="warning">禁用</el-tag>
           <span v-else> {{ roleInfo.enabled }} </span>
