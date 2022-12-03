@@ -6,18 +6,18 @@
       </h3>
       <el-form-item prop="username">
         <el-input ref="username" v-model="loginForm.username" type="text" auto-complete="off" placeholder="请输入用户名">
-          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
+          <svg-icon slot="prefix" icon-class="username" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
         <el-input ref="password" v-model="loginForm.password" :type="pwdFlagType" auto-complete="off" placeholder="请输入密码" @keyup.enter.native="handleLogin">
           <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
-          <i slot="suffix" :class="[pwdFlag ? 'el-icon-view' : 'el-icon-view']" style="margin-top: 12px; margin-right: 5px; font-size: 16px;" @click="getPwdFlag()" />
+          <svg-icon v-show="loginForm.password !== ''" slot="suffix" :icon-class="pwdFlag ? 'eye-close' : 'eye'" class="el-input__icon input-icon" style="margin-right: 5px;" @click="getPwdFlag()" />
         </el-input>
       </el-form-item>
       <el-form-item prop="code">
         <el-input ref="code" v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+          <svg-icon slot="prefix" icon-class="auth-code" class="el-input__icon input-icon" />
         </el-input>
         <div class="login-code">
           <img :src="codeUrl" alt="" @click="getCode">
@@ -44,7 +44,7 @@
 
 <script>
 import qs from 'qs'
-import Background from '@/assets/images/wh.jpg'
+import Background from '@/assets/images/background.jpeg'
 import { encrypt } from '@/utils/rsaEncrypt'
 export default {
   name: 'Login',
