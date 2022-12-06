@@ -36,21 +36,14 @@ export const defaultRouterMap = [
   },
   {
     path: '/',
-    meta: { title: 'Z-BLOG', noCache: true },
-    name: 'Index',
-    component: (resolve) => require(['@/views/web'], resolve),
-    hidden: true
-  },
-  {
-    path: '/admin',
     component: Layout,
-    redirect: '/admin/dashboard',
+    redirect: '/dashboard',
     children: [
       {
         path: 'dashboard',
         component: (resolve) => require(['@/views/admin/home'], resolve),
         name: 'Dashboard',
-        meta: { title: '首页', icon: 'index', affix: true, noCache: true }
+        meta: { title: '首页', icon: 'home', affix: true, noCache: true }
       }
     ]
   },

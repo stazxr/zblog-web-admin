@@ -11,8 +11,8 @@
       <template v-if="device !== 'mobile'">
         <!-- 菜单搜索 -->
         <search id="header-search" class="right-menu-item" />
-        <!-- 项目文档 -->
-        <el-tooltip content="网站首页" effect="dark" placement="bottom">
+        <!-- 网站首页 -->
+        <el-tooltip content="前往首页" effect="dark" placement="bottom">
           <Web class="right-menu-item hover-effect" />
         </el-tooltip>
         <!-- 全屏缩放 -->

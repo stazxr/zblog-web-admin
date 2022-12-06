@@ -3,7 +3,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 
 const Highlight = {}
 
-// 自定义插件
+// 自定义代码高亮插件
 Highlight.install = function(Vue) {
   // 自定义指令 v-highlight
   Vue.directive('highlight', {

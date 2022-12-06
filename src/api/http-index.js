@@ -17,8 +17,9 @@ import node from '@/api/base/node.js'
 // service
 import category from '@/api/service/category.js'
 import tag from '@/api/service/tag.js'
+import article from '@/api/service/article.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag
+  category, tag, article
 }

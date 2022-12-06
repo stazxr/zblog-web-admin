@@ -77,7 +77,7 @@ export default {
       handler: function(route) {
         const data = route.query
         if (data && data.redirect) {
-          this.redirect = data.redirect === '/' ? '/admin' : data.redirect
+          this.redirect = data.redirect === '/' ? '/' : data.redirect
           delete data.redirect
           if (JSON.stringify(data) !== '{}') {
             this.redirect = this.redirect + '&' + qs.stringify(data, { indices: false })
@@ -133,7 +133,7 @@ export default {
           this.loading = true
           this.$store.dispatch('Login', loginParam).then(() => {
             this.$message.success('登录成功')
-            this.$router.push({ path: this.redirect || '/admin' })
+            this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
             this.getCode()
             this.$refs.code.focus()

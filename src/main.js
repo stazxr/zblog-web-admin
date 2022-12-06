@@ -13,12 +13,27 @@ import './assets/styles/index.scss'
 import App from './App'
 import store from '@/store'
 import router from '@/router/routers'
-import './assets/icons'
-import './assets/iconfont/iconfont.css'
-import './router/index'
+import '@/assets/icons'
+import '@/assets/iconfont/iconfont.css'
+import '@/router/index'
 import 'echarts-gl'
-import api from './api/http-index'
+import api from '@/api/http-index'
 import 'default-passive-events'
+import $ from 'jquery'
+
+import { Boot } from '@wangeditor/editor'
+import attachmentModule from '@wangeditor/plugin-upload-attachment'
+import formulaModule from '@wangeditor/plugin-formula'
+import markdownModule from '@wangeditor/plugin-md'
+
+// wangeditor 附件上传注册
+Boot.registerModule(attachmentModule)
+
+// wangeditor 公式注册
+Boot.registerModule(formulaModule)
+
+// wangeditor markdown 注册
+Boot.registerModule(markdownModule)
 
 // 加载插件
 Vue.use(perm)
@@ -32,6 +47,7 @@ Vue.use(ElementUI, {
 
 // 声明全局变量
 Vue.prototype['$mapi'] = api
+Vue.prototype['$'] = $
 
 // 关闭提示
 Vue.config.productionTip = false

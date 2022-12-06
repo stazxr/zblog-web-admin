@@ -11,13 +11,13 @@ import perm from '@/api/base/perm'
 NProgress.configure({ showSpinner: false })
 
 // no redirect whitelist
-const whiteList = ['/login']
+const whiteList = ['/login', '/']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if (getToken()) {
     if (to.path === '/login') {
-      next({ path: '/admin' })
+      next({ path: '/' })
       NProgress.done()
     } else {
       if (store.getters.user === null) {
