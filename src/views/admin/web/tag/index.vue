@@ -2,7 +2,11 @@
   <div class="app-container">
     <div class="head-container">
       <div>
-        <el-input v-model="filters.name" clearable placeholder="标签名称" style="width: 200px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.name" clearable placeholder="标签名称" style="width: 180px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.createUser" clearable placeholder="创建用户" style="width: 180px" class="filter-item" @keyup.enter.native="search" />
+        <el-select v-model="filters.type" clearable placeholder="标签类型" style="width: 120px" class="filter-item">
+          <el-option v-for="item in tagTypeEnums" :key="item.value" :value="item.value" :label="item.name" />
+        </el-select>
         <el-select v-model="filters.enabled" clearable placeholder="标签状态" style="width: 120px" class="filter-item">
           <el-option label="启用" value="true" />
           <el-option label="禁用" value="false" />
@@ -31,6 +35,7 @@
             <span v-else> {{ scope.row.type }} </span>
           </template>
         </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="articleCount" label="文章数" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="enabled" label="标签状态" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.enabled" size="small">正常</el-tag>
@@ -96,8 +101,14 @@ export default {
     return {
       filters: {
         name: '',
+        createUser: '',
+        type: '',
         enabled: ''
       },
+      tagTypeEnums: [
+        { name: '公共标签', value: 1 },
+        { name: '定制标签', value: 2 }
+      ],
       tableData: [],
       tableLoading: false,
       total: 0,
@@ -121,6 +132,8 @@ export default {
     },
     resetSearch() {
       this.filters.name = ''
+      this.filters.createUser = ''
+      this.filters.type = ''
       this.filters.enabled = ''
 
       this.page = 1

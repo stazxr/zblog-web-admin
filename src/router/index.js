@@ -11,7 +11,7 @@ import perm from '@/api/base/perm'
 NProgress.configure({ showSpinner: false })
 
 // no redirect whitelist
-const whiteList = ['/login', '/']
+const whiteList = ['/login']
 
 router.beforeEach((to, from, next) => {
   NProgress.start()
