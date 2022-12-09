@@ -1,7 +1,7 @@
 <template>
-  <div class="app-container">
+  <el-card class="main-card">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane v-if="hasPerm(['queryRouterListByPage'])" v-perm="['queryRouterListByPage']" label="接口管理" name="apiList">
+      <el-tab-pane v-if="hasPerm(['queryRouterListByPage'])" label="接口管理" name="apiList">
         <api-list ref="apiList" />
       </el-tab-pane>
       <el-tab-pane v-if="hasPerm(['pageBlackOrWhiteList'])" label="白名单管理" name="routerWhiteList">
@@ -11,7 +11,7 @@
         <black-or-white-list ref="routerBlackList" dict-key="routerBlackList" />
       </el-tab-pane>
     </el-tabs>
-  </div>
+  </el-card>
 </template>
 
 <script>
@@ -65,5 +65,7 @@ export default {
 </script>
 
 <style scoped>
-
+.main-card {
+  margin: 10px 10px 0 10px;
+}
 </style>

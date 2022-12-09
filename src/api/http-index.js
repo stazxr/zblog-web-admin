@@ -18,9 +18,10 @@ import node from '@/api/base/node.js'
 import category from '@/api/service/category.js'
 import tag from '@/api/service/tag.js'
 import article from '@/api/service/article.js'
+import webSetting from '@/api/service/webSetting.js'
 import friendLink from '@/api/service/friendLink.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, friendLink
+  category, tag, article, webSetting, friendLink
 }

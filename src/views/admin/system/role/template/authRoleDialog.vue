@@ -132,7 +132,7 @@ export default {
       this.handleClose()
     },
     submit() {
-      this.$confirm('确定要提交表单吗？').then(_ => {
+      this.$confirm('确定要提交吗？').then(_ => {
         const param = {
           roleId: this.dataId,
           permIds: this.$refs.permTree.getCheckedKeys().concat(this.$refs.permTree.getHalfCheckedKeys())
