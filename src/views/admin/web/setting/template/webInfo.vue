@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="webInfo" size="small" label-width="100px" label-position="left">
+  <el-form :model="webInfo" :rules="addRules" size="small" label-width="100px" label-position="left">
     <el-form-item label="网站头像">
       <el-upload
         ref="upload"
@@ -16,13 +16,13 @@
         <i v-else class="el-icon-plus avatar-uploader-icon" />
       </el-upload>
     </el-form-item>
-    <el-form-item label="网站名称">
+    <el-form-item label="网站名称" prop="websiteName">
       <el-input v-model="webInfo.websiteName" style="width:400px" placeholder="网站名称" maxlength="20" show-word-limit />
     </el-form-item>
-    <el-form-item label="网站作者">
+    <el-form-item label="网站作者" prop="websiteAuthor">
       <el-input v-model="webInfo.websiteAuthor" style="width:400px" placeholder="网站作者" />
     </el-form-item>
-    <el-form-item label="创建日期">
+    <el-form-item label="创建日期" prop="websiteCreateTime">
       <el-date-picker v-model="webInfo.websiteCreateTime" type="date" value-format="yyyy-MM-dd" placeholder="创建日期" style="width:400px" />
     </el-form-item>
     <el-form-item label="网站简介">
@@ -40,7 +40,7 @@
         <el-checkbox label="weibo">微博</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
-    <el-button type="primary" size="medium" style="margin-left:6.3rem" @click="updateWebInfo">
+    <el-button v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateWebInfo">
       修改
     </el-button>
   </el-form>
@@ -51,6 +51,7 @@ import { getToken } from '@/utils/token'
 export default {
   data() {
     return {
+      submitLoading: false,
       headers: {
         Authorization: ''
       },
@@ -63,6 +64,17 @@ export default {
         websiteNotice: '',
         websiteRecordNo: '',
         socialLoginList: []
+      },
+      addRules: {
+        websiteName: [
+          { required: true, message: '请填写网站名称', trigger: 'blur' }
+        ],
+        websiteAuthor: [
+          { required: true, message: '请填写网站作者', trigger: 'blur' }
+        ],
+        websiteCreateTime: [
+          { required: true, message: '请选择网站创建时间', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -81,8 +93,11 @@ export default {
       })
     },
     updateWebInfo() {
+      this.submitLoading = true
       this.$mapi.webSetting.updateWebInfo(this.webInfo).then(res => {
         this.$message.success(res.message)
+      }).finally(_ => {
+        this.submitLoading = false
       })
     },
     beforeUpload(file) {

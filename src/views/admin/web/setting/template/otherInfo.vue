@@ -121,7 +121,7 @@
         <el-radio :label="1">开启</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-button type="primary" size="medium" style="margin-left:6.3rem" @click="updateOtherInfo">
+    <el-button v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateOtherInfo">
       修改
     </el-button>
   </el-form>
@@ -135,6 +135,7 @@ export default {
       headers: {
         Authorization: ''
       },
+      submitLoading: false,
       otherInfo: {
         userAvatar: '',
         touristAvatar: '',
@@ -164,8 +165,11 @@ export default {
       })
     },
     updateOtherInfo() {
+      this.submitLoading = true
       this.$mapi.webSetting.updateOtherInfo(this.otherInfo).then(res => {
         this.$message.success(res.message)
+      }).finally(_ => {
+        this.submitLoading = false
       })
     },
     beforeUpload(file) {

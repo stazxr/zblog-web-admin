@@ -1,7 +1,7 @@
 <template>
   <el-form :model="socialInfo" size="small" label-width="100px" label-position="left">
     <el-form-item label="QQ">
-      <el-input v-model="socialInfo.qq" style="width:400px" placeholder="QQ" />
+      <el-input v-model="socialInfo.qqNum" style="width:400px" placeholder="QQ" />
     </el-form-item>
     <el-form-item label="Github">
       <el-input v-model="socialInfo.github" style="width:400px" placeholder="Github" />
@@ -9,7 +9,7 @@
     <el-form-item label="Gitee">
       <el-input v-model="socialInfo.gitee" style="width:400px" placeholder="Gitee" />
     </el-form-item>
-    <el-button type="primary" size="medium" style="margin-left:6.3rem" @click="updateSocialInfo">
+    <el-button v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateSocialInfo">
       修改
     </el-button>
   </el-form>
@@ -19,8 +19,9 @@
 export default {
   data() {
     return {
+      submitLoading: false,
       socialInfo: {
-        qq: '',
+        qqNum: '',
         github: '',
         gitee: ''
       }
@@ -41,8 +42,11 @@ export default {
       })
     },
     updateSocialInfo() {
+      this.submitLoading = true
       this.$mapi.webSetting.updateSocialInfo(this.socialInfo).then(res => {
         this.$message.success(res.message)
+      }).finally(_ => {
+        this.submitLoading = false
       })
     },
     hasPerm(value) {
