@@ -121,7 +121,7 @@
         <el-radio :label="1">开启</el-radio>
       </el-radio-group>
     </el-form-item>
-    <el-button v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateOtherInfo">
+    <el-button v-perm="['updateOtherInfo']" v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateOtherInfo">
       修改
     </el-button>
   </el-form>
@@ -265,9 +265,6 @@ export default {
         // error
         this.$refs.alipayUpload.handleError(response, file)
       }
-    },
-    hasPerm(value) {
-      return this.checkPerm(value)
     }
   }
 }

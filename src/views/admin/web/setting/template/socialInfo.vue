@@ -9,7 +9,7 @@
     <el-form-item label="Gitee">
       <el-input v-model="socialInfo.gitee" style="width:400px" placeholder="Gitee" />
     </el-form-item>
-    <el-button v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateSocialInfo">
+    <el-button v-perm="['updateSocialInfo']" v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateSocialInfo">
       修改
     </el-button>
   </el-form>
@@ -48,9 +48,6 @@ export default {
       }).finally(_ => {
         this.submitLoading = false
       })
-    },
-    hasPerm(value) {
-      return this.checkPerm(value)
     }
   }
 }

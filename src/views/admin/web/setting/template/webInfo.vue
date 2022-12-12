@@ -40,7 +40,7 @@
         <el-checkbox label="weibo">微博</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
-    <el-button v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateWebInfo">
+    <el-button v-perm="['updateWebInfo']" v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateWebInfo">
       修改
     </el-button>
   </el-form>
@@ -141,9 +141,6 @@ export default {
         // error
         this.$refs.upload.handleError(response, file)
       }
-    },
-    hasPerm(value) {
-      return this.checkPerm(value)
     }
   }
 }

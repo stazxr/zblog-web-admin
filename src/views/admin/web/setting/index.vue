@@ -1,13 +1,13 @@
 <template>
   <el-card class="main-card">
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="网站信息" name="webInfo">
+      <el-tab-pane v-if="hasPerm(['queryWebInfo'])" label="网站信息" name="webInfo">
         <WebInfo ref="webInfo" />
       </el-tab-pane>
-      <el-tab-pane label="社交信息" name="socialInfo">
+      <el-tab-pane v-if="hasPerm(['querySocialInfo'])" label="社交信息" name="socialInfo">
         <SocialInfo ref="socialInfo" />
       </el-tab-pane>
-      <el-tab-pane label="其他设置" name="otherInfo">
+      <el-tab-pane v-if="hasPerm(['queryOtherInfo'])" label="其他设置" name="otherInfo">
         <OtherInfo ref="otherInfo" />
       </el-tab-pane>
     </el-tabs>
