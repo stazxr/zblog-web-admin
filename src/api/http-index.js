@@ -20,8 +20,9 @@ import tag from '@/api/service/tag.js'
 import article from '@/api/service/article.js'
 import webSetting from '@/api/service/webSetting.js'
 import friendLink from '@/api/service/friendLink.js'
+import talk from '@/api/service/talk.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, webSetting, friendLink
+  category, tag, article, webSetting, friendLink, talk
 }

@@ -18,6 +18,7 @@ import '@/assets/iconfont/iconfont.css'
 import '@/router/index'
 import 'echarts-gl'
 import api from '@/api/http-index'
+import config from '@/utils/config'
 import 'default-passive-events'
 import $ from 'jquery'
 
@@ -46,6 +47,7 @@ Vue.use(ElementUI, {
 })
 
 // 声明全局变量
+Vue.prototype['$config'] = config
 Vue.prototype['$mapi'] = api
 Vue.prototype['$'] = $
 

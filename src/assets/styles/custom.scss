@@ -142,3 +142,47 @@
 .el-tooltip__popper {
   max-width: 600px;
 }
+
+// 卡片布局
+.card-container {
+  position: relative;
+  margin: 10px 10px 0 10px;
+}
+.main-card {
+  min-height: calc(100vh - 135px);
+}
+.card-title {
+  position: absolute;
+  left: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #202a34;
+}
+.card-title::before {
+  content: '';
+  width: 24px;
+  height: 16px;
+  border-left: 3px solid #0081ff;
+  margin-right: 20px;
+}
+.card-item {
+  font-size: 14px;
+  margin-top: 40px;
+  color: #999;
+}
+.card-item span {
+  margin-right: 24px;
+}
+.card-item-status {
+  cursor: pointer;
+}
+.card-item-active-status {
+  cursor: pointer;
+  color: #333;
+  font-weight: bold;
+}
+.card-pagination {
+  float: right;
+  margin-top: 1.25rem;
+  margin-bottom: 2.25rem;
+}
