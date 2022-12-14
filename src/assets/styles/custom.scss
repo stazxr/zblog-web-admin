@@ -181,6 +181,12 @@
   color: #333;
   font-weight: bold;
 }
+.card-operation {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  margin-top: 2.25rem;
+}
 .card-pagination {
   float: right;
   margin-top: 1.25rem;

@@ -21,8 +21,9 @@ import article from '@/api/service/article.js'
 import webSetting from '@/api/service/webSetting.js'
 import friendLink from '@/api/service/friendLink.js'
 import talk from '@/api/service/talk.js'
+import page from '@/api/service/page.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, webSetting, friendLink, talk
+  category, tag, article, webSetting, friendLink, talk, page
 }
