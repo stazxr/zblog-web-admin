@@ -30,7 +30,7 @@
 
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" row-key="id" :tree-props="tableProps" border>
-        <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="220px" prop="permName">
+        <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="200px" prop="permName">
           <template slot-scope="scope">
             <span>
               <svg-icon :icon-class="scope.row.icon ? scope.row.icon : ''" />
@@ -38,8 +38,9 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" prop="permCode" label="权限编码" />
-        <el-table-column :show-overflow-tooltip="true" prop="componentName" label="组件名称" />
+        <el-table-column :show-overflow-tooltip="true" width="100px" prop="routerPath" label="组件路径" />
+        <el-table-column :show-overflow-tooltip="true" width="150px" prop="permCode" label="权限编码" />
+        <el-table-column :show-overflow-tooltip="true" width="150px" prop="componentName" label="组件名称" />
         <el-table-column :show-overflow-tooltip="true" prop="componentPath" label="组件路径" />
         <el-table-column prop="permType" label="类型" align="center" width="75px">
           <template slot-scope="scope">

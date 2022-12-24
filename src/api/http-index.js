@@ -22,8 +22,9 @@ import webSetting from '@/api/service/webSetting.js'
 import friendLink from '@/api/service/friendLink.js'
 import talk from '@/api/service/talk.js'
 import page from '@/api/service/page.js'
+import album from '@/api/service/album.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, webSetting, friendLink, talk, page
+  category, tag, article, webSetting, friendLink, talk, page, album
 }

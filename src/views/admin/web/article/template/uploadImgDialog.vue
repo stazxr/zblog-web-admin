@@ -76,9 +76,6 @@ export default {
         this.isReplace = false
         this.replaceIndex = null
       }
-
-      console.log('isReplace', this.isReplace)
-      console.log('replaceIndex', this.replaceIndex)
     },
     doClose(submitFlag) {
       if (submitFlag) {
