@@ -8,31 +8,23 @@
             <span ref="tab-all" class="nav-link" :class="{ 'active': isAllActive }" @click="statusTabChange(1)"> 全部({{ countInfo.allCount }}) </span>
           </li>
           <li class="nav-item">
-            <span ref="tab-public" class="nav-link" :class="{ 'active': isPublicActive }" @click="statusTabChange(2)"> 全部可见({{ countInfo.publicCount }}) </span>
+            <span ref="tab-published" class="nav-link" :class="{ 'active': isPublishedActive }" @click="statusTabChange(2)"> 已发布({{ countInfo.publishedCount }}) </span>
           </li>
           <li class="nav-item">
-            <span ref="tab-private" class="nav-link" :class="{ 'active': isPrivateActive }" @click="statusTabChange(3)"> 仅我可见({{ countInfo.privateCount }}) </span>
-          </li>
-          <li class="nav-item">
-            <span ref="tab-audit" class="nav-link" :class="{ 'active': isAuditActive }" @click="statusTabChange(4)"> 待审核({{ countInfo.auditCount }}) </span>
+            <span ref="tab-audit" class="nav-link" :class="{ 'active': isAuditActive }" @click="statusTabChange(3)"> 待审核({{ countInfo.auditCount }}) </span>
           </li>
           <li class="nav-item">
             <span ref="tab-publish" class="nav-link" :class="{ 'active': isPublishActive }" @click="statusTabChange(5)"> 待发布({{ countInfo.publishCount }}) </span>
           </li>
           <li class="nav-item">
-            <span ref="tab-deal" class="nav-link" :class="{ 'active': isDealActive }" @click="statusTabChange(6)"> 待处理({{ countInfo.dealCount }}) </span>
-          </li>
-          <li class="nav-item">
-            <span ref="tab-draft" class="nav-link" :class="{ 'active': isDraftActive }" @click="statusTabChange(7)"> 草稿箱({{ countInfo.draftCount }}) </span>
-          </li>
-          <li class="nav-item">
-            <span ref="tab-delete" class="nav-link" :class="{ 'active': isDeleteActive }" @click="statusTabChange(8)"> 回收站({{ countInfo.deleteCount }}) </span>
+            <span ref="tab-deal" class="nav-link" :class="{ 'active': isDealActive }" @click="statusTabChange(4)"> 待作者处理({{ countInfo.dealCount }}) </span>
           </li>
         </ul>
       </div>
       <div>
         <el-input v-model="filters.title" clearable placeholder="文章标题" style="width: 180px" class="filter-item" @keyup.enter.native="search" />
         <el-input v-model="filters.keywords" clearable placeholder="关键字（标签名称）" style="width: 180px" class="filter-item" @keyup.enter.native="search" />
+        <el-input v-model="filters.author" clearable placeholder="作者（昵称、用户名）" style="width: 180px" class="filter-item" @keyup.enter.native="search" />
         <el-select v-model="filters.categoryId" clearable placeholder="文章分类" style="width: 150px" class="filter-item">
           <el-option-group v-for="group in categoryList" :key="group.id" :label="group.name">
             <el-option v-for="item in group.children" :key="item.id" :value="item.id" :label="item.name" />
@@ -43,10 +35,6 @@
           <el-option label="转载" value="2" />
           <el-option label="翻译" value="3" />
         </el-select>
-        <el-select v-model="filters.commentFlag" clearable placeholder="评论状态" style="width: 150px" class="filter-item">
-          <el-option label="开启评论" value="true" />
-          <el-option label="关闭评论" value="false" />
-        </el-select>
         <span>
           <el-button class="filter-item" size="small" type="success" icon="el-icon-search" @click="search">查询</el-button>
           <el-button class="filter-item" size="small" type="warning" icon="el-icon-refresh-left" @click="resetSearch">重置</el-button>
@@ -54,14 +42,14 @@
       </div>
       <div class="crud-opts">
         <span class="crud-opts-left">
-          <el-button v-perm="['addArticle']" size="small" type="primary" @click="addArticle()">
-            写文章
+          <el-button v-show="filters.tagStatus === 3" v-perm="['auditArticle']" size="small" type="primary" @click="batchAuditArticle()">
+            审核
           </el-button>
-          <el-button v-show="filters.tagStatus !== 8" :disabled="selectRows.length === 0" size="small" type="warning" @click="batchMoveToRecycleBin()">
-            批量删除
+          <el-button v-show="false" v-perm="['pushArticle']" size="small" type="info" @click="pushArticle()">
+            推送
           </el-button>
-          <el-button v-show="filters.tagStatus === 8" size="small" type="danger" @click="clearRecycleBin()">
-            清空回收站
+          <el-button v-show="false" v-perm="['offlineArticle']" size="small" type="danger" @click="offlineArticle()">
+            下线
           </el-button>
         </span>
       </div>
@@ -71,7 +59,7 @@
       <el-table v-if="!showEmpty" ref="articleTable" v-loading="tableLoading" :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="45" />
         <el-table-column :show-overflow-tooltip="true" prop="articleImgLinkList" label="文章封面" align="center" width="180" fixed="left">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-image
               class="article-cover"
               :src="scope.row['coverImageType'] === 3 ? articleDefaultImg : scope.row['articleImgLinkList'] && scope.row['articleImgLinkList'].length > 0 ? scope.row['articleImgLinkList'][0] : ''"
@@ -84,17 +72,13 @@
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" prop="title" label="文章标题" align="left" width="200" fixed="left">
-          <template slot-scope="scope">
-            {{ scope.row['title'] }}
-          </template>
-        </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="title" label="文章标题" align="left" width="200" fixed="left" />
         <el-table-column :show-overflow-tooltip="true" prop="articleType" label="文章类型" width="80" align="center">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <span v-if="scope.row['articleType'] === 1" style="font-size: 12px">原创</span>
             <span v-else-if="scope.row['articleType'] === 2">
               <el-tooltip :content="scope.row['reprintLink']" placement="top" effect="light">
-                <el-link type="primary" :href="scope.row['reprintLink']" :disabled="scope.row['reprintLink'] === ''" :title="scope.row['reprintLink']" :underline="true" target="_blank" style="font-size: 12px">
+                <el-link type="primary" :href="scope.row['reprintLink']" :disabled="scope.row['reprintLink'] === ''" title="ss" :underline="true" target="_blank" style="font-size: 12px">
                   转载
                 </el-link>
               </el-tooltip>
@@ -111,14 +95,23 @@
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="categoryName" label="文章分类" width="100" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="tagList" label="文章标签" width="250" align="center">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-for="item of scope.row['tagList']" :key="item.id" :type="item.type === 2 ? 'info' : ''" style="margin-right:0.2rem;margin-top:0.2rem;">
               {{ item.name }}
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="viewCount" label="浏览量" width="70" align="center" />
+        <el-table-column :show-overflow-tooltip="true" prop="likeCount" label="点赞量" width="70" align="center" />
+        <el-table-column :show-overflow-tooltip="true" prop="commentCount" label="评论数" width="70" align="center" />
+        <el-table-column :show-overflow-tooltip="true" prop="tagList" label="评论状态" width="100" align="center">
+          <template v-slot="scope">
+            <el-tag v-if="scope.row['commentFlag']" effect="dark">开启评论</el-tag>
+            <el-tag v-else type="warning" effect="dark">关闭评论</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="articleStatus" label="文章状态" width="100" align="center">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row['articleStatus'] === 1" type="info" effect="dark">草稿</el-tag>
             <el-tag v-else-if="scope.row['articleStatus'] === 2" effect="dark">待审核</el-tag>
             <el-tag v-else-if="scope.row['articleStatus'] === 3" effect="dark">待审核</el-tag>
@@ -133,57 +126,26 @@
             <span v-else>-</span>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" prop="articleStatus" label="发布范围" width="100" align="center">
-          <template v-slot="scope">
-            <el-tag v-if="scope.row['articlePerm'] === 1" effect="dark">全部可见</el-tag>
-            <!-- <el-tag v-else-if="scope.row['articlePerm'] === 2">登录可见</el-tag> -->
-            <el-tag v-else-if="scope.row['articlePerm'] === 3" type="warning" effect="dark">仅我可见</el-tag>
-            <span v-else>-</span>
-          </template>
-        </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" prop="tagList" label="评论状态" width="100" align="center">
-          <template v-slot="scope">
-            <el-tag v-if="scope.row['commentFlag']" effect="dark">开启评论</el-tag>
-            <el-tag v-else type="warning" effect="dark">关闭评论</el-tag>
-          </template>
-        </el-table-column>
-        <!-- <el-table-column :show-overflow-tooltip="true" prop="authorNickname" label="作者" width="100" align="center" /> -->
+        <el-table-column :show-overflow-tooltip="true" prop="authorNickname" label="作者" width="100" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="createTime" label="最后修改时间" width="150" align="center">
           <template v-slot="scope">
             <span v-if="scope.row['updateTime'] !== ''">{{ scope.row['updateTime'] }}</span>
             <span v-else>{{ scope.row['createTime'] }}</span>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" prop="wordCount" label="字数" width="70" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="viewCount" label="浏览量" width="70" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="likeCount" label="点赞量" width="70" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="commentCount" label="评论数" width="70" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="desc" label="备注" width="150" align="center" />
-        <el-table-column label="操作" align="center" width="220" fixed="right">
-          <template slot-scope="scope">
-            <el-button-group v-if="scope.row['articleStatus'] !== 8">
+        <el-table-column v-if="hasPerm(['queryArticleDetail'])" label="操作" align="center" width="200" fixed="right">
+          <template v-slot="scope">
+            <el-button-group>
               <el-button type="info" size="mini" @click="showArticleDetail(scope.row)">预览</el-button>
-              <el-button v-show="loginUserId === scope.row['authorId']" v-perm="['editArticle']" type="success" size="mini" @click="editArticle(scope.row)">编辑</el-button>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="moveToRecycleBin(scope.row)">
-                <el-button slot="reference" type="warning" size="mini">删除</el-button>
-              </el-popconfirm>
-            </el-button-group>
-            <el-button-group v-else>
-              <el-button type="info" size="mini" @click="showArticleDetail(scope.row)">预览</el-button>
-              <el-button type="info" size="mini" @click="recycleToDraftBox(scope.row)">回收至草稿箱</el-button>
-              <el-popconfirm title="操作不可撤销，确定删除吗？" @confirm="deleteArticle(scope.row)">
-                <el-button slot="reference" type="danger" size="mini">彻底删除</el-button>
-              </el-popconfirm>
+              <el-button v-show="scope.row['articleStatus'] === 2 || scope.row['articleStatus'] === 3" v-perm="['auditArticle']" type="primary" size="mini" @click="auditArticle(scope.row)">审核</el-button>
             </el-button-group>
           </template>
         </el-table-column>
       </el-table>
-      <el-result v-if="showEmpty" title="空空如也" sub-title="少壮不努力，老大徒伤悲。">
+      <el-result v-if="showEmpty" title="空空如也" sub-title="这里没有需要处理的事务。">
         <template slot="icon">
           <el-image :src="emptyImg" style="width: 200px;" />
-        </template>
-        <template slot="extra">
-          <el-button v-perm="['addArticle']" type="primary" size="medium" @click="addArticle()">去创作</el-button>
         </template>
       </el-result>
     </div>
@@ -202,6 +164,8 @@
       />
     </div>
 
+    <auditDialog ref="auditDialogRef" :dialog-visible="auditDialogVisible" @auditDone="auditDone" />
+
     <el-dialog :visible.sync="previewArticleDialogVisible" title="预览" width="900px">
       <previewArticle ref="previewArticleRef" />
       <div slot="footer" class="dialog-footer">
@@ -213,11 +177,12 @@
 
 <script>
 import EmptyImg from '@/assets/images/empty.png'
+import auditDialog from '@/views/admin/web/article/template/auditDialog'
 import previewArticle from '@/views/admin/web/article/template/previewArticle'
 export default {
-  name: 'Article',
+  name: 'ArticleAudit',
   components: {
-    previewArticle
+    auditDialog, previewArticle
   },
   data() {
     return {
@@ -229,19 +194,16 @@ export default {
         tagStatus: 1,
         title: '',
         keywords: '',
+        author: '',
         categoryId: '',
-        commentFlag: '',
         articleType: ''
       },
       countInfo: {
         allCount: 0,
-        publicCount: 0,
-        privateCount: 0,
+        publishedCount: 0,
         auditCount: 0,
-        publishCount: 0,
         dealCount: 0,
-        draftCount: 0,
-        deleteCount: 0
+        publishCount: 0
       },
       tableData: [],
       selectRows: [],
@@ -249,36 +211,25 @@ export default {
       total: 0,
       page: 1,
       pageSize: 5,
+      auditDialogVisible: false,
       previewArticleDialogVisible: false
     }
   },
   computed: {
-    loginUserId() {
-      return this.$store.getters.user ? this.$store.getters.user.id : null
-    },
     isAllActive() {
       return this.filters.tagStatus === 1
     },
-    isPublicActive() {
+    isPublishedActive() {
       return this.filters.tagStatus === 2
     },
-    isPrivateActive() {
+    isAuditActive() {
       return this.filters.tagStatus === 3
     },
-    isAuditActive() {
+    isDealActive() {
       return this.filters.tagStatus === 4
     },
     isPublishActive() {
       return this.filters.tagStatus === 5
-    },
-    isDealActive() {
-      return this.filters.tagStatus === 6
-    },
-    isDraftActive() {
-      return this.filters.tagStatus === 7
-    },
-    isDeleteActive() {
-      return this.filters.tagStatus === 8
     }
   },
   mounted() {
@@ -287,16 +238,14 @@ export default {
     this.listTableData()
   },
   activated() {
-    if (this.$route.query._ts && this.$route.query._ts !== '') {
-      this.statusTabChange(this.$route.query._ts)
-    } else {
-      if (this.$route.query.refresh) {
-        this.page = 1
-        this.listTableData()
-      }
+    if (this.$route.query.refresh) {
+      this.listTableData()
     }
   },
   methods: {
+    hasPerm(value) {
+      return this.checkPerm(value)
+    },
     handleSelectionChange(val) {
       this.selectRows = val
     },
@@ -326,8 +275,8 @@ export default {
       this.filters.tagStatus = 1
       this.filters.title = ''
       this.filters.keywords = ''
+      this.filters.author = ''
       this.filters.categoryId = ''
-      this.filters.commentFlag = ''
       this.filters.articleType = ''
 
       this.page = 1
@@ -343,7 +292,7 @@ export default {
       this.tableData = []
       this.showEmpty = false
       this.tableLoading = true
-      this.$mapi.article.pageArticleList(param).then(({ data }) => {
+      this.$mapi.article.pageAuditArticleList(param).then(({ data }) => {
         const { dataList, countInfo } = data
         this.tableData = dataList.list
         this.total = dataList.total
@@ -363,19 +312,6 @@ export default {
         this.showEmpty = this.tableData.length === 0
       })
     },
-    addArticle() {
-      this.$router.push({
-        name: 'AddArticle'
-      })
-    },
-    editArticle(row) {
-      this.$router.push({
-        name: 'AddArticle',
-        query: {
-          articleId: row.id
-        }
-      })
-    },
     showArticleDetail(row) {
       this.previewArticleDialogVisible = true
       this.$nextTick(() => {
@@ -385,45 +321,38 @@ export default {
     closePreviewArticleDialog() {
       this.previewArticleDialogVisible = false
     },
-    recycleToDraftBox(row) {
-      this.$mapi.article.recycleToDraftBox({ articleId: row.id }).then(res => {
-        this.$message.success(res.message)
-        this.listTableData()
-      })
-    },
-    moveToRecycleBin(row) {
-      this.$mapi.article.moveToRecycleBin({ articleId: row.id }).then(res => {
-        this.$message.success(res.message)
-        this.listTableData()
-      })
-    },
-    batchMoveToRecycleBin() {
-      const articleIds = []
-      this.selectRows.forEach(row => {
-        articleIds.push(row.id)
-      })
+    auditArticle(row) {
+      const data = []
+      data.push(row)
 
-      if (articleIds.length === 0) {
-        this.$message.warning('请选择要删除的文章列表')
+      this.auditDialogVisible = true
+      this.$refs.auditDialogRef.initData(data)
+    },
+    batchAuditArticle() {
+      if (this.selectRows.length === 0) {
+        this.$message.error('请选择需要审核的文章')
         return
       }
 
-      this.$mapi.article.batchMoveToRecycleBin(articleIds).then(res => {
-        this.$message.success(res.message)
-        this.listTableData()
+      const data = []
+      this.selectRows.forEach(row => {
+        data.push(row)
       })
+
+      this.auditDialogVisible = true
+      this.$refs.auditDialogRef.initData(data)
     },
-    deleteArticle(row) {
-      this.$mapi.article.deleteArticle({ articleId: row.id }).then(res => {
-        this.$message.success(res.message)
+    auditDone(result = false) {
+      this.auditDialogVisible = false
+      if (result) {
         this.listTableData()
-      })
+      }
     },
-    clearRecycleBin() {
-      this.$mapi.article.clearRecycleBin().then(res => {
-        this.$message.success(res.message)
-        this.listTableData()
-      })
+    pushArticle() {
+
+    },
+    offlineArticle() {
+
     },
     sizeChange(size) {
       this.page = 1

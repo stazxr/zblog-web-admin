@@ -1,6 +1,6 @@
 import variables from '@/assets/styles/element-variables.scss'
 import defaultSettings from '@/settings'
-const { tagsView, fixedHeader, sidebarLogo, showFooter, footerTxt, caseNumber } = defaultSettings
+const { tagsView, fixedHeader, sidebarLogo, showFooter, footerTxt, caseNumber, webApi } = defaultSettings
 
 const state = {
   theme: variables['theme'],
@@ -10,7 +10,8 @@ const state = {
   sidebarLogo: sidebarLogo,
   showFooter: showFooter,
   footerTxt: footerTxt,
-  caseNumber: caseNumber
+  caseNumber: caseNumber,
+  webApi: webApi
 }
 
 const forbiddenKey = ['tokenKey', 'refTokenKey']

@@ -22,11 +22,11 @@
     <el-form-item label="网站作者" prop="websiteAuthor">
       <el-input v-model="webInfo.websiteAuthor" style="width:400px" placeholder="网站作者" />
     </el-form-item>
+    <el-form-item label="网站简介">
+      <el-input v-model="webInfo.websiteIntro" style="width:400px" placeholder="网站简介" />
+    </el-form-item>
     <el-form-item label="创建日期" prop="websiteCreateTime">
       <el-date-picker v-model="webInfo.websiteCreateTime" type="date" value-format="yyyy-MM-dd" placeholder="创建日期" style="width:400px" />
-    </el-form-item>
-    <el-form-item label="网站简介">
-      <el-input v-model="webInfo.websiteIntro" type="textarea" :rows="4" placeholder="网站简介" style="width:400px" />
     </el-form-item>
     <el-form-item label="网站公告">
       <el-input v-model="webInfo.websiteNotice" type="textarea" :rows="4" placeholder="网站公告" style="width:400px" />

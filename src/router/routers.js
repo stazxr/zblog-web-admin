@@ -68,6 +68,20 @@ export const defaultRouterMap = [
     ]
   },
   {
+    path: '/publish',
+    component: Layout,
+    hidden: true,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'blog/success/:articleId',
+        component: (resolve) => require(['@/views/admin/web/article/template/publishArticleSuccess'], resolve),
+        name: 'PublishSuccess',
+        meta: { title: '发布成功' }
+      }
+    ]
+  },
+  {
     path: '/xterm',
     meta: { title: 'WEB_SSH', noCache: true },
     name: 'XtermPage',

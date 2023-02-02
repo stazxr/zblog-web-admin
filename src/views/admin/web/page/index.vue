@@ -3,7 +3,7 @@
     <el-card class="main-card">
       <div class="card-title">{{ this.$route.meta.title || this.$route.name }}</div>
       <div class="card-operation">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="addPage()">
+        <el-button v-perm="['addOrEditPage']" type="primary" size="small" icon="el-icon-plus" @click="addPage()">
           新建页面
         </el-button>
       </div>
@@ -12,14 +12,14 @@
         <el-col v-for="item of tableData" :key="item.id" :md="6">
           <div class="page-item">
             <!-- 相册操作 -->
-            <div class="page-opreation">
+            <div v-if="hasPerm(['addOrEditPage', 'deletePage'])" class="page-opreation">
               <el-dropdown @command="handleCommand">
                 <i class="el-icon-more" style="color:#fff" />
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="'1,' + item.id">
+                  <el-dropdown-item v-perm="['addOrEditPage']" :command="'1,' + item.id">
                     <i class="el-icon-edit" />编辑
                   </el-dropdown-item>
-                  <el-dropdown-item :command="'2,' + item.id">
+                  <el-dropdown-item v-perm="['deletePage']" :command="'2,' + item.id">
                     <i class="el-icon-delete" />删除
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -61,6 +61,9 @@ export default {
     this.listTableData()
   },
   methods: {
+    hasPerm(value) {
+      return this.checkPerm(value)
+    },
     listTableData() {
       this.tableLoading = true
       this.$mapi.page.pageList().then(({ data }) => {

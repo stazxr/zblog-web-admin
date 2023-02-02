@@ -4,7 +4,7 @@
       <div>
         <el-input v-model="filters.username" clearable placeholder="用户名" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
         <el-input v-model="filters.nickname" clearable placeholder="用户昵称" style="width: 150px" class="filter-item" @keyup.enter.native="search" />
-        <el-select v-model="filters.enabled" clearable placeholder="角色状态" style="width: 120px" class="filter-item">
+        <el-select v-model="filters.enabled" clearable placeholder="用户状态" style="width: 120px" class="filter-item">
           <el-option label="启用" value="true" />
           <el-option label="禁用" value="false" />
         </el-select>
@@ -23,9 +23,9 @@
     </div>
 
     <div class="components-container">
-      <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
+      <el-table :loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="username" label="头像" align="center">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-image :src="scope.row['headImgUrl']" :preview-src-list="[scope.row['headImgUrl']]" fit="contain" lazy class="el-avatar">
               <div slot="error">
                 <i class="el-icon-user-solid" />
@@ -37,7 +37,7 @@
         <el-table-column :show-overflow-tooltip="true" prop="nickname" label="用户昵称" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="email" label="邮箱" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="gender" label="性别" align="center">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <span v-if="scope.row.gender === 1">男</span>
             <span v-else-if="scope.row.gender === 2">女</span>
             <span v-else>隐藏</span>
@@ -45,7 +45,7 @@
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="loginTime" label="登录时间" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="enabled" label="用户状态" align="center">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-switch
               v-model="scope.row.enabled"
               :disabled="!hasPerm('updateUserStatus') || user.id === scope.row.id"
@@ -56,7 +56,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="hasPerm(['queryUserDetail', 'editUser', 'deleteUser'])" label="操作" align="center" width="200px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button-group>
               <el-button v-perm="['queryUserDetail']" type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
               <el-button v-perm="['editUser']" type="success" size="mini" @click="editUser(scope.row)">编辑</el-button>

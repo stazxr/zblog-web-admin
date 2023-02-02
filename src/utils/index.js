@@ -62,3 +62,11 @@ export function downloadFileByUrl(url, filename) {
   link.click()
   document.body.removeChild(link)
 }
+
+export function formatMonth(date) {
+  return ('0' + (date.getMonth() + 1)).slice(-2)
+}
+
+export function formatDay(date) {
+  return ('0' + date.getDate()).slice(-2)
+}

@@ -16,13 +16,13 @@
             <div class="user-nickname">
               <div>{{ item['userNickname'] }}</div>
               <!-- 操作 -->
-              <el-dropdown trigger="click" @command="handleCommand">
+              <el-dropdown v-if="hasPerm(['addOrEditTalk', 'deleteTalk'])" trigger="click" @command="handleCommand">
                 <i class="el-icon-more" style="color:#333;cursor: pointer;" />
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="'1,' + item.id">
+                  <el-dropdown-item v-perm="['addOrEditTalk']" :command="'1,' + item.id">
                     <i class="el-icon-edit" />编辑
                   </el-dropdown-item>
-                  <el-dropdown-item :command="'2,' + item.id">
+                  <el-dropdown-item v-perm="['deleteTalk']" :command="'2,' + item.id">
                     <i class="el-icon-delete" />删除
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -99,6 +99,9 @@ export default {
     this.listTableData()
   },
   methods: {
+    hasPerm(value) {
+      return this.checkPerm(value)
+    },
     queryListByStatus(status) {
       this.page = 1
       this.filter.status = status

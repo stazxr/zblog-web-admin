@@ -69,9 +69,10 @@ export default {
     }
   },
   created() {
+    // 每60秒刷新一次用户信息（后台会同步刷新访问令牌）
     this.interval = window.setInterval(() => {
       this.$store.dispatch('GetUserInfo')
-    }, 30000)
+    }, 60000)
   },
   destroyed() {
     console.log('clear interval')

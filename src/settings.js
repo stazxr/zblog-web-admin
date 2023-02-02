@@ -14,6 +14,9 @@ module.exports = {
   // 是否显示设置的底部信息
   showFooter: true,
 
+  // 前台访问地址
+  webApi: 'http://localhost:31943',
+
   // 底部文字，支持html语法
   footerTxt: '© 2022 Sun Tao <a href="https://mit-license.org" target="_blank">MIT License</a>',
 

@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import * as imageConversion from 'image-conversion'
 import { getToken } from '@/utils/token'
 export default {
   name: 'UploadArticleImgDialog',
@@ -130,14 +131,17 @@ export default {
         return false
       }
 
-      // 最大支持 5M
-      const isLt2M = file.size / 1024 / 1024 < 5
-      if (!isLt2M) {
-        this.$message.warning('上传图片大小不能超过 5MB!')
-        return false
-      }
-
+      // 压缩图片
       this.headers.Authorization = getToken()
+      return new Promise(resolve => {
+        if (file.size / 1024 < this.$config.UPLOAD_SIZE) {
+          resolve(file)
+        }
+
+        imageConversion.compressAccurately(file, this.$config.UPLOAD_SIZE).then(res => {
+          resolve(res)
+        })
+      })
     },
     beforeRemove(file) {
       // return this.$confirm(`确定移除 ${file.name} ？`)
