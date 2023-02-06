@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { validEmail } from '@/utils/validate'
+import { validUsername, validEmail } from '@/utils/validate'
 export default {
   props: {
     dialogVisible: {
@@ -55,11 +55,20 @@ export default {
   data() {
     const validMail = (rule, value, callback) => {
       if (value === '' || value === null) {
-        callback(new Error('请输入邮箱'))
+        callback(new Error('请填写邮箱'))
       } else if (validEmail(value)) {
         callback()
       } else {
         callback(new Error('邮箱格式错误'))
+      }
+    }
+    const validUserName = (rule, value, callback) => {
+      if (value === '' || value === null) {
+        callback(new Error('请填写用户名'))
+      } else if (validUsername(value)) {
+        callback()
+      } else {
+        callback(new Error('用户名只允许包含数字和字母, 且长度范围要求为[4, 20]'))
       }
     }
     return {
@@ -74,7 +83,7 @@ export default {
       },
       addRules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, validator: validUserName, trigger: 'blur' }
         ],
         email: [
           { required: true, validator: validMail, trigger: 'blur' }
@@ -98,22 +107,10 @@ export default {
       submitLoading: false
     }
   },
-  watch: {
-    userInfo(user) {
-      if (user !== null) {
-        this.addForm.id = user['id']
-        this.addForm.username = user['username']
-        this.addForm.email = user['email']
-        this.addForm.enabled = user['enabled']
-        this.addForm.temp = user['temp']
-        this.addForm.expiredTime = user['expiredTime']
-        this.addForm.roleIds = user['roleIds']
-      }
-    }
-  },
   methods: {
-    initData() {
+    initData(dataId) {
       this.getRoleList()
+      this.getUserDetail(dataId)
     },
     getRoleList() {
       this.$mapi.role.roleList({}).then(res => {
@@ -121,6 +118,26 @@ export default {
       }).catch(_ => {
         this.roleList = []
       })
+    },
+    getUserDetail(dataId) {
+      if (dataId != null && dataId !== '') {
+        this.$mapi.user.queryUserDetail({ userId: dataId }).then(res => {
+          const { data } = res
+          Object.keys(this.addForm).forEach(key => {
+            this.addForm[key] = data[key]
+          })
+        }).catch(_ => {
+          this.addForm = {
+            id: '',
+            username: '',
+            email: '',
+            enabled: true,
+            temp: false,
+            expiredTime: '',
+            roleIds: []
+          }
+        })
+      }
     },
     doClose(result = false) {
       this.addForm = {

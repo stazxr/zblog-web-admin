@@ -63,6 +63,9 @@
                     <el-radio :label="3">不显示</el-radio>
                   </el-radio-group>
                 </el-form-item>
+                <el-form-item label="个人网站">
+                  <el-input v-model="form.website" style="width: 35%;" />
+                </el-form-item>
                 <el-form-item label="签名">
                   <el-input v-model="form.signature" type="textarea" style="width: 35%;" rows="4" maxlength="100" show-word-limit />
                 </el-form-item>
@@ -75,7 +78,7 @@
             <el-tab-pane label="操作日志" name="second">
               <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%;">
                 <el-table-column type="expand">
-                  <template slot-scope="props">
+                  <template v-slot="props">
                     <el-form label-position="left" inline class="demo-table-expand">
                       <el-form-item class="el-form-item" label="日志序号:">
                         <span>{{ props.row['id'] }}</span>
@@ -101,14 +104,14 @@
                 <el-table-column :show-overflow-tooltip="true" prop="description" label="请求内容" />
                 <el-table-column :show-overflow-tooltip="true" prop="browser" label="浏览器" />
                 <el-table-column :show-overflow-tooltip="true" prop="execResult" label="请求结果" align="center">
-                  <template slot-scope="scope">
+                  <template v-slot="scope">
                     <el-tag v-if="scope.row['logType'] === 3" size="small" type="danger">系统错误</el-tag>
                     <el-tag v-else-if="!scope.row['execResult']" size="small" type="warning">失败</el-tag>
                     <el-tag v-else size="small">成功</el-tag>
                   </template>
                 </el-table-column>
                 <el-table-column :show-overflow-tooltip="true" prop="costTime" label="请求耗时" align="center">
-                  <template slot-scope="scope">
+                  <template v-slot="scope">
                     <span v-if="scope.row['costTime'] === null"> - </span>
                     <el-tag v-else-if="scope.row['costTime'] <= 500">{{ scope.row['costTime'] }}ms</el-tag>
                     <el-tag v-else-if="scope.row['costTime'] <= 3000" type="warning">{{ scope.row['costTime'] }}ms</el-tag>
@@ -121,7 +124,7 @@
                       创建日期<i class="el-icon-refresh" style="margin-left: 40px" />
                     </div>
                   </template>
-                  <template slot-scope="scope">
+                  <template v-slot="scope">
                     <i class="el-icon-time" />
                     <span>{{ scope.row['eventTime'] }}</span>
                   </template>
@@ -208,7 +211,8 @@ export default {
         nickname: this.user.nickname,
         gender: this.user.gender,
         telephone: this.user.telephone,
-        signature: this.user.signature
+        signature: this.user.signature,
+        website: this.user.website
       }
     })
   },

@@ -27,7 +27,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="previewDialogVisible">
+    <el-dialog :visible.sync="previewDialogVisible" style="padding-bottom: 100px;">
       <img width="100%" :src="addForm.headUrl" alt="图片不存在">
     </el-dialog>
   </div>

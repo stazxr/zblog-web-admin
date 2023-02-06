@@ -24,8 +24,9 @@ import talk from '@/api/service/talk.js'
 import page from '@/api/service/page.js'
 import album from '@/api/service/album.js'
 import message from '@/api/service/message.js'
+import comment from '@/api/service/comment.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, webSetting, friendLink, talk, page, album, message
+  category, tag, article, webSetting, friendLink, talk, page, album, message, comment
 }

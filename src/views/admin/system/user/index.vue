@@ -24,7 +24,7 @@
 
     <div class="components-container">
       <el-table :loading="tableLoading" :data="tableData" border style="width: 100%">
-        <el-table-column :show-overflow-tooltip="true" prop="username" label="头像" align="center">
+        <el-table-column :show-overflow-tooltip="true" prop="username" label="头像" align="center" width="80">
           <template v-slot="scope">
             <el-image :src="scope.row['headImgUrl']" :preview-src-list="[scope.row['headImgUrl']]" fit="contain" lazy class="el-avatar">
               <div slot="error">
@@ -33,10 +33,10 @@
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="nickname" label="用户昵称" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="email" label="邮箱" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="gender" label="性别" align="center">
+        <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" align="center" width="180" />
+        <el-table-column :show-overflow-tooltip="true" prop="nickname" label="用户昵称" align="center" width="180" />
+        <el-table-column :show-overflow-tooltip="true" prop="email" label="邮箱" align="center" width="180" />
+        <el-table-column :show-overflow-tooltip="true" prop="gender" label="性别" align="center" width="80">
           <template v-slot="scope">
             <span v-if="scope.row.gender === 1">男</span>
             <span v-else-if="scope.row.gender === 2">女</span>
@@ -55,10 +55,10 @@
             />
           </template>
         </el-table-column>
-        <el-table-column v-if="hasPerm(['queryUserDetail', 'editUser', 'deleteUser'])" label="操作" align="center" width="200px">
+        <el-table-column label="操作" align="center" width="200px">
           <template v-slot="scope">
             <el-button-group>
-              <el-button v-perm="['queryUserDetail']" type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
+              <el-button type="info" size="mini" @click="showUserDetail(scope.row)">详情</el-button>
               <el-button v-perm="['editUser']" type="success" size="mini" @click="editUser(scope.row)">编辑</el-button>
               <el-popconfirm v-perm="['deleteUser']" title="操作不可撤销，确定删除吗？" @confirm="deleteUser(scope.row)">
                 <el-button slot="reference" type="danger" size="mini">删除</el-button>
@@ -89,14 +89,12 @@
       ref="addOrEditDialogRef"
       :dialog-visible="addOrEditDialogVisible"
       :dialog-title="addOrEditDialogTitle"
-      :user-info="userInfo"
       @addOrEditDone="addOrEditDone"
     />
     <!-- 查看详情 -->
     <showDetailDialog
       ref="showDetailDialogRef"
       :dialog-visible="showDetailDialogVisible"
-      :data-id="dataId"
       @showDetailDone="showDetailDone"
     />
   </div>
@@ -124,8 +122,6 @@ export default {
       total: 0,
       page: 1,
       pageSize: 10,
-      dataId: null,
-      userInfo: null,
       addOrEditDialogTitle: '',
       addOrEditDialogVisible: false,
       showDetailDialogVisible: false,
@@ -194,19 +190,16 @@ export default {
       })
     },
     addUser() {
-      this.userInfo = null
       this.addOrEditDialogVisible = true
       this.addOrEditDialogTitle = '新增用户'
       this.$refs.addOrEditDialogRef.initData()
     },
     editUser(row) {
-      this.userInfo = row
       this.addOrEditDialogVisible = true
       this.addOrEditDialogTitle = '编辑用户'
-      this.$refs.addOrEditDialogRef.initData()
+      this.$refs.addOrEditDialogRef.initData(row.id)
     },
     addOrEditDone(result = false) {
-      this.userInfo = null
       this.addOrEditDialogVisible = false
       this.addOrEditDialogTitle = ''
       if (result) {
@@ -214,12 +207,10 @@ export default {
       }
     },
     showUserDetail(row) {
-      this.dataId = row.id.toString()
       this.showDetailDialogVisible = true
-      this.$refs.showDetailDialogRef.initData()
+      this.$refs.showDetailDialogRef.initData(row.id)
     },
     showDetailDone() {
-      this.dataId = null
       this.showDetailDialogVisible = false
     },
     deleteUser(row) {

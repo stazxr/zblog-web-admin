@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="用户详情" append-to-body :close-on-click-modal="true" :before-close="handleClose" :visible.sync="dialogVisible" width="550px">
+    <el-dialog title="用户详情" append-to-body :close-on-click-modal="true" :before-close="doClose" :visible.sync="dialogVisible" width="550px">
       <el-descriptions direction="vertical" :column="4" border>
         <!-- 1 -->
         <el-descriptions-item label="用户序列"> {{ userInfo.id }} </el-descriptions-item>
@@ -40,6 +40,7 @@
         <el-descriptions-item label="修改用户" :span="2"> {{ userInfo.updateUser }} </el-descriptions-item>
         <el-descriptions-item label="修改时间" :span="2"> {{ userInfo.updateTime }} </el-descriptions-item>
         <!-- 6 -->
+        <el-descriptions-item label="个人网站" :span="4"> {{ userInfo.website }} </el-descriptions-item>
         <el-descriptions-item label="个性签名" :span="4"> {{ userInfo.signature }} </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -52,10 +53,6 @@ export default {
     dialogVisible: {
       type: Boolean,
       default: false
-    },
-    dataId: {
-      type: String,
-      default: ''
     }
   },
   data() {
@@ -73,19 +70,20 @@ export default {
         createTime: '',
         updateUser: '',
         updateTime: '',
+        website: '',
         signature: '',
         roleNames: []
       }
     }
   },
   methods: {
-    initData() {
+    initData(dataId) {
       this.$nextTick(() => {
-        this.getUserDetail()
+        this.getUserDetail(dataId)
       })
     },
-    getUserDetail() {
-      this.$mapi.user.queryUserDetail({ userId: this.dataId }).then(res => {
+    getUserDetail(dataId) {
+      this.$mapi.user.queryUserDetail({ userId: dataId }).then(res => {
         const { data } = res
         Object.keys(this.userInfo).forEach(key => {
           this.userInfo[key] = data[key] == null || data[key] === '' ? '-' : data[key].toString()

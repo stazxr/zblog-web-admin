@@ -22,8 +22,14 @@
     <el-form-item label="网站作者" prop="websiteAuthor">
       <el-input v-model="webInfo.websiteAuthor" style="width:400px" placeholder="网站作者" />
     </el-form-item>
-    <el-form-item label="网站简介">
-      <el-input v-model="webInfo.websiteIntro" style="width:400px" placeholder="网站简介" />
+    <el-form-item label="网站介绍">
+      <el-input v-model="webInfo.websiteIntro" style="width:400px" placeholder="网站介绍" />
+    </el-form-item>
+    <el-form-item label="网站前台链接">
+      <el-input v-model="webInfo.websiteLink" style="width:400px" placeholder="网站前台链接" />
+    </el-form-item>
+    <el-form-item label="网站后台链接">
+      <el-input v-model="webInfo.websiteAdminLink" style="width:400px" placeholder="网站后台链接" />
     </el-form-item>
     <el-form-item label="创建日期" prop="websiteCreateTime">
       <el-date-picker v-model="webInfo.websiteCreateTime" type="date" value-format="yyyy-MM-dd" placeholder="创建日期" style="width:400px" />
@@ -37,7 +43,6 @@
     <el-form-item label="第三方登录">
       <el-checkbox-group v-model="webInfo.socialLoginList">
         <el-checkbox label="qq">QQ</el-checkbox>
-        <el-checkbox label="weibo">微博</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
     <el-button v-perm="['updateWebInfo']" v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateWebInfo">
@@ -61,6 +66,8 @@ export default {
         websiteAuthor: '',
         websiteCreateTime: '',
         websiteIntro: '',
+        websiteLink: '',
+        websiteAdminLink: '',
         websiteNotice: '',
         websiteRecordNo: '',
         socialLoginList: []

@@ -10,6 +10,17 @@ export function isValidPhone(phone) {
 }
 
 /**
+ * 用户名正则校验
+ *
+ * @param username
+ * @returns {boolean}
+ */
+export function validUsername(username) {
+  const reg = /^[\da-zA-Z]{4,20}$/i
+  return reg.test(username)
+}
+
+/**
  * 邮箱正则校验
  *
  * @param email
