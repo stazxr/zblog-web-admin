@@ -308,7 +308,7 @@ export default {
             timeout: 30 * 1000,
             fieldName: 'file',
             headers: {
-              Authorization: this.userToken
+              Authorization: this.getUserToken()
             },
             customInsert(res, insertFn) {
               const { code, data } = res
@@ -336,7 +336,7 @@ export default {
             timeout: 30 * 1000,
             fieldName: 'file',
             headers: {
-              Authorization: this.userToken
+              Authorization: this.getUserToken()
             },
             customInsert(res, insertFn) {
               const { code, data } = res
@@ -365,7 +365,7 @@ export default {
             timeout: 30 * 1000,
             fieldName: 'file',
             headers: {
-              Authorization: this.userToken
+              Authorization: this.getUserToken()
             },
             maxFileSize: 10 * 1024 * 1024,
             customInsert(res, file, insertFn) {
@@ -504,9 +504,6 @@ export default {
     }
   },
   computed: {
-    userToken() {
-      return getToken()
-    },
     maxUploadSize() {
       if (this.addForm.coverImageType === 2) {
         // 多封面最多支持 4 个封面
@@ -651,6 +648,9 @@ export default {
     next()
   },
   methods: {
+    getUserToken() {
+      return getToken()
+    },
     addBeforeunloadEventListener() {
       window.addEventListener('beforeunload', this.beforeUnloadHandler, false)
     },
