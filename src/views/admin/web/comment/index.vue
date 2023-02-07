@@ -36,7 +36,11 @@
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="nickname" label="评论人" align="center" width="180" />
         <el-table-column :show-overflow-tooltip="true" prop="replyNickname" label="回复人" align="center" width="180" />
-        <el-table-column :show-overflow-tooltip="true" prop="content" label="评论内容" align="center" />
+        <el-table-column :show-overflow-tooltip="true" prop="content" label="评论内容" align="center">
+          <template v-slot="scope">
+            <span class="comment-content" v-html="scope.row.content" />
+          </template>
+        </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="ipSource" label="IP来源" align="center" width="120" />
         <el-table-column :show-overflow-tooltip="true" label="来源" align="center" width="70">
           <template v-slot="scope">
@@ -205,5 +209,7 @@ export default {
 </script>
 
 <style scoped>
-
+.comment-content {
+  display: inline-block;
+}
 </style>
