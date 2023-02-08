@@ -1123,6 +1123,14 @@ export default {
     onMaxLength(editor) {
     },
     onFocus(editor) {
+      // 实施获取最新的Token，防止使用后台弃用的Token进行访问
+      const token = this.getUserToken()
+      if (token == null || token === '') {
+        this.$message.warning('令牌信息不存在，请手动保存文章信息后刷新页面重试')
+      }
+      this.editorConfig.MENU_CONF.uploadImage.headers.Authorization = token
+      this.editorConfig.MENU_CONF.uploadVideo.headers.Authorization = token
+      this.editorConfig.MENU_CONF.uploadAttachment.headers.Authorization = token
     },
     onBlur(editor) {
     },
