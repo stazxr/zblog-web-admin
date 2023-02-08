@@ -2,6 +2,7 @@
   <div v-loading="pageLoading" element-loading-text="数据加载中..." class="editor-container">
     <div class="editor-toolbar">
       <Toolbar
+        v-if="activeEditor"
         :editor="editor"
         :default-config="toolbarConfig"
         :mode="mode"
@@ -32,6 +33,7 @@
           </div>
           <div class="editor-text-area">
             <Editor
+              v-if="activeEditor"
               v-model="html"
               :default-config="editorConfig"
               :mode="mode"
@@ -212,6 +214,7 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { Message } from 'element-ui'
 import uploadImgDialog from '@/views/admin/web/article/template/uploadImgDialog'
 import contentEditRecordDrawer from '@/views/admin/web/article/template/contentEditRecordDrawer'
+import NProgress from 'nprogress'
 export default {
   name: 'AddArticle',
   components: {
@@ -220,6 +223,7 @@ export default {
   data() {
     return {
       editor: null,
+      activeEditor: true,
       html: '<p><br></p>',
       // 默认模式
       mode: 'default',
@@ -310,6 +314,21 @@ export default {
             headers: {
               Authorization: this.getUserToken()
             },
+            maxFileSize: 10 * 1024 * 1024,
+            // async onBeforeUpload(file) {
+            //   let key = ''
+            //   for (const prop in file) {
+            //     key = prop
+            //   }
+            //
+            //   if (file[key].size / 1024 < 200) {
+            //     return file
+            //   }
+            //
+            //   await imageConversion.compressAccurately(file[key].data, 200).then(res => {
+            //     return res
+            //   })
+            // },
             customInsert(res, insertFn) {
               const { code, data } = res
               if (code === 200) {
@@ -329,6 +348,12 @@ export default {
               } else {
                 Message.error(res.message)
               }
+            },
+            // async customUpload(file, insertFn) {
+            // },
+            onError(file, err, res) {
+              alert('图片上传失败')
+              console.log('图片上传失败', err.message)
             }
           },
           'uploadVideo': {
@@ -550,6 +575,7 @@ export default {
     console.log('created')
     this.closeTipAlert()
     this.resetSaveDraftData()
+    this.getArticleTagList()
     const dataId = this.$route.query.articleId
     if (dataId != null && dataId !== '') {
       console.log('created:编辑文章', dataId)
@@ -570,7 +596,6 @@ export default {
     console.log('mounted:初始化基本数据')
     this.getDefaultArticleImg()
     this.getArticleCategoryTree()
-    this.getArticleTagList()
     this.$nextTick(() => {
       console.log('mounted:$nextTick:初始化目录')
       this.initTitle()
@@ -588,6 +613,7 @@ export default {
         this.clearRecentDraft()
         if (dataId !== this.addForm.id) {
           console.log('activated:编辑文章序号不同，重新加载文章信息')
+          this.getArticleTagList()
           this.resetSaveDraftData()
           this.getArticleDetail(dataId)
         }
@@ -596,6 +622,7 @@ export default {
         if (this.addForm.action !== 'add') {
           console.log('activated:原先是编辑文章或是新文章，清除文章内容，重新获取文章ID')
           this.clearData()
+          this.getArticleTagList()
           this.resetSaveDraftData()
           this.queryRecentDraft()
           this.autoGenerateId()
@@ -609,11 +636,13 @@ export default {
 
     this.$nextTick(() => {
       console.log('activated:$nextTick:outer:启动文章自动保存事件')
+      this.activeEditor = true
       this.openAutoSaveEvent()
     })
   },
   deactivated() {
     console.log('deactivated:关闭文章自动保存事件')
+    this.activeEditor = false
     this.closeAutoSaveEvent()
     console.log('===========================>>>')
   },
@@ -634,7 +663,11 @@ export default {
     // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
     // 可以访问组件实例 `this`
     console.log('beforeRouteUpdate', from.path, ' -> ', to.path)
-    next()
+    if (to.path !== from.path) {
+      next()
+    } else {
+      NProgress.done()
+    }
   },
   beforeRouteLeave(to, from, next) {
     // 导航离开该组件的对应路由时调用
@@ -685,6 +718,7 @@ export default {
     },
     autoGenerateId() {
       this.$mapi.communal.getId().then(({ data }) => {
+        this.pageLoading = false
         this.addForm.action = 'add'
         this.addForm.id = data
       }).catch(_ => {
@@ -709,7 +743,9 @@ export default {
         this.addForm.action = 'edit'
         this.oldContent = this.addForm.content
         this.editor.setHtml(this.addForm.content)
-      }).catch(_ => {
+      }).catch(e => {
+        this.$message.error('加载文章信息失败，请刷新浏览器再试！')
+        console.log('getArticleDetail failed', e)
         Object.keys(this.addForm).forEach(key => {
           this.addForm[key] = ''
         })

@@ -34,6 +34,7 @@ router.beforeEach((to, from, next) => {
         })
       } else {
         next()
+        // NProgress.done()
       }
     }
   } else {

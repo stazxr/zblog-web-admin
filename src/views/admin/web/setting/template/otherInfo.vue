@@ -57,6 +57,11 @@
       <el-input-number v-model.number="otherInfo.articleViewInterval" :min="-1" :max="1440" placeholder="[-1, 1440]，单位分钟" step-strictly controls-position="right" style="width: 200px" />
       <br><span style="padding-top: 10px;color: gray">同一 IP 访问同一篇文章时，新增文章浏览数的时间间隔，单位分钟，-1 代表浏览数不重复增加，0 代表每次访问都增加</span>
     </el-form-item>
+    <el-form-item label="文章搜索策略">
+      <el-radio-group v-model="otherInfo.articleSearchStrategy">
+        <el-radio label="mysql">MySQL</el-radio>
+      </el-radio-group>
+    </el-form-item>
     <el-form-item label="评论审核">
       <el-radio-group v-model="otherInfo.isCommentReview">
         <el-radio :label="0">关闭</el-radio>
@@ -146,6 +151,7 @@ export default {
         articleCover: '',
         isEmailNotice: '',
         articleViewInterval: '',
+        articleSearchStrategy: '',
         isCommentReview: '',
         isMessageReview: '',
         isReward: '',
