@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import * as imageConversion from 'image-conversion'
+// import * as imageConversion from 'image-conversion'
 import { getToken } from '@/utils/token'
 export default {
   props: {
@@ -148,17 +148,18 @@ export default {
         return false
       }
 
-      // 压缩图片
       this.headers.Authorization = getToken()
-      return new Promise(resolve => {
-        if (file.size / 1024 < this.$config.UPLOAD_SIZE) {
-          resolve(file)
-        }
-
-        imageConversion.compressAccurately(file, this.$config.UPLOAD_SIZE).then(res => {
-          resolve(res)
-        })
-      })
+      return file
+      // 压缩图片
+      // return new Promise(resolve => {
+      //   if (file.size / 1024 < this.$config.UPLOAD_SIZE) {
+      //     resolve(file)
+      //   }
+      //
+      //   imageConversion.compressAccurately(file, this.$config.UPLOAD_SIZE).then(res => {
+      //     resolve(res)
+      //   })
+      // })
     },
     handleError(err) {
       try {
