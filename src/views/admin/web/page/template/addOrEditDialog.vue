@@ -8,7 +8,7 @@
         <el-form-item label="页面标签" prop="pageLabel">
           <el-input v-model="addForm.pageLabel" style="width:360px" />
         </el-form-item>
-        <el-form-item label="页面排序" prop="pageSort">
+        <el-form-item label="页面排序">
           <el-input-number v-model.number="addForm.pageSort" :min="0" :max="99999" step-strictly controls-position="right" style="width: 360px" />
         </el-form-item>
         <el-form-item label="页面封面">
@@ -73,9 +73,6 @@ export default {
         ],
         pageLabel: [
           { required: true, message: '请填写页面标签', trigger: 'blur' }
-        ],
-        pageSort: [
-          { required: true, message: '请填写页面排序', trigger: 'blur' }
         ]
       }
     }
