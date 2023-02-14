@@ -18,20 +18,29 @@
         <el-form-item label="分类排序" prop="sort">
           <el-input-number v-model.number="addForm.sort" :min="0" :max="99999" step-strictly controls-position="right" style="width: 178px" />
         </el-form-item>
-        <el-form-item label="分类略缩图">
-          <img :src="addForm.imageUrl && addForm.imageUrl !== '' ? addForm.imageUrl : NoImg" title="点击上传" class="avatar" alt="" @click="toggleShow">
-          <img-upload
-            ref="imgUploadRef"
-            v-model="showImgUpload"
-            field="file"
-            :headers="headers"
-            :url="$store.state.api.fileUploadApi"
-            :lang-ext="langExt"
-            @crop-upload-success="cropUploadSuccess"
-          />
-        </el-form-item>
         <el-form-item label="分类描述">
           <el-input v-model="addForm.desc" type="textarea" rows="4" maxlength="1000" show-word-limit style="width: 470px" />
+        </el-form-item>
+        <el-form-item label="分类略缩图">
+          <el-upload
+            ref="upload"
+            name="file"
+            class="upload-cover"
+            drag
+            :action="$store.state.api.fileUploadApi"
+            :headers="headers"
+            :show-file-list="false"
+            :before-upload="beforeUpload"
+            :on-error="handleError"
+            :on-success="handleSuccess"
+          >
+            <i v-if="addForm.imageUrl === ''" class="el-icon-upload" />
+            <div v-if="addForm.imageUrl === ''" class="el-upload__text">
+              将文件拖到此处，或<em>点击上传</em>
+            </div>
+            <img v-else :src="addForm.imageUrl" width="360px" height="180px" alt="">
+          </el-upload>
+          <el-button v-if="addForm.imageUrl !== ''" type="danger" @click="removeImg">清除图片</el-button>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -43,11 +52,8 @@
 </template>
 
 <script>
-import NoImg from '@/assets/images/no-img.jpg'
-import ImgUpload from 'vue-image-crop-upload'
 import { getToken } from '@/utils/token'
 export default {
-  components: { ImgUpload },
   props: {
     dialogVisible: {
       type: Boolean,
@@ -86,7 +92,6 @@ export default {
           { required: true, message: '请选择分类状态', trigger: 'blur' }
         ]
       },
-      NoImg: NoImg,
       showImgUpload: false,
       langExt: {
         success: '上传成功!',
@@ -123,24 +128,54 @@ export default {
         })
       }
     },
-    toggleShow() {
-      this.headers.Authorization = getToken()
+    beforeUpload(file) {
+      // 支持类型：.jpg,.jpeg,.png
+      if (file.name.indexOf('.') !== -1) {
+        const imgType = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase()
+        if (imgType !== 'jpg' && imgType !== 'jpeg' && imgType !== 'png') {
+          this.$message.warning('上传文件只能是 jpg, jpeg, png 格式!')
+          return false
+        }
+      } else {
+        this.$message.warning('上传文件只能是 jpg, jpeg, png 格式!')
+        return false
+      }
 
-      this.$refs.imgUploadRef.step = 1
-      this.showImgUpload = !this.showImgUpload
+      this.headers.Authorization = getToken()
+      return file
+      // 压缩图片
+      // return new Promise(resolve => {
+      //   if (file.size / 1024 < this.$config.UPLOAD_SIZE) {
+      //     resolve(file)
+      //   }
+      //
+      //   imageConversion.compressAccurately(file, this.$config.UPLOAD_SIZE).then(res => {
+      //     resolve(res)
+      //   })
+      // })
     },
-    cropUploadSuccess(jsonData) {
-      const { code, data, message } = jsonData
-      if (code === 200) {
+    handleError(err) {
+      try {
+        this.$message.error(JSON.parse(err.message.toString()).message)
+      } catch {
+        this.$message.error('系统发生未知错误')
+      }
+    },
+    handleSuccess(response, file) {
+      if (response.code === 200) {
         // success
-        this.addForm.imageUrl = data[0]['downloadUrl']
-        this.$refs.imgUploadRef.off()
+        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+          this.addForm.imageUrl = response.data[0]['downloadUrl']
+        }
+
+        this.$message.success(response.message || '上传成功')
       } else {
         // error
-        this.$refs.imgUploadRef.loading = 3
-        this.$refs.imgUploadRef.hasError = true
-        this.$refs.imgUploadRef.errorMsg = message
+        this.$refs.upload.handleError(response, file)
       }
+    },
+    removeImg() {
+      this.addForm.imageUrl = ''
     },
     doClose(result = false) {
       this.addForm = {

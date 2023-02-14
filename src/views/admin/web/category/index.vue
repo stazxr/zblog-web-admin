@@ -24,31 +24,31 @@
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" row-key="id" :tree-props="tableProps" border>
         <el-table-column :show-overflow-tooltip="true" prop="name" label="分类名称" width="200" />
-        <el-table-column :show-overflow-tooltip="true" prop="desc" label="分类描述" />
-        <el-table-column :show-overflow-tooltip="true" prop="imageUrl" label="分类图标" align="center" width="100">
-          <template slot-scope="scope">
-            <el-image v-if="scope.row['imageUrl'] !== ''" :src="scope.row['imageUrl']" :preview-src-list="[scope.row['imageUrl']]" fit="contain" lazy class="el-avatar">
-              <div slot="error">
-                <span />
+        <el-table-column prop="articleImgLinkList" label="分类图标" align="center" width="180">
+          <template v-slot="scope">
+            <el-image class="article-cover" :src="scope.row['imageUrl']" :preview-src-list="getPreviewList(scope.row)">
+              <div slot="error" class="image-slot">
+                <span v-if="scope.row['imageUrl'] === ''">未配置</span>
+                <span v-else>加载失败</span>
               </div>
             </el-image>
-            <span v-else />
           </template>
         </el-table-column>
+        <el-table-column :show-overflow-tooltip="true" prop="desc" label="分类描述" />
         <el-table-column :show-overflow-tooltip="true" prop="articleCount" label="文章数" align="center" width="100" />
         <el-table-column prop="enabled" label="状态" align="center" width="100">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
             <el-tag v-else size="small" type="warning">禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="menuSort" label="排序" align="center" width="100">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             {{ scope.row.sort }}
           </template>
         </el-table-column>
         <el-table-column v-if="hasPerm(['queryCategoryDetail', 'editCategory', 'deleteCategory'])" label="操作" align="center" width="200">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-button-group>
               <el-button v-perm="['queryCategoryDetail']" type="info" size="mini" @click="showCategoryDetail(scope.row)">详情</el-button>
               <el-button v-perm="['editCategory']" type="success" size="mini" @click="editCategory(scope.row)">编辑</el-button>
@@ -165,11 +165,33 @@ export default {
     },
     showDetailDone() {
       this.showDetailDialogVisible = false
+    },
+    getPreviewList(row) {
+      if (row['imageUrl'] && row['imageUrl'] !== '') {
+        return [row['imageUrl']]
+      } else {
+        return []
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-
+.article-cover {
+  position: relative;
+  width: 100%;
+  height: 90px;
+  border-radius: 4px;
+}
+::v-deep .image-slot, .demo-image__placeholder .image-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: #f5f7fa;
+  color: #909399;
+  font-size: 14px;
+}
 </style>
