@@ -146,8 +146,8 @@ function responseHandler(result) {
       logout(false)
     }
   } else if (code === 403) {
-    Message.error('权限不足，请联系管理员')
-    return Promise.reject(new Error('403'))
+    Message.error(result.message || '权限不足，请联系管理员')
+    return Promise.reject(new Error(result.message || '403'))
   } else if (code === 404) {
     Message.error(result.message || '请求资源不存在')
     return Promise.reject(new Error(result.message || '404'))
