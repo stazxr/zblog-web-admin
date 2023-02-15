@@ -133,8 +133,9 @@ function responseHandler(result) {
       Message.error(result.message || '登录失败')
       return Promise.reject(new Error(result.message || '登录失败'))
     } else if (identifier === 10009) {
+      // 密码过期，跳转到修改密码的页面
       Message.error(result.message || '请修改密码')
-      return Promise.reject(new Error(result.message || '请修改密码'))
+      return Promise.reject(new Error('' + identifier))
     } else if (identifier === 900002) {
       logout(true)
     } else if (identifier === 900003 || identifier === 900004) {

@@ -82,6 +82,8 @@ export default {
           if (JSON.stringify(data) !== '{}') {
             this.redirect = this.redirect + '&' + qs.stringify(data, { indices: false })
           }
+        } else {
+          this.redirect = '/'
         }
       },
       immediate: true
@@ -122,8 +124,9 @@ export default {
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
+          const username = this.loginForm.username
           const loginParam = {
-            username: this.loginForm.username,
+            username: username,
             password: encrypt(this.loginForm.password),
             rememberMe: this.loginForm.rememberMe,
             code: this.loginForm.code,
@@ -131,12 +134,23 @@ export default {
           }
 
           this.loading = true
-          this.$store.dispatch('Login', loginParam).then(() => {
-            this.$message.success('登录成功')
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
-            this.getCode()
-            this.$refs.code.focus()
+          this.$store.dispatch('Login', loginParam).then(change_pwd => {
+            if (change_pwd) {
+              this.$message.error('需要重置您的密码，请修改密码')
+              this.$router.push({ path: '/forceUpdatePass', query: { username: username }})
+            } else {
+              this.$message.success('登录成功')
+              this.$router.push({ path: this.redirect || '/' })
+            }
+          }).catch(e => {
+            console.log('Login Error', e)
+            if (e.message && e.message === '10009') {
+              // 跳转修改密码界面
+              this.$router.push({ path: '/forceUpdatePass', query: { username: username }})
+            } else {
+              this.getCode()
+              this.$refs.code.focus()
+            }
           }).finally(_ => {
             this.loading = false
           })

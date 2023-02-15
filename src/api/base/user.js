@@ -15,6 +15,10 @@ export default {
   updateUserPass: params => {
     return api.httpRequest().post(`${userApi}/updateUserPass`, params)
   },
+  // 强制修改用户密码
+  forceUpdateUserPass: params => {
+    return api.httpRequest().post(`${userApi}/forceUpdatePass`, params)
+  },
   // 修改用户邮箱
   updateUserEmail: params => {
     return api.httpRequest().post(`${userApi}/updateUserEmail`, params)

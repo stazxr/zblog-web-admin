@@ -1377,7 +1377,7 @@ export default {
   line-height: 24px;
 }
 .editor-content-config-opt-left .save-draft-span {
-  background-image: url(https://suntaoblog.oss-cn-beijing.aliyuncs.com/zblog/icon/icon-autosave.png);
+  background-image: url(../../../../assets/images/icon-autosave.png);
   background-size: 16px 16px;
   background-repeat: no-repeat;
   background-position: 0;

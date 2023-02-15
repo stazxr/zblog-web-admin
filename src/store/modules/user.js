@@ -19,11 +19,18 @@ const user = {
     Login({ commit }, loginParam) {
       return new Promise((resolve, reject) => {
         communal.login(loginParam).then(res => {
-          const { access_token } = res.data
-          setToken(access_token)
-          setUserInfo(commit)
-          commit('SET_LOAD_MENUS', true)
-          resolve()
+          const { access_token, change_pwd } = res.data
+          if (!change_pwd) {
+            // 查询用户信息
+            setToken(access_token)
+            commit('SET_LOAD_MENUS', true)
+            communal.loginId().then(res => {
+              commit('SET_USER', res.data)
+              resolve(change_pwd)
+            })
+          } else {
+            resolve(change_pwd)
+          }
         }).catch(error => {
           reject(error)
         })
@@ -49,11 +56,6 @@ const user = {
           reject(error)
         })
       })
-    },
-    UpdateLoadMenus({ commit }) {
-      return new Promise(() => {
-        commit('SET_LOAD_MENUS', false)
-      })
     }
   }
 }
@@ -61,12 +63,6 @@ const user = {
 export const logout = (commit) => {
   commit('SET_USER', null)
   removeToken()
-}
-
-export const setUserInfo = (commit) => {
-  communal.loginId().then(res => {
-    commit('SET_USER', res.data)
-  })
 }
 
 export default user
