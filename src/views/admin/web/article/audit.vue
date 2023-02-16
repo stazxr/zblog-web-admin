@@ -134,7 +134,7 @@
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="desc" label="备注" width="150" align="center" />
-        <el-table-column v-if="hasPerm(['queryArticleDetail'])" label="操作" align="center" width="200" fixed="right">
+        <el-table-column label="操作" align="center" width="200" fixed="right">
           <template v-slot="scope">
             <el-button-group>
               <el-button type="info" size="mini" @click="showArticleDetail(scope.row)">预览</el-button>
@@ -243,9 +243,6 @@ export default {
     }
   },
   methods: {
-    hasPerm(value) {
-      return this.checkPerm(value)
-    },
     handleSelectionChange(val) {
       this.selectRows = val
     },

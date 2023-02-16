@@ -73,7 +73,7 @@
                 </div>
               </div>
               <span v-if="addForm.coverImageType === 1" style="display: block;">
-                <strong>*支持 jpg、jpeg、png 格式，单张图片最大支持 5MB，建议图片尺寸 16:9</strong>
+                <strong>*支持 jpg、jpeg、png、webp 格式，单张图片最大支持 5MB，建议图片尺寸 16:9</strong>
               </span>
               <div v-if="addForm.coverImageType === 2" class="cover-img-box-flex cover-img-box-more">
                 <!-- 多封面 -->
@@ -95,7 +95,7 @@
                 </div>
               </div>
               <span v-if="addForm.coverImageType === 2" style="display: block;">
-                <strong>*支持 jpg、jpeg、png 格式，单张图片最大支持 5MB，建议图片尺寸 16:9，最多支持 4 张图片</strong>
+                <strong>*支持 jpg、jpeg、png、webp 格式，单张图片最大支持 5MB，建议图片尺寸 16:9，最多支持 4 张图片</strong>
               </span>
               <img v-if="addForm.coverImageType === 3" :src="articleDefaultImg === '' ? noImg : articleDefaultImg" alt="" style="display: block;width: 160px; height: 90px;margin-top: 5px;">
               <span v-if="addForm.coverImageType === 4" style="display: block;margin-top: 5px;">

@@ -119,15 +119,14 @@ export default {
       }
     },
     beforeUpload(file) {
-      // 支持类型：.jpg,.jpeg,.png
       if (file.name.indexOf('.') !== -1) {
         const imgType = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase()
-        if (imgType !== 'jpg' && imgType !== 'jpeg' && imgType !== 'png') {
-          this.$message.warning('上传文件只能是 jpg, jpeg, png 格式!')
+        if (imgType !== 'jpg' && imgType !== 'jpeg' && imgType !== 'png' && imgType !== 'webp') {
+          this.$message.warning('上传文件只能是 jpg, jpeg, png, webp 格式!')
           return false
         }
       } else {
-        this.$message.warning('上传文件只能是 jpg, jpeg, png 格式!')
+        this.$message.warning('上传文件只能是 jpg, jpeg, png, webp 格式!')
         return false
       }
 

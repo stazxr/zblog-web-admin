@@ -49,7 +49,7 @@
             <el-tab-pane label="用户资料" name="first">
               <el-form ref="form" :model="form" :rules="rules" style="margin-top: 10px;" size="small" label-width="70px">
                 <el-form-item label="昵称" prop="nickname">
-                  <el-input v-model="form.nickname" style="width: 35%" maxlength="20" show-word-limit />
+                  <el-input v-model="form.nickname" style="width: 35%" maxlength="25" show-word-limit />
                   <span style="color: #C0C0C0;margin-left: 10px;">用户昵称不作为登录使用</span>
                 </el-form-item>
                 <el-form-item label="手机号" prop="telephone">
@@ -185,7 +185,7 @@ export default {
       rules: {
         nickname: [
           { required: true, message: '请输入用户昵称', trigger: 'blur' },
-          { min: 1, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          { min: 1, max: 25, message: '长度在 2 到 25 个字符', trigger: 'blur' }
         ],
         telephone: [
           { required: false, trigger: 'blur', validator: validPhone }
