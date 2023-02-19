@@ -8,7 +8,7 @@
           </div>
           <div class="editor-text-area">
             <Editor
-              v-model="addForm.content"
+              v-model="html"
               :mode="mode"
               :default-config="editorConfig"
               @onCreated="onCreated"
@@ -43,6 +43,7 @@ export default {
     return {
       editor: null,
       mode: 'default',
+      html: '<p><br></p>',
       totalCount: 0,
       pageLoading: false,
       pageLoadingText: '数据加载中...',
@@ -139,6 +140,8 @@ export default {
   }
 }
 </script>
+
+<style src='@wangeditor/editor/dist/css/style.css'></style>
 
 <style scoped>
 .editor-container {
