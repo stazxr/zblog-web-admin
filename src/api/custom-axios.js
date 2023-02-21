@@ -69,6 +69,7 @@ instance.interceptors.response.use(response => {
 }, error => {
   // 统一异常处理，一般不会出现401|403|404，后端将其作为业务异常处理了
   let errorMsg
+  console.log('axios error', error)
   const { response, request } = error
   if (response) {
     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围
