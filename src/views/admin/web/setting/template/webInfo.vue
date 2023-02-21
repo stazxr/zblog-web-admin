@@ -31,6 +31,9 @@
     <el-form-item label="网站后台链接">
       <el-input v-model="webInfo.websiteAdminLink" style="width:400px" placeholder="网站后台链接" />
     </el-form-item>
+    <el-form-item label="关于我链接">
+      <el-input v-model="webInfo.readMeLink" style="width:400px" placeholder="关于我链接" />
+    </el-form-item>
     <el-form-item label="创建日期" prop="websiteCreateTime">
       <el-date-picker v-model="webInfo.websiteCreateTime" type="date" value-format="yyyy-MM-dd" placeholder="创建日期" style="width:400px" />
     </el-form-item>
@@ -68,6 +71,7 @@ export default {
         websiteIntro: '',
         websiteLink: '',
         websiteAdminLink: '',
+        readMeLink: '',
         websiteNotice: '',
         websiteRecordNo: '',
         socialLoginList: []
