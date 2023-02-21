@@ -309,11 +309,12 @@ export default {
         MENU_CONF: {
           'uploadImage': {
             server: this.$store.state.api.fileUploadApi,
-            timeout: 30 * 1000,
+            timeout: 120 * 1000,
             fieldName: 'file',
             headers: {
               Authorization: this.getUserToken()
             },
+            maxNumberOfFiles: 10,
             maxFileSize: 10 * 1024 * 1024,
             // async onBeforeUpload(file) {
             //   let key = ''
@@ -328,6 +329,9 @@ export default {
             //   await imageConversion.compressAccurately(file[key].data, 200).then(res => {
             //     return res
             //   })
+            // },
+            // async customUpload(file, insertFn) {
+            //   // insertFn(url, alt, href)
             // },
             customInsert(res, insertFn) {
               const { code, data } = res
@@ -352,13 +356,15 @@ export default {
             // async customUpload(file, insertFn) {
             // },
             onError(file, err, res) {
-              alert('图片上传失败')
+              Message.error('图片上传失败')
               console.log('图片上传失败', err.message)
             }
           },
           'uploadVideo': {
             server: this.$store.state.api.fileUploadApi,
-            timeout: 30 * 1000,
+            timeout: 120 * 1000,
+            maxFileSize: 10 * 1024 * 1024,
+            maxNumberOfFiles: 1,
             fieldName: 'file',
             headers: {
               Authorization: this.getUserToken()
@@ -387,7 +393,7 @@ export default {
           // <a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://xxx.com/aaa/bbb/xxx.zip" download="xxx.zip">xxx.zip</a>
           'uploadAttachment': {
             server: this.$store.state.api.fileUploadApi,
-            timeout: 30 * 1000,
+            timeout: 120 * 1000,
             fieldName: 'file',
             headers: {
               Authorization: this.getUserToken()
