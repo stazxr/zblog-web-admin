@@ -10,9 +10,25 @@
     <link rel="icon" href="./favicon.ico">
     <title><%= webpackConfig.name %></title>
     <script src="./server.js"></script>
+    <% if (process.env.NODE_ENV === 'production' ) { %>
+    <script>
+      // const _hmt = []
+    </script>
+    <% } %>
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+
+    <% if (process.env.NODE_ENV === 'production' ) { %>
+    <script>
+      (function() {
+        const hm = document.createElement('script')
+        hm.src = "https://hm.baidu.com/hm.js?3206b8f77bd109cd2ee973aeabc740c3"
+        const s = document.getElementsByTagName('script')[0]
+        s.parentNode.insertBefore(hm, s)
+      })()
+    </script>
+    <% } %>
   </body>
 </html>
