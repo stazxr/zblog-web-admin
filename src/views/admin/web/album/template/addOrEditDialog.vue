@@ -2,7 +2,7 @@
   <el-dialog append-to-body :close-on-click-modal="false" :before-close="handleClose" :visible.sync="dialogVisible" :title="dialogTitle" width="540px">
     <el-form ref="addForm" :inline="true" :model="addForm" :rules="addRules" size="small" label-width="80px">
       <el-form-item label="相册名称" prop="albumName">
-        <el-input v-model="addForm.albumName" style="width:360px" maxlength="20" show-word-limit />
+        <el-input v-model="addForm.albumName" style="width:360px" maxlength="15" show-word-limit />
       </el-form-item>
       <el-form-item label="相册描述">
         <el-input v-model="addForm.albumDesc" style="width:360px" maxlength="50" show-word-limit />

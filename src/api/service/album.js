@@ -23,12 +23,32 @@ export default {
   pagePhotoList: params => {
     return api.httpRequest().get(`${albumApi}/pagePhotoList`, params)
   },
-  // 保存相册照片列表
+  // 上传相册照片
   saveAlbumPhoto: params => {
     return api.httpRequest().post(`${albumApi}/saveAlbumPhoto`, params)
   },
+  // 移动相册照片
+  moveAlbumPhoto: params => {
+    return api.httpRequest().post(`${albumApi}/moveAlbumPhoto`, params)
+  },
+  // 删除相册照片
+  deleteAlbumPhoto: params => {
+    return api.httpRequest().post(`${albumApi}/deleteAlbumPhoto`, params)
+  },
+  // 查询用户相册列表
+  queryUserAlbumList: params => {
+    return api.httpRequest().get(`${albumApi}/queryUserAlbumList`, params)
+  },
   // 分页查询回收站照片列表
-  pageRecycleList: params => {
-    return api.httpRequest().get(`${albumApi}/pageRecycleList`, params)
+  pageDeletePhotoList: params => {
+    return api.httpRequest().get(`${albumApi}/pageDeletePhotoList`, params)
+  },
+  // 永久删除相册照片
+  deleteAlbumPhotoForever: params => {
+    return api.httpRequest().post(`${albumApi}/deleteAlbumPhotoForever`, params)
+  },
+  // 恢复相册照片
+  recoverAlbumPhoto: params => {
+    return api.httpRequest().post(`${albumApi}/recoverAlbumPhoto`, params)
   }
 }

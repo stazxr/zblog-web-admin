@@ -56,6 +56,7 @@ export default {
     doClose(result = false) {
       this.uploadList = []
       this.submitLoading = false
+      this.$refs.upload.clearFiles()
       this.$emit('uploadPhotoDone', result)
     },
     handleClose() {

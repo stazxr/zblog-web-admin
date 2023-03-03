@@ -3,14 +3,14 @@
     <el-card class="main-card">
       <div class="card-title">{{ this.$route.meta.title || this.$route.name }}</div>
       <div class="card-operation">
-        <el-button type="primary" size="small" icon="el-icon-plus" @click="addAlbum()">
+        <el-button v-perm="['addOrEditAlbum']" type="primary" size="small" icon="el-icon-plus" @click="addAlbum()">
           新建相册
         </el-button>
         <div style="margin-left:auto">
           <el-button type="text" size="small" icon="el-icon-delete" style="margin-right:1rem" @click="openAlbumDelete">
             回收站
           </el-button>
-          <el-input v-model="filters.keywords" prefix-icon="el-icon-search" size="small" placeholder="请输入相册名" style="width:200px" @keyup.enter.native="searchAlbum" />
+          <el-input v-model="filters.albumName" prefix-icon="el-icon-search" size="small" placeholder="请输入相册名" style="width:200px" @keyup.enter.native="searchAlbum" />
           <el-button type="primary" size="small" icon="el-icon-search" style="margin-left:1rem" @click="searchAlbum">
             搜索
           </el-button>
@@ -24,15 +24,17 @@
               <span v-if="item.status === 1">公开</span>
               <span v-else-if="item.status === 2">私密</span>
               <span v-else>-</span>
+              ·
+              {{ item['userNickname'] }}
             </div>
-            <div class="album-opreation">
-              <el-dropdown @command="handleCommand">
+            <div class="album-operation">
+              <el-dropdown v-if="user.id === '1' || (user.id === item['userId'] && hasPerm(['addOrEditTalk', 'deleteTalk']))" @command="handleCommand">
                 <i class="el-icon-more" style="color:#fff" />
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="'1,' + item.id">
+                  <el-dropdown-item v-perm="['addOrEditAlbum']" :command="'1,' + item.id">
                     <i class="el-icon-edit" />编辑
                   </el-dropdown-item>
-                  <el-dropdown-item :command="'2,' + item.id">
+                  <el-dropdown-item v-perm="['deleteAlbum']" :command="'2,' + item.id">
                     <i class="el-icon-delete" />删除
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -40,7 +42,7 @@
             </div>
             <div class="album-photo-count">
               <div>{{ item['photoCount'] }}</div>
-              <i v-if="item.status === 2" class="iconfont el-icon-mymima" />
+              <!-- <i v-if="item.status === 2" class="iconfont mima" /> -->
             </div>
             <el-image fit="cover" class="album-cover" :src="item['albumCover']" />
             <div class="album-name">{{ item['albumName'] }}</div>
@@ -71,6 +73,7 @@
 
 <script>
 import addOrEditDialog from '@/views/admin/web/album/template/addOrEditDialog'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Album',
   components: {
@@ -79,7 +82,7 @@ export default {
   data() {
     return {
       filters: {
-        keywords: ''
+        albumName: ''
       },
       tableData: [],
       tableLoading: false,
@@ -90,10 +93,18 @@ export default {
       addOrEditDialogVisible: false
     }
   },
+  computed: {
+    ...mapGetters([
+      'user'
+    ])
+  },
   mounted() {
     this.listTableData()
   },
   methods: {
+    hasPerm(value) {
+      return this.checkPerm(value)
+    },
     handleCommand(command) {
       const arr = command.split(',')
       switch (arr[0]) {
@@ -219,7 +230,7 @@ export default {
   top: 0.5rem;
   left: 0.8rem;
 }
-.album-opreation {
+.album-operation {
   position: absolute;
   z-index: 1000;
   top: 0.5rem;
