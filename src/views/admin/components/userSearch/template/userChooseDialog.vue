@@ -14,19 +14,19 @@
           <el-table-column :show-overflow-tooltip="true" prop="nickname" label="用户昵称" align="center" />
           <el-table-column :show-overflow-tooltip="true" prop="loginTime" label="登录时间" align="center" />
           <el-table-column :show-overflow-tooltip="true" prop="temp" label="用户类型" align="center">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <span v-if="scope.row['temp']">临时用户</span>
               <span v-else>正式用户</span>
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="locked" label="锁定状态" align="center">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <span v-if="scope.row['locked']">锁定</span>
               <span v-else>正常</span>
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="enabled" label="启用状态" align="center">
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <span v-if="scope.row['enabled']">启用</span>
               <span v-else>禁用</span>
             </template>
