@@ -669,7 +669,7 @@ export default {
     // 由于会渲染同样的 Foo 组件，因此组件实例会被复用。而这个钩子就会在这个情况下被调用。
     // 可以访问组件实例 `this`
     console.log('beforeRouteUpdate', from.path, ' -> ', to.path)
-    if (to.path !== from.path) {
+    if (to.path !== from.path || to.query._f != null) {
       next()
     } else {
       NProgress.done()
@@ -881,6 +881,7 @@ export default {
       this.$refs.addForm.validateField('remark')
     },
     openDraftPage(articleId) {
+      console.log('编辑草稿', articleId)
       this.$router.push({ name: 'AddArticle', query: { articleId: articleId, _f: '' }})
     },
     openMoreDraftPage(draftFlag) {
