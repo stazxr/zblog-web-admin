@@ -15,10 +15,6 @@ export default {
   queryDictDetail: params => {
     return api.httpRequest().get(`${dictApi}/queryDictDetail`, params)
   },
-  // 查询字典信息（做反显用）
-  queryDictInfo: params => {
-    return api.httpRequest().get(`${dictApi}/queryDictInfo`, params)
-  },
   // 新增字典
   addDict: params => {
     return api.httpRequest().post(`${dictApi}/addDict`, params)

@@ -24,21 +24,21 @@
         <el-table-column :show-overflow-tooltip="true" prop="value" label="字典VALUE" align="left" />
         <el-table-column :show-overflow-tooltip="true" prop="sort" label="字典排序" align="left" width="80" />
         <el-table-column :show-overflow-tooltip="true" prop="locked" label="锁定状态" align="center" width="120">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <span v-if="scope.row.locked">禁止编辑删除</span>
             <span v-else>允许编辑删除</span>
           </template>
         </el-table-column>
         <el-table-column :show-overflow-tooltip="true" prop="enabled" label="状态" align="center" width="100">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
             <el-tag v-else size="small" type="warning">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column v-if="hasPerm(['queryDictDetail', 'addDict', 'editDict', 'deleteDict'])" label="操作" align="center" width="250px">
-          <template slot-scope="scope">
+        <el-table-column label="操作" align="center" width="250px">
+          <template v-slot="scope">
             <el-button-group>
-              <el-button v-perm="['queryDictDetail']" type="info" size="mini" @click="showDictDetail(scope.row)">详情</el-button>
+              <el-button type="info" size="mini" @click="showDictDetail(scope.row)">详情</el-button>
               <el-button v-if="hasPerm(['addDict']) && scope.row.type === 1" type="primary" size="mini" @click="addDict(scope.row)">新增子项</el-button>
               <el-button v-if="hasPerm(['editDict']) && !scope.row.locked" type="success" size="mini" @click="editDict(scope.row)">编辑</el-button>
               <el-popconfirm v-if="hasPerm(['deleteDict']) && !scope.row.locked && !scope.row.hasChildren" title="操作不可撤销，确定删除吗？" @confirm="deleteDict(scope.row)">
@@ -166,7 +166,6 @@ export default {
       }, 1)
     },
     addDictGroup() {
-      this.dataType = 1
       this.rowId = null
       this.rowPid = null
       this.addOrEditDialogVisible = true
