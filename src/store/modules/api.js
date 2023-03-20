@@ -11,7 +11,7 @@ const api = {
     // Druid
     sqlApi: baseUrl + '/api/druid/index.html',
     // Swagger
-    swaggerApi: baseUrl + '/swagger-ui.html',
+    swaggerApi: baseUrl + '/doc.html',
     // webSsh
     webSshApi: wsUrl + '/webssh'
   }
