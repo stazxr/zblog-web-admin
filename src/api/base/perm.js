@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from './../custom-axios'
 
 const permApi = '/api/perms'
@@ -31,10 +32,6 @@ export default {
   queryPermCodes: params => {
     return api.httpRequest().get(`${permApi}/queryPermCodes`, params)
   },
-  // 查询权限信息
-  queryPermInfo: params => {
-    return api.httpRequest().get(`${permApi}/queryPermInfo`, params)
-  },
   // 新增权限
   addPerm: params => {
     return api.httpRequest().post(`${permApi}/addPerm`, params)
@@ -45,7 +42,9 @@ export default {
   },
   // 删除权限
   deletePerm: params => {
-    return api.httpRequest().post(`${permApi}/deletePerm`, params)
+    return api.httpRequest().post(`${permApi}/deletePerm`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 删除权限 - 角色关系数据
   batchDeleteRolePerm: params => {

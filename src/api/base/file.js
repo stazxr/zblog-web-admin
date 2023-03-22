@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const fileApi = '/api/file'
@@ -33,6 +34,8 @@ export default {
   },
   // 激活存储配置
   activeStorageConfig: params => {
-    return api.httpRequest().post(`${fileApi}/activeStorageConfig`, params)
+    return api.httpRequest().post(`${fileApi}/activeStorageConfig`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

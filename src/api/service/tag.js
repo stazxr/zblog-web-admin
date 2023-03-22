@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const tagApi = '/api/tags'
@@ -21,6 +22,8 @@ export default {
   },
   // 删除标签
   deleteTag: params => {
-    return api.httpRequest().post(`${tagApi}/deleteTag`, params)
+    return api.httpRequest().post(`${tagApi}/deleteTag`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

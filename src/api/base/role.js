@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const roleApi = '/api/roles'
@@ -25,7 +26,9 @@ export default {
   },
   // 删除角色
   deleteRole: params => {
-    return api.httpRequest().post(`${roleApi}/deleteRole`, params)
+    return api.httpRequest().post(`${roleApi}/deleteRole`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 授权角色
   authRole: params => {

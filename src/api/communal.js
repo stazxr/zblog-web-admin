@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from './custom-axios'
 
 export default {
@@ -19,7 +20,9 @@ export default {
   },
   // 发送邮箱验证码
   sendEmailCode: params => {
-    return api.httpRequest().post(`/api/email/sendCode`, params)
+    return api.httpRequest().post(`/api/email/sendCode`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 生成一个全局ID
   getId: params => {

@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const albumApi = '/api/albums'
@@ -17,7 +18,9 @@ export default {
   },
   // 删除相册
   deleteAlbum: params => {
-    return api.httpRequest().post(`${albumApi}/deleteAlbum`, params)
+    return api.httpRequest().post(`${albumApi}/deleteAlbum`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 分页查询照片列表
   pagePhotoList: params => {

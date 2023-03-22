@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const versionApi = '/api/version'
@@ -21,6 +22,8 @@ export default {
   },
   // 删除版本
   deleteVersion: params => {
-    return api.httpRequest().post(`${versionApi}/deleteVersion`, params)
+    return api.httpRequest().post(`${versionApi}/deleteVersion`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

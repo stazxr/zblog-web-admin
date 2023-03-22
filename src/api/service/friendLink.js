@@ -1,4 +1,5 @@
 import api from '@/api/custom-axios'
+import qs from 'qs'
 
 const friendLinkApi = '/api/friendLinks'
 
@@ -21,6 +22,8 @@ export default {
   },
   // 删除友链
   deleteFriendLink: params => {
-    return api.httpRequest().post(`${friendLinkApi}/deleteFriendLink`, params)
+    return api.httpRequest().post(`${friendLinkApi}/deleteFriendLink`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

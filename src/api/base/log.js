@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const logApi = '/api/logs'
@@ -25,7 +26,9 @@ export default {
   },
   // 删除日志列表
   deleteLog: params => {
-    return api.httpRequest().post(`${logApi}/deleteLog`, params)
+    return api.httpRequest().post(`${logApi}/deleteLog`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 查询日志堆栈详情
   queryLogErrorDetail: params => {

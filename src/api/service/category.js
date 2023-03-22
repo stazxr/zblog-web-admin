@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const categoryApi = '/api/categories'
@@ -25,6 +26,8 @@ export default {
   },
   // 删除类别
   deleteCategory: params => {
-    return api.httpRequest().post(`${categoryApi}/deleteCategory`, params)
+    return api.httpRequest().post(`${categoryApi}/deleteCategory`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

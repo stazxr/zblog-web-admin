@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const pageApi = '/api/pages'
@@ -17,6 +18,8 @@ export default {
   },
   // 删除页面
   deletePage: params => {
-    return api.httpRequest().post(`${pageApi}/deletePage`, params)
+    return api.httpRequest().post(`${pageApi}/deletePage`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

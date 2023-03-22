@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const nodeApi = '/api/node'
@@ -21,7 +22,9 @@ export default {
   },
   // 删除节点
   deleteNode: params => {
-    return api.httpRequest().post(`${nodeApi}/deleteNode`, params)
+    return api.httpRequest().post(`${nodeApi}/deleteNode`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 测试 SSH 连通性
   sshTest: params => {

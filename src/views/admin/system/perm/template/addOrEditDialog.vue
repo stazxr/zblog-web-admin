@@ -219,7 +219,7 @@ export default {
     },
     getPermInfo() {
       if (this.addForm.id != null && this.addForm.id !== '') {
-        this.$mapi.perm.queryPermInfo({ permId: this.addForm.id }).then(res => {
+        this.$mapi.perm.queryPermDetail({ permId: this.addForm.id }).then(res => {
           const { data } = res
           Object.keys(this.addForm).forEach(key => {
             this.addForm[key] = data[key]

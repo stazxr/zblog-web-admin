@@ -42,7 +42,7 @@ instance.defaults.validateStatus = status => {
 instance.interceptors.request.use(config => {
   // set default header
   config.headers.Authorization = getToken()
-  config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+  // config.headers['Content-Type'] = 'application/json;charset=UTF-8'
 
   // return config
   return config
@@ -97,7 +97,7 @@ instance.interceptors.response.use(response => {
     // 请求已经成功发起，但没有收到响应
     if (!window.navigator.onLine) {
       // 断网处理
-      errorMsg = '服务迷失在了大千网络世界中，请等候它回来'
+      errorMsg = '没网啦~'
     } else {
       if (error.message && error.message.includes('timeout')) {
         errorMsg = '请求超时'
@@ -116,7 +116,7 @@ instance.interceptors.response.use(response => {
 
 function logout(expired) {
   if (expired) {
-    window.sessionStorage.setItem('point', 401)
+    window.sessionStorage.setItem('point', '401')
   }
 
   removeToken()
@@ -166,7 +166,9 @@ export const get = (url, params, requestItem) => {
       // 是与请求一起发送的 URL 参数，必须是一个简单对象或 URLSearchParams 对象
       params: params,
       // 自定义请求头
-      headers: {},
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
       // 浏览器将要响应的数据类型，['arraybuffer', 'document', 'json', 'text', 'stream', 'blob'(浏览器专属)]
       responseType: 'json'
     }
@@ -190,7 +192,9 @@ export const post = (url, params, requestItem) => {
       // 可选语法，Country=China&City=Xian，只有 value 会被发送，key 则不会
       data: params,
       // 自定义请求头
-      headers: {},
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
       // 浏览器将要响应的数据类型，['arraybuffer', 'document', 'json', 'text', 'stream', 'blob'(浏览器专属)]
       responseType: 'json'
     }

@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const dictApi = '/api/dict'
@@ -25,6 +26,8 @@ export default {
   },
   // 删除字典
   deleteDict: params => {
-    return api.httpRequest().post(`${dictApi}/deleteDict`, params)
+    return api.httpRequest().post(`${dictApi}/deleteDict`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

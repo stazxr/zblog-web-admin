@@ -1,4 +1,5 @@
 import api from '../custom-axios'
+import qs from 'qs'
 
 const talkApi = '/api/talks'
 
@@ -17,6 +18,8 @@ export default {
   },
   // 删除说说
   deleteTalk: params => {
-    return api.httpRequest().post(`${talkApi}/deleteTalk`, params)
+    return api.httpRequest().post(`${talkApi}/deleteTalk`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

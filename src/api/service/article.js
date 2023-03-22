@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const articleApi = '/api/articles'
@@ -49,15 +50,21 @@ export default {
   },
   // 删除文章：移动至回收站
   moveToRecycleBin: params => {
-    return api.httpRequest().post(`${articleApi}/moveToRecycleBin`, params)
+    return api.httpRequest().post(`${articleApi}/moveToRecycleBin`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 将文章回收至草稿箱
   recycleToDraftBox: params => {
-    return api.httpRequest().post(`${articleApi}/recycleToDraftBox`, params)
+    return api.httpRequest().post(`${articleApi}/recycleToDraftBox`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 彻底删除文章
   deleteArticle: params => {
-    return api.httpRequest().post(`${articleApi}/deleteArticle`, params)
+    return api.httpRequest().post(`${articleApi}/deleteArticle`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   },
   // 删除文章：批量移动至回收站
   batchMoveToRecycleBin: params => {

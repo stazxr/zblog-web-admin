@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const routerApi = '/api/router'
@@ -33,6 +34,8 @@ export default {
   },
   // 删除黑白名单
   deleteBlackOrWhiteRouter: params => {
-    return api.httpRequest().post(`${routerApi}/deleteBlackOrWhiteRouter`, params)
+    return api.httpRequest().post(`${routerApi}/deleteBlackOrWhiteRouter`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }

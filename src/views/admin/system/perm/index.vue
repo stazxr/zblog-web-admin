@@ -31,7 +31,7 @@
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" row-key="id" :tree-props="tableProps" border>
         <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="200px" prop="permName">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <span>
               <svg-icon :icon-class="scope.row.icon ? scope.row.icon : ''" />
               {{ scope.row['permName'] }}
@@ -43,7 +43,7 @@
         <el-table-column :show-overflow-tooltip="true" width="150px" prop="componentName" label="组件名称" />
         <el-table-column :show-overflow-tooltip="true" prop="componentPath" label="组件路径" />
         <el-table-column prop="permType" label="类型" align="center" width="75px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row['permType'] === 1" size="small">目录</el-tag>
             <el-tag v-else-if="scope.row['permType'] === 2" size="small" type="success">菜单</el-tag>
             <el-tag v-else-if="scope.row['permType'] === 3" size="small" type="info">按钮</el-tag>
@@ -51,7 +51,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="permLevel" label="级别" align="center" width="75px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row['permLevel'] === 1" size="small" type="warning">公开</el-tag>
             <el-tag v-else-if="scope.row['permLevel'] === 2" size="small" type="info">认证</el-tag>
             <el-tag v-else-if="scope.row['permLevel'] === 3" size="small" type="success">授权</el-tag>
@@ -59,20 +59,20 @@
           </template>
         </el-table-column>
         <el-table-column prop="enabled" label="状态" width="75px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             <el-tag v-if="scope.row.enabled" size="small">启用</el-tag>
             <el-tag v-else size="small" type="warning">禁用</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="menuSort" label="排序" align="center" width="75px">
-          <template slot-scope="scope">
+          <template v-slot="scope">
             {{ scope.row.sort }}
           </template>
         </el-table-column>
-        <el-table-column v-if="hasPerm(['queryPermDetail', 'editPerm', 'deletePerm'])" label="操作" align="center" width="200">
-          <template slot-scope="scope">
+        <el-table-column label="操作" align="center" width="200">
+          <template v-slot="scope">
             <el-button-group>
-              <el-button v-perm="['queryPermDetail']" type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
+              <el-button type="info" size="mini" @click="showPermDetail(scope.row)">详情</el-button>
               <el-button v-perm="['editPerm']" type="success" size="mini" @click="editPerm(scope.row)">编辑</el-button>
               <el-popconfirm v-perm="['deletePerm']" title="操作不可撤销，确定删除吗？" @confirm="deletePerm(scope.row)">
                 <el-button v-show="allowDelete(scope.row)" slot="reference" type="danger" size="mini">删除</el-button>

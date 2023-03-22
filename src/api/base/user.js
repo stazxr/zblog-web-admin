@@ -1,3 +1,4 @@
+import qs from 'qs'
 import api from '../custom-axios'
 
 const userApi = '/api/users'
@@ -49,6 +50,8 @@ export default {
   },
   // 删除用户
   deleteUser: params => {
-    return api.httpRequest().post(`${userApi}/deleteUser`, params)
+    return api.httpRequest().post(`${userApi}/deleteUser`, qs.stringify(params), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }
+    })
   }
 }
