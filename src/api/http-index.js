@@ -25,8 +25,9 @@ import page from '@/api/service/page.js'
 import album from '@/api/service/album.js'
 import message from '@/api/service/message.js'
 import comment from '@/api/service/comment.js'
+import test from '@/api/service/test.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, webSetting, friendLink, talk, page, album, message, comment
+  category, tag, article, webSetting, friendLink, talk, page, album, message, comment, test
 }
