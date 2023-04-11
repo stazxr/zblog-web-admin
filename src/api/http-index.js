@@ -15,6 +15,7 @@ import file from '@/api/base/file.js'
 import node from '@/api/base/node.js'
 
 // service
+import column from '@/api/service/column.js'
 import category from '@/api/service/category.js'
 import tag from '@/api/service/tag.js'
 import article from '@/api/service/article.js'
@@ -29,5 +30,5 @@ import test from '@/api/service/test.js'
 
 export default {
   communal, home, perm, user, log, router, role, dict, server, version, file, node,
-  category, tag, article, webSetting, friendLink, talk, page, album, message, comment, test
+  column, category, tag, article, webSetting, friendLink, talk, page, album, message, comment, test
 }

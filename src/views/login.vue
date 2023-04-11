@@ -23,9 +23,9 @@
           <img :src="codeUrl" alt="" @click="getCode">
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
+      <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
         记住我
-      </el-checkbox>
+      </el-checkbox> -->
       <el-form-item style="width:100%;">
         <el-button ref="loginBtn" :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           <span v-if="!loading">登 录</span>

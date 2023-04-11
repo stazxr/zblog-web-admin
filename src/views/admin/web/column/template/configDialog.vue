@@ -2,26 +2,26 @@
   <div>
     <el-dialog append-to-body :close-on-click-modal="false" :before-close="handleClose" :visible.sync="dialogVisible" :title="dialogTitle" width="640px">
       <el-form ref="addForm" :inline="true" :model="addForm" :rules="addRules" size="small" label-width="100px">
-        <el-form-item label="分类名称" prop="name">
+        <el-form-item label="专栏名称" prop="name">
           <el-input v-model="addForm.name" style="width: 178px" maxlength="50" show-word-limit />
         </el-form-item>
-        <el-form-item label="上级分类" prop="pid">
-          <el-select v-model="addForm.pid" placeholder="上级分类" clearable style="width: 178px">
-            <el-option v-for="item in firstCategoryList" :key="item.id" :label="item.name" :value="item.id" />
+        <el-form-item label="首页展示" prop="pageShow">
+          <el-select v-model="addForm.pageShow" placeholder="首页展示" style="width: 178px">
+            <el-option v-for="item in pageShowEnums" :key="item.value" :label="item.name" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="分类状态" prop="enabled">
-          <el-select v-model="addForm.enabled" placeholder="分类状态" style="width: 178px">
+        <el-form-item label="专栏状态" prop="enabled">
+          <el-select v-model="addForm.enabled" placeholder="专栏状态" style="width: 178px">
             <el-option v-for="item in enabledEnums" :key="item.value" :label="item.name" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="分类排序" prop="sort">
+        <el-form-item label="专栏排序" prop="sort">
           <el-input-number v-model.number="addForm.sort" :min="0" :max="99999" step-strictly controls-position="right" style="width: 178px" />
         </el-form-item>
-        <el-form-item label="分类描述">
+        <el-form-item label="专栏描述">
           <el-input v-model="addForm.desc" type="textarea" rows="4" maxlength="1000" show-word-limit style="width: 470px" />
         </el-form-item>
-        <el-form-item label="分类略缩图">
+        <el-form-item label="专栏略缩图">
           <el-upload
             ref="upload"
             name="file"
@@ -66,30 +66,36 @@ export default {
   },
   data() {
     return {
-      firstCategoryList: [],
       submitLoading: false,
+      pageShowEnums: [
+        { name: '展示', value: true },
+        { name: '不展示', value: false }
+      ],
       enabledEnums: [
         { name: '启用', value: true },
         { name: '禁用', value: false }
       ],
       addForm: {
         id: '',
-        pid: '',
         name: '',
         imageUrl: '',
         desc: '',
         sort: 99999,
+        pageShow: false,
         enabled: true
       },
       addRules: {
         name: [
-          { required: true, message: '请输入分类名称', trigger: 'blur' }
+          { required: true, message: '请输入专栏名称', trigger: 'blur' }
         ],
         sort: [
-          { required: true, message: '请输入分类排序', trigger: 'blur' }
+          { required: true, message: '请输入专栏排序', trigger: 'blur' }
         ],
         enabled: [
-          { required: true, message: '请选择分类状态', trigger: 'blur' }
+          { required: true, message: '请选择专栏状态', trigger: 'blur' }
+        ],
+        pageShow: [
+          { required: true, message: '请选择专栏是否首页展示', trigger: 'blur' }
         ]
       },
       showImgUpload: false,
@@ -105,20 +111,13 @@ export default {
   methods: {
     initData(dataId) {
       this.addForm.id = dataId
-      this.getFirstCategoryList()
       this.$nextTick(() => {
-        this.getCategoryDetail()
+        this.getColumnDetail()
       })
     },
-    getFirstCategoryList() {
-      this.firstCategoryList = []
-      this.$mapi.category.queryFirstCategoryList().then(res => {
-        this.firstCategoryList = res.data ? res.data : []
-      })
-    },
-    getCategoryDetail() {
+    getColumnDetail() {
       if (this.addForm.id != null && this.addForm.id !== '') {
-        this.$mapi.category.queryCategoryDetail({ categoryId: this.addForm.id }).then(res => {
+        this.$mapi.column.queryColumnDetail({ columnId: this.addForm.id }).then(res => {
           const { data } = res
           Object.keys(this.addForm).forEach(key => {
             this.addForm[key] = data[key]
@@ -180,11 +179,11 @@ export default {
     doClose(result = false) {
       this.addForm = {
         id: '',
-        pid: '',
         name: '',
         imageUrl: '',
         desc: '',
         sort: 99999,
+        pageShow: false,
         enabled: true
       }
       this.$refs['addForm'].resetFields()
@@ -208,7 +207,7 @@ export default {
           this.submitLoading = true
           if (this.addForm.id == null || this.addForm.id === '') {
             // add
-            this.$mapi.category.addCategory(this.addForm).then(res => {
+            this.$mapi.column.addColumn(this.addForm).then(res => {
               this.$message.success(res.message)
               this.doClose(true)
             }).finally(_ => {
@@ -216,7 +215,7 @@ export default {
             })
           } else {
             // edit
-            this.$mapi.category.editCategory(this.addForm).then(res => {
+            this.$mapi.column.editColumn(this.addForm).then(res => {
               this.$message.success(res.message)
               this.doClose(true)
             }).finally(_ => {
