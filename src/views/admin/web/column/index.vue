@@ -28,7 +28,7 @@
     <div class="components-container">
       <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="name" label="专栏名称" align="center" />
-        <el-table-column :show-overflow-tooltip="true" prop="desc" label="专栏描述" align="center" />
+        <el-table-column :show-overflow-tooltip="true" prop="desc" label="专栏简介" align="center" />
         <el-table-column :show-overflow-tooltip="true" prop="sort" label="排序" align="center" width="100" />
         <el-table-column :show-overflow-tooltip="true" prop="articleCount" label="文章数" align="center" width="100" />
         <el-table-column :show-overflow-tooltip="true" prop="pageShow" label="首页展示" align="center" width="100">
