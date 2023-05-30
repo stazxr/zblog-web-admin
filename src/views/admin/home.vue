@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      defaultType: 'visits',
+      defaultType: 'pv',
       lineChartData: {
         xAxisData: [],
         actualData: []

@@ -1,54 +1,54 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('visits')">
-        <div class="card-panel-icon-wrapper icon-visits">
-          <svg-icon icon-class="visits" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('pv')">
+        <div class="card-panel-icon-wrapper icon-pv">
+          <svg-icon icon-class="pv" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            访问量
+            浏览量
           </div>
-          <count-to :start-val="0" :end-val="panelData.visits" :duration="5000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData.pv" :duration="5000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('uv')">
+        <div class="card-panel-icon-wrapper icon-uv">
+          <svg-icon icon-class="uv" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            评论数
+            访客数
           </div>
-          <count-to :start-val="0" :end-val="panelData.messages" :duration="5000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData.uv" :duration="5000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('articles')">
-        <div class="card-panel-icon-wrapper icon-articles">
-          <svg-icon icon-class="education" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('uu')">
+        <div class="card-panel-icon-wrapper icon-uu">
+          <svg-icon icon-class="uu" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            文章数
+            用户数
           </div>
-          <count-to :start-val="0" :end-val="panelData.articles" :duration="5000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData.uu" :duration="5000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('warnings')">
-        <div class="card-panel-icon-wrapper icon-gongGao">
-          <svg-icon icon-class="gong-gao" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('av')">
+        <div class="card-panel-icon-wrapper icon-av">
+          <svg-icon icon-class="av" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            告警
+            阅读量
           </div>
-          <count-to :start-val="0" :end-val="panelData.warnings" :duration="5000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="panelData.av" :duration="5000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -65,29 +65,31 @@ export default {
   data() {
     return {
       panelData: {
-        visits: 0,
-        messages: 0,
-        articles: 0,
-        warnings: 0
+        pv: 0,
+        uv: 0,
+        uu: 0,
+        av: 0
       }
     }
   },
-  activated() {
-    this.getPanelData()
+  mounted() {
+    this.$nextTick(() => {
+      this.getPanelData()
+    })
   },
   methods: {
     getPanelData() {
       this.$mapi.home.getHomePanelDataCount().then(res => {
-        const { visits, messages, articles, warnings } = res.data
-        this.panelData.visits = visits || 0
-        this.panelData.messages = messages || 0
-        this.panelData.articles = articles || 0
-        this.panelData.warnings = warnings || 0
+        const { pv, uv, uu, av } = res.data
+        this.panelData.pv = pv || 0
+        this.panelData.uv = uv || 0
+        this.panelData.uu = uu || 0
+        this.panelData.av = av || 0
       }).catch(() => {
-        this.panelData.visits = 0
-        this.panelData.messages = 0
-        this.panelData.articles = 0
-        this.panelData.warnings = 0
+        this.panelData.pv = 0
+        this.panelData.uv = 0
+        this.panelData.uu = 0
+        this.panelData.av = 0
       })
     },
     handleSetLineChartData(type) {
@@ -121,37 +123,37 @@ export default {
         color: #fff;
       }
 
-      .icon-visits {
-        background: #40c9c6;
-      }
-
-      .icon-message {
+      .icon-pv {
         background: #34bfa3;
       }
 
-      .icon-articles {
+      .icon-uv {
         background: #34bfa3;
       }
 
-      .icon-gongGao {
-        background: #f4516c
+      .icon-uu {
+        background: #34bfa3;
+      }
+
+      .icon-av {
+        background: #34bfa3;
       }
     }
 
-    .icon-visits {
-      color: #40c9c6;
-    }
-
-    .icon-message {
+    .icon-pv {
       color: #34bfa3;
     }
 
-    .icon-articles {
+    .icon-uv {
       color: #34bfa3;
     }
 
-    .icon-gongGao {
-      color: #f4516c
+    .icon-uu {
+      color: #34bfa3;
+    }
+
+    .icon-av {
+      color: #34bfa3;
     }
 
     .card-panel-icon-wrapper {
