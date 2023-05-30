@@ -44,7 +44,7 @@
 
 <script>
 import qs from 'qs'
-import Background from '@/assets/images/background.jpeg'
+import Background from '@/assets/images/background.jpg'
 import { encrypt } from '@/utils/rsaEncrypt'
 export default {
   name: 'Login',
@@ -184,9 +184,10 @@ export default {
 
   .login-form {
     border-radius: 6px;
-    background: #ffffff;
     width: 385px;
     padding: 25px 25px 5px 25px;
+    background-color: rgba(255, 255, 255, 0.9);
+    opacity: 0.9;
     .el-input {
       height: 38px;
       input {
