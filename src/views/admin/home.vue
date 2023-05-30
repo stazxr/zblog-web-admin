@@ -9,6 +9,9 @@
       <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <line-chart :chart-data="lineChartData" />
       </el-row>
+      <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+        <china-map />
+      </el-row>
     </div>
   </div>
 </template>
@@ -17,12 +20,14 @@
 import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './dashboard/PanelGroup'
 import LineChart from './dashboard/LineChart'
+import ChinaMap from '@/components/Echarts/Map'
 export default {
   name: 'Dashboard',
   components: {
     GithubCorner,
     PanelGroup,
-    LineChart
+    LineChart,
+    ChinaMap
   },
   data() {
     return {
