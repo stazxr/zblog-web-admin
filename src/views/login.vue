@@ -46,6 +46,7 @@
 import qs from 'qs'
 import Background from '@/assets/images/background.jpg'
 import { encrypt } from '@/utils/rsaEncrypt'
+import { setToken } from '@/utils/token'
 export default {
   name: 'Login',
   data() {
@@ -95,6 +96,24 @@ export default {
     this.getCode()
     // 登录过期提醒
     this.point()
+
+    // 单点登录
+    const data = qs.parse(window.location.search.replace('?', ''))
+    if (data['isIframe'] && data.origin) {
+      console.log('第一次交互成功：后台连接上了前台，并准备向前台发送一个消息', data)
+      window.parent.postMessage('ok', data.origin)
+      window.addEventListener('message', function(event) {
+        console.log('后台收到前台的消息', event)
+        if (event.origin === data.origin) {
+          if (event.data != null) {
+            console.log('单点登录', event.data)
+            setToken(event.data)
+          } else {
+            console.log('第三次交互成功：后台收到了前台的回应')
+          }
+        }
+      }, false)
+    }
   },
   // 在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作
   mounted() {

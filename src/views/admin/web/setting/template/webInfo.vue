@@ -1,57 +1,70 @@
 <template>
-  <el-form :model="webInfo" :rules="addRules" size="small" label-width="100px" label-position="left">
-    <el-form-item label="网站头像">
-      <el-upload
-        ref="upload"
-        name="file"
-        class="avatar-uploader"
-        :action="$store.state.api.fileUploadApi"
-        :headers="headers"
-        :show-file-list="false"
-        :before-upload="beforeUpload"
-        :on-error="handleError"
-        :on-success="handleSuccess"
-      >
-        <img v-if="webInfo.websiteAvatar" :src="webInfo.websiteAvatar" class="avatar" alt="">
-        <i v-else class="el-icon-plus avatar-uploader-icon" />
-      </el-upload>
-    </el-form-item>
-    <el-form-item label="网站名称" prop="websiteName">
-      <el-input v-model="webInfo.websiteName" style="width:400px" placeholder="网站名称" maxlength="20" show-word-limit />
-    </el-form-item>
-    <el-form-item label="网站作者" prop="websiteAuthor">
-      <el-input v-model="webInfo.websiteAuthor" style="width:400px" placeholder="网站作者" />
-    </el-form-item>
-    <el-form-item label="网站介绍">
-      <el-input v-model="webInfo.websiteIntro" style="width:400px" placeholder="网站介绍" />
-    </el-form-item>
-    <el-form-item label="网站前台链接">
-      <el-input v-model="webInfo.websiteLink" style="width:400px" placeholder="网站前台链接" />
-    </el-form-item>
-    <el-form-item label="网站后台链接">
-      <el-input v-model="webInfo.websiteAdminLink" style="width:400px" placeholder="网站后台链接" />
-    </el-form-item>
-    <el-form-item label="关于我链接">
-      <el-input v-model="webInfo.readMeLink" style="width:400px" placeholder="关于我链接" />
-    </el-form-item>
-    <el-form-item label="创建日期" prop="websiteCreateTime">
-      <el-date-picker v-model="webInfo.websiteCreateTime" type="date" value-format="yyyy-MM-dd" placeholder="创建日期" style="width:400px" />
-    </el-form-item>
-    <el-form-item label="网站公告">
-      <el-input v-model="webInfo.websiteNotice" type="textarea" :rows="4" placeholder="网站公告" style="width:400px" />
-    </el-form-item>
-    <el-form-item label="网站备案号">
-      <el-input v-model="webInfo.websiteRecordNo" style="width:400px" placeholder="网站备案号" />
-    </el-form-item>
-    <el-form-item label="第三方登录">
-      <el-checkbox-group v-model="webInfo.socialLoginList">
-        <el-checkbox label="qq">QQ</el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
+  <div>
+    <el-form title="网站信息" :model="webInfo" :rules="addRules" size="small" label-width="100px" label-position="right">
+      <el-form-item label="网站头像">
+        <el-upload
+          ref="upload"
+          name="file"
+          class="avatar-uploader"
+          :action="$store.state.api.fileUploadApi"
+          :headers="headers"
+          :show-file-list="false"
+          :before-upload="beforeUpload"
+          :on-error="handleError"
+          :on-success="handleSuccess"
+        >
+          <img v-if="webInfo.websiteAvatar" :src="webInfo.websiteAvatar" class="avatar" alt="">
+          <i v-else class="el-icon-plus avatar-uploader-icon" />
+        </el-upload>
+      </el-form-item>
+      <el-form-item label="网站名称" prop="websiteName">
+        <el-input v-model="webInfo.websiteName" style="width:400px" placeholder="网站名称" maxlength="20" show-word-limit />
+      </el-form-item>
+      <el-form-item label="网站作者" prop="websiteAuthor">
+        <el-input v-model="webInfo.websiteAuthor" style="width:400px" placeholder="网站作者" />
+      </el-form-item>
+      <el-form-item label="网站介绍">
+        <el-input v-model="webInfo.websiteIntro" style="width:400px" placeholder="网站介绍" />
+      </el-form-item>
+      <el-form-item label="网站前台链接">
+        <el-input v-model="webInfo.websiteLink" style="width:400px" placeholder="网站前台链接" />
+      </el-form-item>
+      <el-form-item label="网站后台链接">
+        <el-input v-model="webInfo.websiteAdminLink" style="width:400px" placeholder="网站后台链接" />
+      </el-form-item>
+      <el-form-item label="关于我链接">
+        <el-input v-model="webInfo.readMeLink" style="width:400px" placeholder="关于我链接" />
+      </el-form-item>
+      <el-form-item label="创建日期" prop="websiteCreateTime">
+        <el-date-picker v-model="webInfo.websiteCreateTime" type="date" value-format="yyyy-MM-dd" placeholder="创建日期" style="width:400px" />
+      </el-form-item>
+      <el-form-item label="网站公告">
+        <el-input v-model="webInfo.websiteNotice" type="textarea" :rows="4" placeholder="网站公告" style="width:400px" />
+      </el-form-item>
+      <el-form-item label="网站备案号">
+        <el-input v-model="webInfo.websiteRecordNo" style="width:400px" placeholder="网站备案号" />
+      </el-form-item>
+      <el-form-item label="第三方登录">
+        <el-checkbox-group v-model="webInfo.socialLoginList">
+          <el-checkbox label="qq">QQ</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+    </el-form>
+    <el-form v-show="webInfo.socialLoginList.indexOf('qq') !== -1" title="QQ 第三方登录配置" :model="webInfo" size="small" label-width="100px" label-position="right">
+      <el-form-item label="APP ID">
+        <el-input v-model="webInfo.qqAppId" style="width:400px" placeholder="QQ APP ID" />
+      </el-form-item>
+      <el-form-item label="APP Key">
+        <el-input v-model="webInfo.qqAppKey" style="width:400px" placeholder="QQ APP Key" />
+      </el-form-item>
+      <el-form-item label="回调地址">
+        <el-input v-model="webInfo.qqCallBackUrl" style="width:400px" placeholder="回调地址" />
+      </el-form-item>
+    </el-form>
     <el-button v-perm="['updateWebInfo']" v-loading="submitLoading" type="primary" size="medium" style="margin-left:6.3rem" @click="updateWebInfo">
       修改
     </el-button>
-  </el-form>
+  </div>
 </template>
 
 <script>
@@ -74,7 +87,10 @@ export default {
         readMeLink: '',
         websiteNotice: '',
         websiteRecordNo: '',
-        socialLoginList: []
+        socialLoginList: [],
+        qqAppId: '',
+        qqAppKey: '',
+        qqCallBackUrl: ''
       },
       addRules: {
         websiteName: [
