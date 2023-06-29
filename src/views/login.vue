@@ -1,43 +1,54 @@
 <template>
-  <div class="login" :style="'background-image:url('+ Background +');'">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
-      <h3 class="title">
-        Z-BLOG 后台管理系统
-      </h3>
-      <el-form-item prop="username">
-        <el-input ref="username" v-model="loginForm.username" type="text" auto-complete="off" placeholder="请输入用户名">
-          <svg-icon slot="prefix" icon-class="username" class="el-input__icon input-icon" />
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="password">
-        <el-input ref="password" v-model="loginForm.password" :type="pwdFlagType" auto-complete="off" placeholder="请输入密码" @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
-          <svg-icon v-show="loginForm.password !== ''" slot="suffix" :icon-class="pwdFlag ? 'eye-close' : 'eye'" class="el-input__icon input-icon" style="margin-right: 5px;" @click="getPwdFlag()" />
-        </el-input>
-      </el-form-item>
-      <el-form-item prop="code">
-        <el-input ref="code" v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
-          <svg-icon slot="prefix" icon-class="auth-code" class="el-input__icon input-icon" />
-        </el-input>
-        <div class="login-code">
-          <img :src="codeUrl" alt="" @click="getCode">
-        </div>
-      </el-form-item>
-      <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
-        记住我
-      </el-checkbox> -->
-      <el-form-item style="width:100%;">
-        <el-button ref="loginBtn" :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
-        </el-button>
-      </el-form-item>
-    </el-form>
-    <!--  底部  -->
-    <div v-if="$store.state.settings.showFooter" id="el-login-footer">
-      <span v-html="$store.state.settings.footerTxt" />
-      <span> ⋅ </span>
-      <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+  <div style="height: 100%">
+    <div v-if="pageLoading" class="oauth-background">
+      <div id="preloader_1">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    </div>
+    <div v-else class="login" :style="'background-image:url('+ Background +');'">
+      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
+        <h3 class="title">
+          Z-BLOG 后台管理系统
+        </h3>
+        <el-form-item prop="username">
+          <el-input ref="username" v-model="loginForm.username" type="text" auto-complete="off" placeholder="请输入用户名">
+            <svg-icon slot="prefix" icon-class="username" class="el-input__icon input-icon" />
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input ref="password" v-model="loginForm.password" :type="pwdFlagType" auto-complete="off" placeholder="请输入密码" @keyup.enter.native="handleLogin">
+            <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
+            <svg-icon v-show="loginForm.password !== ''" slot="suffix" :icon-class="pwdFlag ? 'eye-close' : 'eye'" class="el-input__icon input-icon" style="margin-right: 5px;" @click="getPwdFlag()" />
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="code">
+          <el-input ref="code" v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
+            <svg-icon slot="prefix" icon-class="auth-code" class="el-input__icon input-icon" />
+          </el-input>
+          <div class="login-code">
+            <img :src="codeUrl" alt="" @click="getCode">
+          </div>
+        </el-form-item>
+        <!-- <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">
+          记住我
+        </el-checkbox> -->
+        <el-form-item style="width:100%;">
+          <el-button ref="loginBtn" :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+            <span v-if="!loading">登 录</span>
+            <span v-else>登 录 中...</span>
+          </el-button>
+        </el-form-item>
+      </el-form>
+      <!--  底部  -->
+      <div v-if="$store.state.settings.showFooter" id="el-login-footer">
+        <span v-html="$store.state.settings.footerTxt" />
+        <span> ⋅ </span>
+        <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +62,7 @@ export default {
   name: 'Login',
   data() {
     return {
+      pageLoading: true,
       Background: Background,
       codeUrl: '',
       loginForm: {
@@ -92,6 +104,9 @@ export default {
   },
   // 在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图
   created() {
+    // 判断用户是否登录
+    this.checkUserLoginStatus()
+
     // 获取验证码
     this.getCode()
     // 登录过期提醒
@@ -140,6 +155,24 @@ export default {
         this.loginForm.uuid = res.data.uuid
       })
     },
+    checkUserLoginStatus() {
+      this.pageLoading = true
+      console.log('开始检查用户的登录状态...')
+      this.$mapi.communal.checkUserLoginStatus().then(res => {
+        if (res.code === 200 && res.data != null) {
+          // 查询用户信息
+          console.log('用户已登录，加载用户信息...')
+          const userToken = res.data['accessToken']
+          setToken(userToken)
+          this.$router.push({ path: this.redirect || '/' })
+        } else {
+          console.log('用户未登录...')
+          this.pageLoading = false
+        }
+      }).catch(_ => {
+        this.pageLoading = false
+      })
+    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -186,6 +219,70 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.oauth-background {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 1000;
+}
+#preloader_1 {
+  position: relative;
+  top: 45vh;
+  left: 45vw;
+}
+#preloader_1 span {
+  display: block;
+  bottom: 0;
+  width: 9px;
+  height: 5px;
+  background: #9b59b6;
+  position: absolute;
+  animation: preloader_1 1.5s infinite ease-in-out;
+}
+#preloader_1 span:nth-child(2) {
+  left: 11px;
+  animation-delay: 0.2s;
+}
+#preloader_1 span:nth-child(3) {
+  left: 22px;
+  animation-delay: 0.4s;
+}
+#preloader_1 span:nth-child(4) {
+  left: 33px;
+  animation-delay: 0.6s;
+}
+#preloader_1 span:nth-child(5) {
+  left: 44px;
+  animation-delay: 0.8s;
+}
+@keyframes preloader_1 {
+  0% {
+    height: 5px;
+    transform: translateY(0px);
+    background: #9b59b6;
+  }
+  25% {
+    height: 30px;
+    transform: translateY(15px);
+    background: #3498db;
+  }
+  50% {
+    height: 5px;
+    transform: translateY(0px);
+    background: #9b59b6;
+  }
+  100% {
+    height: 5px;
+    transform: translateY(0px);
+    background: #9b59b6;
+  }
+}
+</style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .login {

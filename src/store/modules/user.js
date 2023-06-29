@@ -38,9 +38,18 @@ const user = {
     },
     GetUserInfo({ commit }) {
       return new Promise((resolve, reject) => {
-        communal.loginId().then(res => {
-          commit('SET_USER', res.data)
-          resolve(res)
+        communal.checkUserLoginStatus().then(res => {
+          if (res.code === 200 && res.data != null) {
+            const userToken = res.data['accessToken']
+            setToken(userToken)
+          }
+
+          communal.loginId().then(res => {
+            commit('SET_USER', res.data)
+            resolve(res)
+          }).catch(error => {
+            reject(error)
+          })
         }).catch(error => {
           reject(error)
         })

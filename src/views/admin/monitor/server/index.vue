@@ -283,7 +283,7 @@ export default {
       setTimeout(() => {
         this.init()
       }, 2)
-    }, 3500)
+    }, 10000)
   },
   destroyed() {
     clearInterval(this.monitor)

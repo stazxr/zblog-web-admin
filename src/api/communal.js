@@ -27,5 +27,9 @@ export default {
   // 生成一个全局ID
   getId: params => {
     return api.httpRequest().get(`/api/id/getId`, params)
+  },
+  // 检查用户的登录状态
+  checkUserLoginStatus: params => {
+    return api.httpRequest().post(`/api/auth/checkUserLoginStatus`, params)
   }
 }
