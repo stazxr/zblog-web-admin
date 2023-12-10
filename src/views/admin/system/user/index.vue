@@ -23,7 +23,7 @@
     </div>
 
     <div class="components-container">
-      <el-table :loading="tableLoading" :data="tableData" border style="width: 100%">
+      <el-table v-loading="tableLoading" :data="tableData" border style="width: 100%">
         <el-table-column :show-overflow-tooltip="true" prop="username" label="头像" align="center" width="80">
           <template v-slot="scope">
             <el-image :src="scope.row['headImgUrl']" :preview-src-list="[scope.row['headImgUrl']]" fit="contain" lazy class="el-avatar">

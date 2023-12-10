@@ -122,7 +122,9 @@
             <el-tag v-if="scope.row['articleStatus'] === 1" type="info" effect="dark">草稿</el-tag>
             <el-tag v-else-if="scope.row['articleStatus'] === 2" effect="dark">待审核</el-tag>
             <el-tag v-else-if="scope.row['articleStatus'] === 3" effect="dark">待审核</el-tag>
-            <el-tag v-else-if="scope.row['articleStatus'] === 4" type="warning" effect="dark">审核拒绝</el-tag>
+            <el-tag v-else-if="scope.row['articleStatus'] === 4" type="warning" effect="dark">
+              {{ '审核拒绝：' + scope.row['desc'] }}
+            </el-tag>
             <el-tag v-else-if="scope.row['articleStatus'] === 5" type="success" effect="dark">
               {{ scope.row['articlePerm'] === 3 ? '私密文章' : '已发布' }}
             </el-tag>
