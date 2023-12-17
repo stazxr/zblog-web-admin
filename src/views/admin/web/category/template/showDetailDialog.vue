@@ -53,10 +53,10 @@ export default {
   methods: {
     initData(dataId) {
       this.$nextTick(() => {
-        this.getDictDetail(dataId)
+        this.getCategoryDetail(dataId)
       })
     },
-    getDictDetail(dataId) {
+    getCategoryDetail(dataId) {
       this.$mapi.category.queryCategoryDetail({ categoryId: dataId }).then(res => {
         const { data } = res
         Object.keys(this.dataInfo).forEach(key => {
