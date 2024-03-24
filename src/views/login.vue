@@ -15,18 +15,18 @@
           Z-BLOG 后台管理系统
         </h3>
         <el-form-item prop="username">
-          <el-input ref="username" v-model="loginForm.username" type="text" auto-complete="off" placeholder="请输入用户名">
+          <el-input id="username" ref="username" v-model="loginForm.username" type="text" auto-complete="off" placeholder="请输入用户名">
             <svg-icon slot="prefix" icon-class="username" class="el-input__icon input-icon" />
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input ref="password" v-model="loginForm.password" :type="pwdFlagType" auto-complete="off" placeholder="请输入密码" @keyup.enter.native="handleLogin">
+          <el-input id="password" ref="password" v-model="loginForm.password" :type="pwdFlagType" auto-complete="off" placeholder="请输入密码" @keyup.enter.native="handleLogin">
             <svg-icon slot="prefix" icon-class="password" class="el-input__icon input-icon" />
             <svg-icon v-show="loginForm.password !== ''" slot="suffix" :icon-class="pwdFlag ? 'eye-close' : 'eye'" class="el-input__icon input-icon" style="margin-right: 5px;" @click="getPwdFlag()" />
           </el-input>
         </el-form-item>
         <el-form-item prop="code">
-          <el-input ref="code" v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
+          <el-input id="code" ref="code" v-model="loginForm.code" auto-complete="off" placeholder="请输入验证码" style="width: 63%" @keyup.enter.native="handleLogin">
             <svg-icon slot="prefix" icon-class="auth-code" class="el-input__icon input-icon" />
           </el-input>
           <div class="login-code">
@@ -109,6 +109,7 @@ export default {
 
     // 获取验证码
     this.getCode()
+
     // 登录过期提醒
     this.point()
 
@@ -133,14 +134,16 @@ export default {
   // 在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作
   mounted() {
     // 页面加载自动聚焦
-    if (this.loginForm.username === '') {
-      this.$refs.username.focus()
-    } else if (this.loginForm.password === '') {
-      this.$refs.password.focus()
-    } else if (this.loginForm.code === '') {
-      this.$refs.code.focus()
-    } else {
-      this.$refs.loginBtn.focus()
+    if (!this.pageLoading) {
+      if (this.loginForm.username === '') {
+        this.$refs.username.focus()
+      } else if (this.loginForm.password === '') {
+        this.$refs.password.focus()
+      } else if (this.loginForm.code === '') {
+        this.$refs.code.focus()
+      } else {
+        this.$refs.loginBtn.focus()
+      }
     }
   },
   methods: {
